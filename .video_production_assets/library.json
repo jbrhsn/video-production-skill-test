@@ -9,7 +9,18 @@
     "reference-only": "Study material only; never copy into an output."
   },
   "collections": [
-    {"id": "illustrated-ideas-v1", "path": "images", "inventory": "images/inventory.json", "description": "Starter transparent illustration, creator-economics graphics, and social-CTA cutouts."}
+    {
+      "id": "illustrated-ideas-v1",
+      "path": "images",
+      "inventory": "images/inventory.json",
+      "description": "Starter transparent illustration, creator-economics graphics, and social-CTA cutouts."
+    },
+    {
+      "id": "doodle-explainers-v1",
+      "path": "images",
+      "inventory": "images/inventory.json",
+      "description": "Authentic hand-drawn doodle, whiteboard sketch, and marker explainer cutouts."
+    }
   ],
   "assets": [
     {
@@ -17,9 +28,24 @@
       "path": "images/brain_light_bulb.png",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["brain", "thinking", "insight", "education", "technology"],
-      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
-      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "tags": [
+        "brain",
+        "thinking",
+        "insight",
+        "education",
+        "technology"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": null,
+        "source_url": null
+      },
+      "rights": {
+        "status": "unknown",
+        "usage_basis": null,
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "Transparent cutout; inspect edge treatment against the planned background."
     },
     {
@@ -27,9 +53,24 @@
       "path": "images/creative_light_bulb.png",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["creativity", "imagination", "art", "design", "inspiration"],
-      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
-      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "tags": [
+        "creativity",
+        "imagination",
+        "art",
+        "design",
+        "inspiration"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": null,
+        "source_url": null
+      },
+      "rights": {
+        "status": "unknown",
+        "usage_basis": null,
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "Detailed hero cutout; reserve clear caption space around it."
     },
     {
@@ -37,9 +78,24 @@
       "path": "images/yellow_star_emoji.png",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["star", "reward", "success", "celebration", "emoji"],
-      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
-      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "tags": [
+        "star",
+        "reward",
+        "success",
+        "celebration",
+        "emoji"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": null,
+        "source_url": null
+      },
+      "rights": {
+        "status": "unknown",
+        "usage_basis": null,
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "Use as a small celebratory accent; avoid serious editorial topics."
     },
     {
@@ -47,9 +103,24 @@
       "path": "images/youtube_like_button_click.png",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["youtube", "like", "call-to-action", "engagement", "click"],
-      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
-      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "tags": [
+        "youtube",
+        "like",
+        "call-to-action",
+        "engagement",
+        "click"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "Contains English text, platform-specific visual language, and a white canvas; use only in an appropriate CTA."
     },
     {
@@ -57,9 +128,27 @@
       "path": "images/reused_content_stamp.png",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["reused content", "demonetized", "stamp", "rubber stamp", "penalty", "youtube policy", "warning", "faceless channel"],
-      "source": {"type": "ai-generated", "creator_or_provider": "local generation", "source_url": null},
-      "rights": {"status": "user-owned", "usage_basis": "generated in project session", "attribution": null, "expires_on": null},
+      "tags": [
+        "reused content",
+        "demonetized",
+        "stamp",
+        "rubber stamp",
+        "penalty",
+        "youtube policy",
+        "warning",
+        "faceless channel"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "Keyed RGBA transparent red rubber stamp. Sharp distressed edges, suitable for high-impact drop and slam animations."
     },
     {
@@ -67,9 +156,29 @@
       "path": "images/workflow_screencast.jpg",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["screencast", "developer", "automation", "api", "webhook", "code", "dashboard", "dark mode", "ui", "technical walkthrough"],
-      "source": {"type": "ai-generated", "creator_or_provider": "local generation", "source_url": null},
-      "rights": {"status": "user-owned", "usage_basis": "generated in project session", "attribution": null, "expires_on": null},
+      "tags": [
+        "screencast",
+        "developer",
+        "automation",
+        "api",
+        "webhook",
+        "code",
+        "dashboard",
+        "dark mode",
+        "ui",
+        "technical walkthrough"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "16:9 dark-mode developer UI canvas showing automated webhook flow (Stripe, API log, Notification) with code editor and telemetry chips."
     },
     {
@@ -77,9 +186,27 @@
       "path": "images/map_data_graphic.jpg",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["map", "world map", "data visualization", "geopolitics", "shipping routes", "motion graphics", "infographic", "visual essay"],
-      "source": {"type": "ai-generated", "creator_or_provider": "local generation", "source_url": null},
-      "rights": {"status": "user-owned", "usage_basis": "generated in project session", "attribution": null, "expires_on": null},
+      "tags": [
+        "map",
+        "world map",
+        "data visualization",
+        "geopolitics",
+        "shipping routes",
+        "motion graphics",
+        "infographic",
+        "visual essay"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "16:9 cinematic dark navy map plate with illuminated global trade routes, timeline curve charts, and neon coordinate markers."
     },
     {
@@ -87,9 +214,29 @@
       "path": "images/pomodoro_study_room.jpg",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["pomodoro", "study room", "ambient", "deep work", "lo-fi", "desk", "workspace", "focus", "dusk", "headphones"],
-      "source": {"type": "ai-generated", "creator_or_provider": "local generation", "source_url": null},
-      "rights": {"status": "user-owned", "usage_basis": "generated in project session", "attribution": null, "expires_on": null},
+      "tags": [
+        "pomodoro",
+        "study room",
+        "ambient",
+        "deep work",
+        "lo-fi",
+        "desk",
+        "workspace",
+        "focus",
+        "dusk",
+        "headphones"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "16:9 warm dusk study workspace with laptop showing active Pomodoro countdown ring, studio headphones, and warm ambient lighting."
     },
     {
@@ -97,10 +244,265 @@
       "path": "images/funnel_blueprint.jpg",
       "kind": "image",
       "collection": "illustrated-ideas-v1",
-      "tags": ["funnel", "blueprint", "marketing", "business model", "traffic conversion", "newsletter", "youtube funnel", "creator economics"],
-      "source": {"type": "ai-generated", "creator_or_provider": "local generation", "source_url": null},
-      "rights": {"status": "user-owned", "usage_basis": "generated in project session", "attribution": null, "expires_on": null},
+      "tags": [
+        "funnel",
+        "blueprint",
+        "marketing",
+        "business model",
+        "traffic conversion",
+        "newsletter",
+        "youtube funnel",
+        "creator economics"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
       "output_notes": "16:9 architectural business funnel blueprint showing multi-tier conversion from top-of-funnel YouTube traffic to owned email list."
+    },
+    {
+      "id": "img-doodle-drawing-hand-v1",
+      "path": "images/doodle_drawing_hand.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "hand",
+        "marker",
+        "drawing hand",
+        "sketch",
+        "pen",
+        "dry erase",
+        "explainer"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Keyed RGBA cutout of realistic hand holding black dry-erase marker at 45 degrees, ready for synchronized draw-on whiteboard reveals."
+    },
+    {
+      "id": "img-doodle-idea-bulb-v1",
+      "path": "images/doodle_idea_bulb.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "lightbulb",
+        "idea",
+        "insight",
+        "brainstorm",
+        "creativity",
+        "solution",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn black ink lightbulb with radiating idea spark rays and sketch hatching; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-rocket-launch-v1",
+      "path": "images/doodle_rocket_launch.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "rocket",
+        "launch",
+        "startup",
+        "growth",
+        "scale",
+        "takeoff",
+        "space",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Minimalist hand-drawn cartoon rocket blasting off with billowing exhaust smoke clouds; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-target-bullseye-v1",
+      "path": "images/doodle_target_bullseye.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "target",
+        "bullseye",
+        "arrow",
+        "goal",
+        "accuracy",
+        "kpi",
+        "focus",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn archery target with arrow in dead center and red accent ring; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-magnifying-glass-v1",
+      "path": "images/doodle_magnifying_glass.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "magnifying glass",
+        "search",
+        "research",
+        "investigation",
+        "analysis",
+        "audit",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn black marker sketch of magnifying glass angled at 45 degrees with lens reflection; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-growth-chart-v1",
+      "path": "images/doodle_growth_chart.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "chart",
+        "growth",
+        "metrics",
+        "analytics",
+        "revenue",
+        "trending up",
+        "arrow",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn line graph on coordinate grid with soaring green accent arrow; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-money-stack-v1",
+      "path": "images/doodle_money_stack.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "money",
+        "cash",
+        "coins",
+        "wealth",
+        "revenue",
+        "profit",
+        "monetization",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn stack of paper banknotes tied with a band alongside sketched coins with green wash accents; keyed to transparent RGBA."
+    },
+    {
+      "id": "img-doodle-megaphone-alert-v1",
+      "path": "images/doodle_megaphone_alert.png",
+      "kind": "image",
+      "collection": "doodle-explainers-v1",
+      "tags": [
+        "doodle",
+        "whiteboard",
+        "megaphone",
+        "bullhorn",
+        "announcement",
+        "broadcast",
+        "marketing",
+        "shout",
+        "alert",
+        "sketch"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "user-owned",
+        "usage_basis": "User confirmed default approval for video output",
+        "attribution": null,
+        "expires_on": null
+      },
+      "output_notes": "Hand-drawn retro megaphone bullhorn with radiating soundwave arcs and orange accent lines; keyed to transparent RGBA."
     }
   ]
 }

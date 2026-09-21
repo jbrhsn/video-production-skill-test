@@ -635,6 +635,537 @@
         "Opaque 16:9 diagram.",
         "Contains conceptual funnel stage labels in English."
       ]
+    },
+    {
+      "file_name": "doodle_drawing_hand.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_drawing_hand.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Realistic human hand holding a black chisel-tip dry-erase marker pen angled at 45 degrees, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "hand",
+          "marker pen",
+          "drawing hand",
+          "whiteboard marker",
+          "dry erase"
+        ],
+        "action_or_state": [
+          "actively sketching",
+          "drawing",
+          "writing",
+          "pointing",
+          "illustrating"
+        ],
+        "style": [
+          "studio product photography",
+          "clean isolated cutout",
+          "whiteboard presenter tool"
+        ],
+        "color_palette": [
+          "skin tones",
+          "black marker",
+          "white text",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel; can overlay directly over whiteboards, grids, diagrams, or doodle strokes.",
+        "composition": "Hand entering from upper left with marker tip positioned in lower right quadrant at drawing anchor point.",
+        "text_present": true,
+        "text_content": [
+          "EXPO",
+          "low odor",
+          "chisel"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Key asset for frame-driven hand-drawn reveals: animate position along SVG paths to simulate real-time drawing."
+      },
+      "best_for": [
+        "whiteboard explainer videos",
+        "doodle animations and simulated hand sketching",
+        "educational tutorials and visual notes",
+        "step-by-step diagram walk-throughs",
+        "call-to-action signature reveals"
+      ],
+      "keywords": [
+        "hand",
+        "marker",
+        "drawing",
+        "whiteboard",
+        "sketch",
+        "pen",
+        "doodle",
+        "expo",
+        "illustrator"
+      ],
+      "limitations": [
+        "Contains EXPO brand lettering on marker body.",
+        "Fixed 45-degree hand angle; best suited for right-handed downward stroke simulations."
+      ]
+    },
+    {
+      "file_name": "doodle_idea_bulb.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_idea_bulb.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn doodle of an illuminated lightbulb with radiating idea spark rays and cross-hatch shading, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "lightbulb",
+          "idea rays",
+          "filament",
+          "screw base",
+          "eureka moment"
+        ],
+        "action_or_state": [
+          "illuminating",
+          "inspiring",
+          "discovering",
+          "brainstorming",
+          "solving problem"
+        ],
+        "style": [
+          "casual whiteboard doodle",
+          "thick black marker ink",
+          "energetic hatching",
+          "minimalist line art"
+        ],
+        "color_palette": [
+          "black ink",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel; suitable for layering over white or colored backgrounds.",
+        "composition": "Centered vertical lightbulb surrounded by symmetrical radial energy rays.",
+        "text_present": false,
+        "visual_weight": "medium-high",
+        "transparency_use": "Ideal for sudden pop-in scale springs overhead characters or alongside solution headers."
+      },
+      "best_for": [
+        "ideas and insight moments",
+        "creative problem-solving explainers",
+        "innovation and startup concepts",
+        "brainstorming workflows",
+        "educational key takeaways"
+      ],
+      "keywords": [
+        "lightbulb",
+        "idea",
+        "insight",
+        "brainstorm",
+        "creativity",
+        "solution",
+        "doodle",
+        "whiteboard",
+        "eureka"
+      ],
+      "limitations": [
+        "Monochrome black ink style; requires color tinting or accent fills if color coding is desired."
+      ]
+    },
+    {
+      "file_name": "doodle_rocket_launch.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_rocket_launch.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn cartoon space rocket blasting diagonally upward with energetic exhaust flames and billowing scribble smoke clouds, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "space rocket",
+          "smoke clouds",
+          "exhaust fire",
+          "porthole window",
+          "fins"
+        ],
+        "action_or_state": [
+          "blasting off",
+          "launching",
+          "exponential scaling",
+          "accelerating",
+          "taking flight"
+        ],
+        "style": [
+          "playful whiteboard doodle",
+          "bold black marker strokes",
+          "expressive smoke scribble",
+          "whimsical sketch"
+        ],
+        "color_palette": [
+          "black ink",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Diagonal thrust from lower-left billowing clouds toward upper-right apex.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Perfect for animated translational trajectories gliding upward across the frame."
+      },
+      "best_for": [
+        "product launches and startup rollouts",
+        "exponential growth and scaling explainers",
+        "speed and velocity metaphors",
+        "career and revenue milestones",
+        "high-energy video intros and transitions"
+      ],
+      "keywords": [
+        "rocket",
+        "launch",
+        "startup",
+        "growth",
+        "scale",
+        "takeoff",
+        "space",
+        "doodle",
+        "whiteboard",
+        "speed"
+      ],
+      "limitations": [
+        "Diagonal 45-degree orientation; best positioned with trajectory space ahead of the rocket nose."
+      ]
+    },
+    {
+      "file_name": "doodle_target_bullseye.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_target_bullseye.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn circular archery target with concentric rings, subtle hatching, red accent ring, and an arrow piercing the exact center bullseye, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "archery target",
+          "bullseye",
+          "arrow",
+          "fletching",
+          "concentric circles"
+        ],
+        "action_or_state": [
+          "hitting target",
+          "achieving goal",
+          "laser focus",
+          "precision",
+          "high accuracy"
+        ],
+        "style": [
+          "whiteboard marker sketch",
+          "hand-drawn circles",
+          "crimson red accent marker",
+          "clean ink hatching"
+        ],
+        "color_palette": [
+          "black ink",
+          "crimson red",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Centered circular target slightly tilted in 3D perspective with incoming arrow from upper right.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Excellent for impact wobble animation when announcing goals reached or niche targeting."
+      },
+      "best_for": [
+        "target audience and product-market fit explainers",
+        "strategic goals and quarterly KPIs",
+        "accuracy and precision benchmarks",
+        "marketing conversion targets",
+        "success verification seals"
+      ],
+      "keywords": [
+        "target",
+        "bullseye",
+        "arrow",
+        "goal",
+        "accuracy",
+        "kpi",
+        "focus",
+        "doodle",
+        "whiteboard",
+        "precision"
+      ],
+      "limitations": [
+        "Has red marker accent color (may need alignment with overall project palette)."
+      ]
+    },
+    {
+      "file_name": "doodle_magnifying_glass.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_magnifying_glass.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn doodle of a magnifying glass angled at 45 degrees with playful sketch outline and curved glass reflection marks, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "magnifying glass",
+          "lens",
+          "handle",
+          "glass reflection",
+          "investigation tool"
+        ],
+        "action_or_state": [
+          "examining",
+          "searching",
+          "auditing",
+          "focusing on details",
+          "discovering clues"
+        ],
+        "style": [
+          "clean whiteboard doodle",
+          "thick black marker lines",
+          "minimalist line art",
+          "curved hatching"
+        ],
+        "color_palette": [
+          "black ink",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Diagonal handle extending to bottom-right, circular lens centered in upper-left.",
+        "text_present": false,
+        "visual_weight": "medium",
+        "transparency_use": "Can hover and pan over charts, code snippets, or text to highlight specific focal points."
+      },
+      "best_for": [
+        "search intent and seo research explainers",
+        "code reviews and technical audits",
+        "data inspection and anomaly detection",
+        "market research and competitor analysis",
+        "mystery and inquiry hooks"
+      ],
+      "keywords": [
+        "magnifying glass",
+        "search",
+        "research",
+        "investigation",
+        "analysis",
+        "audit",
+        "doodle",
+        "whiteboard",
+        "lens"
+      ],
+      "limitations": [
+        "Interior lens area is keyed transparent; to simulate actual glass distortion, an overlay shader is needed."
+      ]
+    },
+    {
+      "file_name": "doodle_growth_chart.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_growth_chart.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn coordinate grid graph with a jagged ascending trend line and green accent arrowhead breaking out of the upper boundary, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "line chart",
+          "grid graph",
+          "ascending arrow",
+          "trend line",
+          "compounding data"
+        ],
+        "action_or_state": [
+          "growing",
+          "increasing revenue",
+          "breaking through resistance",
+          "compounding",
+          "outperforming"
+        ],
+        "style": [
+          "casual whiteboard sketch",
+          "imperfect marker grid",
+          "emerald green accent highlight",
+          "bold strokes"
+        ],
+        "color_palette": [
+          "black ink",
+          "emerald green",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Square grid frame with upward trend line rising steeply from bottom-left to top-right corner.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Great for progressive reveal from bottom-left origin to bursting top-right peak."
+      },
+      "best_for": [
+        "revenue growth and business scaling explainers",
+        "channel analytics and subscriber trajectory",
+        "compound interest and investment videos",
+        "algorithm retention curves",
+        "productivity milestone tracking"
+      ],
+      "keywords": [
+        "chart",
+        "growth",
+        "metrics",
+        "analytics",
+        "revenue",
+        "trending up",
+        "arrow",
+        "graph",
+        "doodle",
+        "whiteboard"
+      ],
+      "limitations": [
+        "Grid numbers and axis labels are unprinted (can be customized with dynamic text labels in Remotion)."
+      ]
+    },
+    {
+      "file_name": "doodle_money_stack.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_money_stack.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn stack of paper banknotes strapped with a paper band alongside a small pile of gold/silver coins with dollar marks, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "money stack",
+          "cash banknotes",
+          "coins",
+          "currency band",
+          "dollar signs"
+        ],
+        "action_or_state": [
+          "accumulating wealth",
+          "monetizing",
+          "paying affiliates",
+          "generating profits",
+          "earning"
+        ],
+        "style": [
+          "whiteboard cartoon doodle",
+          "bold ink contours",
+          "soft green watercolor/marker wash",
+          "sketchy shading"
+        ],
+        "color_palette": [
+          "black ink",
+          "soft sage green",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Isometric cash stack on left with scattered coins grouping in front right.",
+        "text_present": true,
+        "text_content": [
+          "$"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Can drop in with gentle bounce when explaining pricing, revenue streams, or monetization tiers."
+      },
+      "best_for": [
+        "creator economics and monetization models",
+        "affiliate commissions and digital template sales",
+        "cashflow and profit margin breakdowns",
+        "streaming royalties and ad revenue comparisons",
+        "pricing strategy explainers"
+      ],
+      "keywords": [
+        "money",
+        "cash",
+        "coins",
+        "wealth",
+        "revenue",
+        "profit",
+        "monetization",
+        "dollars",
+        "doodle",
+        "whiteboard"
+      ],
+      "limitations": [
+        "Coins feature US dollar symbols ($), not currency-neutral."
+      ]
+    },
+    {
+      "file_name": "doodle_megaphone_alert.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/doodle_megaphone_alert.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Hand-drawn retro handheld bullhorn megaphone pointing right with expanding concentric sound wave ripples and orange accent outlines, keyed to transparent RGBA.",
+      "visual": {
+        "subject": [
+          "megaphone",
+          "bullhorn",
+          "sound waves",
+          "handle and trigger",
+          "broadcast speaker"
+        ],
+        "action_or_state": [
+          "announcing",
+          "broadcasting",
+          "amplifying voice",
+          "shouting out",
+          "marketing message"
+        ],
+        "style": [
+          "expressive whiteboard sketch",
+          "thick marker lines",
+          "warm orange accent rings",
+          "energetic sound arcs"
+        ],
+        "color_palette": [
+          "black ink",
+          "warm orange",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel.",
+        "composition": "Megaphone cone facing right with soundwave arcs radiating outward to frame right.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Can pulse or oscillate with sound effects to emphasize announcements and call-to-actions."
+      },
+      "best_for": [
+        "marketing and public relations explainers",
+        "call to actions and subscribe prompts",
+        "social media broadcasting and outreach",
+        "announcements and product updates",
+        "viral growth and word-of-mouth campaigns"
+      ],
+      "keywords": [
+        "megaphone",
+        "bullhorn",
+        "announcement",
+        "broadcast",
+        "marketing",
+        "shout",
+        "alert",
+        "sound waves",
+        "doodle",
+        "whiteboard"
+      ],
+      "limitations": [
+        "Has orange marker accent lines."
+      ]
     }
   ]
 }
