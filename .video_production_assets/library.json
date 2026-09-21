@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "asset_root": ".video_production_assets",
+  "purpose": "Curated reusable creative media for local video-production projects.",
+  "eligibility": {
+    "cleared": "May be used in an output, subject to any recorded attribution or expiry terms.",
+    "user-owned": "User confirms they own or control the asset and may use it for this output.",
+    "unknown": "Do not use in a published output until source and rights are confirmed.",
+    "reference-only": "Study material only; never copy into an output."
+  },
+  "collections": [
+    {"id": "illustrated-ideas-v1", "path": "images", "inventory": "images/inventory.json", "description": "Starter transparent illustration and social-CTA cutouts."}
+  ],
+  "assets": [
+    {
+      "id": "img-brain-light-bulb-v1",
+      "path": "images/brain_light_bulb.png",
+      "kind": "image",
+      "collection": "illustrated-ideas-v1",
+      "tags": ["brain", "thinking", "insight", "education", "technology"],
+      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
+      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "output_notes": "Transparent cutout; inspect edge treatment against the planned background."
+    },
+    {
+      "id": "img-creative-light-bulb-v1",
+      "path": "images/creative_light_bulb.png",
+      "kind": "image",
+      "collection": "illustrated-ideas-v1",
+      "tags": ["creativity", "imagination", "art", "design", "inspiration"],
+      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
+      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "output_notes": "Detailed hero cutout; reserve clear caption space around it."
+    },
+    {
+      "id": "img-yellow-star-emoji-v1",
+      "path": "images/yellow_star_emoji.png",
+      "kind": "image",
+      "collection": "illustrated-ideas-v1",
+      "tags": ["star", "reward", "success", "celebration", "emoji"],
+      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
+      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "output_notes": "Use as a small celebratory accent; avoid serious editorial topics."
+    },
+    {
+      "id": "img-youtube-like-click-v1",
+      "path": "images/youtube_like_button_click.png",
+      "kind": "image",
+      "collection": "illustrated-ideas-v1",
+      "tags": ["youtube", "like", "call-to-action", "engagement", "click"],
+      "source": {"type": "user-provided", "creator_or_provider": null, "source_url": null},
+      "rights": {"status": "unknown", "usage_basis": null, "attribution": null, "expires_on": null},
+      "output_notes": "Contains English text, platform-specific visual language, and a white canvas; use only in an appropriate CTA."
+    }
+  ]
+}

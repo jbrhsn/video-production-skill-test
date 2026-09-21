@@ -249,7 +249,7 @@
           "light gray",
           "dark gray"
         ],
-        "background": "White background in the inspected preview; treat as a light-background asset unless alpha transparency is confirmed during import.",
+        "background": "White canvas confirmed in visual inspection; treat as a light-background asset rather than a transparent cutout.",
         "composition": "Large horizontal button centered in the square canvas, with the cursor overlapping the lower-right edge; strong left-to-right reading from icon to text to click action.",
         "text_present": true,
         "text_content": [

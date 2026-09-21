@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Copy these patterns when adding creative assets. These are discovery examples, not downloaded assets and not blanket publishing permission.",
+  "rules": [
+    "Create a real library.json asset entry only after the exact file has been downloaded and visually inspected.",
+    "Record the exact item URL and license snapshot or license URL; a provider-level policy alone is not enough when an item has its own terms.",
+    "Keep unknown, non-commercial, share-alike, and reference-only material out of outputs unless the project's intended use and obligations are explicitly approved.",
+    "Asset discovery informs the storyboard; it never requires a video to use a library asset."
+  ],
+  "categories": [
+    {
+      "folder": "images",
+      "kind": "image",
+      "discovery_example": {
+        "provider": "Unsplash",
+        "browse_url": "https://unsplash.com/",
+        "policy_url": "https://unsplash.com/license",
+        "what_to_add": "A direct image page URL, photographer, downloaded filename, subject/style tags, and any recognizable-person, artwork, trademark, or editorial-use concern.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "img-person-thinking-at-desk-v1",
+        "path": "images/person-thinking-at-desk.jpg",
+        "kind": "image",
+        "tags": ["thinking", "work", "focus", "desk"],
+        "source": {"type": "stock-provider", "creator_or_provider": "Photographer name", "source_url": "https://unsplash.com/photos/EXACT_ITEM"},
+        "rights": {"status": "unknown", "usage_basis": "Review exact item and current provider terms", "attribution": "Optional or required as recorded", "expires_on": null},
+        "creative_notes": "State framing, empty text space, visual style, visible brands/people, and crop limitations."
+      }
+    },
+    {
+      "folder": "footage",
+      "kind": "video",
+      "discovery_example": {
+        "provider": "Pexels Videos",
+        "browse_url": "https://www.pexels.com/videos/",
+        "policy_url": "https://www.pexels.com/license/",
+        "what_to_add": "Direct video page URL, creator, native resolution/fps/duration, usable action and timecode, plus visible-brand/person restrictions.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "vid-rain-on-window-closeup-v1",
+        "path": "footage/rain-on-window-closeup-4k.mp4",
+        "kind": "video",
+        "tags": ["rain", "reflection", "contemplative", "background"],
+        "source": {"type": "stock-provider", "creator_or_provider": "Creator name", "source_url": "https://www.pexels.com/video/EXACT_ITEM"},
+        "rights": {"status": "unknown", "usage_basis": "Review exact item and current provider terms", "attribution": null, "expires_on": null},
+        "creative_notes": "Record the useful 00:00-00:05 action, crop safety, whether source audio is discarded, and any loop limitation."
+      }
+    },
+    {
+      "folder": "audio/music",
+      "kind": "music",
+      "discovery_example": {
+        "provider": "YouTube Audio Library",
+        "browse_url": "https://www.youtube.com/audiolibrary",
+        "policy_url": "https://support.google.com/youtube/answer/3376882",
+        "what_to_add": "Track title, artist, download date, exact attribution requirement shown by the track, duration, mood, and narration-safe section.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "music-calm-ambient-bed-v1",
+        "path": "audio/music/calm-ambient-bed.mp3",
+        "kind": "music",
+        "tags": ["calm", "ambient", "explainers", "no-vocals"],
+        "source": {"type": "platform-library", "creator_or_provider": "Artist name", "source_url": "https://www.youtube.com/audiolibrary"},
+        "rights": {"status": "unknown", "usage_basis": "Record the exact track's terms", "attribution": "Copy the required line exactly when applicable", "expires_on": null},
+        "creative_notes": "Record BPM/key if known, loop point, loudness, and the range that stays under narration."
+      }
+    },
+    {
+      "folder": "audio/sfx",
+      "kind": "sound-effect",
+      "discovery_example": {
+        "provider": "Freesound",
+        "browse_url": "https://freesound.org/",
+        "policy_url": "https://freesound.org/help/faq/",
+        "what_to_add": "Exact sound page, uploader, Creative Commons license displayed on that item, attribution text, duration, peak level, and intended action.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "sfx-soft-ui-confirm-v1",
+        "path": "audio/sfx/soft-ui-confirm.wav",
+        "kind": "sound-effect",
+        "tags": ["ui", "confirm", "positive", "soft"],
+        "source": {"type": "community-library", "creator_or_provider": "Uploader name", "source_url": "https://freesound.org/s/EXACT_ITEM"},
+        "rights": {"status": "unknown", "usage_basis": "Use only if the exact CC license permits the project's use", "attribution": "Record required credit for CC BY", "expires_on": null},
+        "creative_notes": "Record onset, duration, peak, and the visual action it supports. Avoid CC BY-NC for commercial or monetized work."
+      }
+    },
+    {
+      "folder": "fonts",
+      "kind": "font",
+      "discovery_example": {
+        "provider": "Google Fonts",
+        "browse_url": "https://fonts.google.com/",
+        "policy_url": "https://developers.google.com/fonts",
+        "what_to_add": "Family, exact files/weights, family license file or URL, intended role, language coverage, and whether the font is bundled into a deliverable.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "font-inter-variable-v1",
+        "path": "fonts/inter/Inter-VariableFont_opsz,wght.ttf",
+        "kind": "font",
+        "tags": ["sans-serif", "readable", "captions", "ui"],
+        "source": {"type": "open-font-library", "creator_or_provider": "Family designer(s)", "source_url": "https://fonts.google.com/"},
+        "rights": {"status": "unknown", "usage_basis": "Keep the exact family license with the file", "attribution": null, "expires_on": null},
+        "creative_notes": "Record supported weights, language coverage, caption readability, and any reserved-font-name condition."
+      }
+    },
+    {
+      "folder": "brand",
+      "kind": "brand-asset",
+      "discovery_example": {
+        "provider": "Official brand resource center",
+        "browse_url": "https://about.google/brand-resource-center/",
+        "policy_url": "https://about.google/brand-resource-center/guidance/",
+        "what_to_add": "Official download source, owner/approver, version, allowed context, minimum size/clear space, and any approval requirement.",
+        "status_before_review": "unknown"
+      },
+      "entry_example": {
+        "id": "brand-client-logo-light-v2",
+        "path": "brand/client-logo-light.svg",
+        "kind": "brand-asset",
+        "tags": ["logo", "approved", "light-background"],
+        "source": {"type": "official-brand-source", "creator_or_provider": "Brand owner", "source_url": "https://OFFICIAL_BRAND_RESOURCE_URL"},
+        "rights": {"status": "unknown", "usage_basis": "Approval or applicable brand-guideline permission", "attribution": null, "expires_on": null},
+        "creative_notes": "Record approval owner, version, clear space, recoloring/animation rules, and required context."
+      }
+    },
+    {
+      "folder": "references",
+      "kind": "reference-only",
+      "discovery_example": {
+        "provider": "Wikimedia Commons",
+        "browse_url": "https://commons.wikimedia.org/",
+        "policy_url": "https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia",
+        "what_to_add": "Direct file page, author, exact license, required credit and link, plus a note explaining whether it remains study-only or is cleared for output.",
+        "status_before_review": "reference-only"
+      },
+      "entry_example": {
+        "id": "ref-editorial-collage-rhythm-v1",
+        "path": "references/editorial-collage-rhythm.jpg",
+        "kind": "reference-only",
+        "tags": ["collage", "editorial", "transitions", "style-study"],
+        "source": {"type": "reference", "creator_or_provider": "Creator name", "source_url": "https://commons.wikimedia.org/wiki/File:EXACT_ITEM"},
+        "rights": {"status": "reference-only", "usage_basis": "Style study only until exact license and project use are reviewed", "attribution": null, "expires_on": null},
+        "creative_notes": "Describe what is being studied. Do not copy the asset itself into a rendered output."
+      }
+    }
+  ]
+}
