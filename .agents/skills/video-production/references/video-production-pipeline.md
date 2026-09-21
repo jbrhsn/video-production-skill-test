@@ -6,7 +6,7 @@ SKILL means this skill directory; WORKSPACE is the explicit target repository/wo
 
 Create a dedicated environment once (reuse it on later runs). In these examples replace SKILL, WORKSPACE, and PROJECT with actual paths; quote paths containing spaces.
 
-For a new collaborative production, follow [collaborative production](collaborative-production.md): transcript approval -> measured scene audio and checked timestamps -> asset/storyboard/design planning -> asset intake/review -> approved execution playbook -> scene implementation and Studio feedback -> approved export. Copy the three planning/state templates from SKILL/assets without overwriting authored project files. Use PROJECT/assets for submitted files; selected files are staged into public/media. The commands below are pipeline steps, not permission to skip those reviews.
+For a new collaborative production, follow [collaborative production](collaborative-production.md): transcript -> scene audio -> checked timestamps -> narration-package approval -> creative/asset planning and asset-request handoff -> inspected assets and approved refined playbook -> one scene at a time with Studio approval -> master review and export approval. Copy the state/asset/playbook/execution templates from SKILL/assets only at their applicable stage, without overwriting authored files. Use PROJECT/assets for submitted files; selected files are staged into public/media. The commands below are pipeline steps, not permission to skip those reviews.
 
 ```bash
 uv venv --python 3.11 WORKSPACE/.venv-video-production
@@ -97,7 +97,7 @@ Generated files: package.json, tsconfig.json, src/config.ts, src/index.ts, src/R
 
 The default refuses to overwrite structural files; --refresh-generated explicitly replaces them. Existing scenes, WordCaptions.tsx, and Timeline.tsx are preserved and may need manual updates. Saved src/edit-plan.json choices are reused unless --edit-plan supplies a replacement. Existing scenes without a timeline-contract marker keep their legacy renderer and reject edit plans; see [migration guidance](transitions.md). The script only adds node_modules/ and out/ ignores inside PROJECT; the caller manages workspace model ignores.
 
-03_scaffold.py automatically discovers PROJECT/production-state.json or accepts --production-state PATH. When present, it checks recorded current plan approval and asset readiness plus required planning documents before writes. Legacy invocations without state are unchanged. Use 09_check_production.py --project-dir PROJECT --stage implement or --stage render for a standalone check (state required). The state schema, explicit autonomous delegation, feedback statuses, and revision-maintenance responsibilities are in [collaborative production](collaborative-production.md). These checks do not detect file edits or establish creative/rights correctness; maintain revisions when dependencies change.
+03_scaffold.py requires production-state.json by default (or --production-state PATH). New v2 projects require narration/plan approvals, asset readiness and a valid execution-plan.json matching the approved inputs/fps. Explicit --legacy-workflow supports old v1/no-state projects or engineering fixtures; it never bypasses v2 checks. Run 09_check_production.py with --stage plan, implement, scene --scene N, or render at the respective gate. Use --snapshot narration|plan|scene:N|video to retain the reviewed input digest. Snapshot changes invalidate v2 approvals; quality/rights review remains manual. See [collaborative production](collaborative-production.md).
 
 The local WordCaptions groups phrases using punctuation, pauses, word count, and a width-based character budget. It supports optional word highlighting and safe-area fractions, and hides captions in gaps. The heuristic is not font measurement; inspect actual text bounds. Existing projects preserve their authored caption component. See [Remotion caption utilities](https://www.remotion.dev/docs/captions/) for advanced layouts; do not import a nonexistent Captions component.
 
@@ -105,7 +105,7 @@ New visual-only scenes receive contentFrame, rawContentFrame, durationFrames, fp
 
 ## Rendering and checks
 
-During collaborative implementation, use `npm run typecheck` and `npm run studio`. Provide the actual Studio URL and scene/boundary/master checkpoints, record user feedback, and obtain approval of the current video revision before video/still exports. Record all feedback and approval history in production-state.json. Scripts never infer that a successful render means approval. The following export commands apply after the relevant approval or explicit delegation.
+During collaborative implementation, typecheck the active scene and ask the user to run `npm run studio` from PROJECT. Provide SceneN and frame checkpoints, record feedback, and wait for approval before the next scene. Start Studio yourself only if requested. Obtain final master/export approval before video/still exports. Record all feedback and approval history in production-state.json. Scripts never infer that a successful render means approval. The following export commands apply after the relevant approval or explicit delegation.
 
 From PROJECT:
 ```bash
@@ -117,7 +117,7 @@ ffprobe -v error -show_streams -show_format -of json out/video.mp4
 ```
 Repeat preview rendering for each scene and BoundaryN composition. VideoFull uses the compiled timeline in new projects and Series.Sequence for legacy projects. SafeAreaReview adds inset guides. BoundaryN slices the actual master including its mix; SceneN isolates speech/visuals without global music/effects.
 
-Render the deliverable from VideoFull, not by concatenating isolated SceneN files. Scene files are separate exports; they lack master overlap and global mix. Direct npm/Remotion render commands do not enforce production-state checks: run the standalone render preflight first when state exists and honor the recorded workflow.
+Render the deliverable from VideoFull, not by concatenating isolated SceneN files. Scene files are separate exports; they lack master overlap and global mix. New state-bearing scaffold projects have guarded npm render/hero commands, bundling the Python checker locally and invoking it through uv before Remotion. Missing state blocks these exports. Direct Remotion CLI or Studio export buttons are not intercepted and must not be used to bypass pending review. Legacy no-state projects have unguarded commands only through explicit compatibility setup.
 
 New TOTAL_FRAMES = sum(contentFrames + explicit hold frames); visual overlap does not shorten speech or the total. Legacy TOTAL_FRAMES = sum(scene.duration_frames). LAST_FRAME = TOTAL_FRAMES - 1. Regenerate timing/config/hero commands after edit changes. Compare output duration to TOTAL_FRAMES / fps, allowing container/audio encoder rounding. Narration quantization adds less than one frame per scene; explicit holds are additional intentional duration.
 
@@ -125,13 +125,14 @@ Inspect opening, dense middle, transitions, and last decoded video frame; compar
 
 ## Regression tests
 
-Prepare a review bundle with `uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/05_review_bundle.py --project-dir PROJECT`. It writes commands and a pending-review report, preserving prior reports as review-previous-N.md. Add `--render` to check current recorded export readiness when state exists, then execute scene/boundary/full renders and stills, make a contact sheet, and capture ffprobe metadata. --production-state PATH selects explicit state. The manifest records completion or partial failure, never claiming listening or creative review occurred. The helper never modifies production-state.json. See [creative review](creative-review.md) for editorial checks and optional analytics-based iteration. Honor any requested pause before testing/rendering.
+Prepare a review bundle with `uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/05_review_bundle.py --project-dir PROJECT`. It writes commands and a pending-review report, preserving prior reports as review-previous-N.md. Add `--render` to require current recorded export readiness (explicit --legacy-workflow for no-state fixtures), then execute scene/boundary/full renders and stills, make a contact sheet, and capture ffprobe metadata. --production-state PATH selects explicit state. The manifest records completion or partial failure, never claiming listening or creative review occurred. The helper never modifies production-state.json. See [creative review](creative-review.md) for editorial checks and optional analytics-based iteration. Honor any requested pause before testing/rendering.
 
 Run from the workspace:
 ```bash
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_pipeline.py
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_extensions.py
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_production.py
+uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_workflow_v2.py
 ```
 Tests use temporary directories and mock external synthesis/transcription where appropriate. A real integration smoke test should additionally run download, TTS, timestamps, npm install/typecheck, and a small MP4/hero render under the requested test folder. Unit tests alone do not establish end-to-end media quality.
 

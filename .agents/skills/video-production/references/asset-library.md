@@ -52,7 +52,7 @@ uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python 
   --query "focus distraction desk" --include-unusable
 ```
 
-The command performs transparent token matching against curated metadata and collection details. `--include-unusable` makes `unknown` and `reference-only` entries visible for review; it does not make them usable. Inspect shortlisted files, confirm project-specific rights, and mention only real, suitable selected assets in the storyboard. When no asset is appropriate, proceed with original code visuals or acquire/generate media under the user's authorization. Inventory scarcity must not shrink the narrative, dictate a visual style, or turn the video into generic text slides.
+The command performs transparent token matching against curated metadata and collection details. `--include-unusable` makes `unknown` and `reference-only` entries visible for review; it does not make them usable. Inspect shortlisted files, confirm project-specific rights, and mention only real, suitable selected assets in the storyboard. When none fits, propose code visuals or acquisition/generation at the asset handoff and await the user's choice unless already explicitly delegated. Do not use a code-only fallback to bypass that gate. Inventory scarcity must not shrink the narrative, dictate style, or turn the video into generic text slides.
 
 ## Selecting media for a project
 

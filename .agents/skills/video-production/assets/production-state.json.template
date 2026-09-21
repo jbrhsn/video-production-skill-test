@@ -4,6 +4,7 @@
   "phase": "narration",
   "narrationRevision": "narration-1",
   "activeScene": null,
+  "pendingReview": null,
   "planRevision": "plan-1",
   "projectRevision": "project-1",
   "assetsReadyRevision": null,

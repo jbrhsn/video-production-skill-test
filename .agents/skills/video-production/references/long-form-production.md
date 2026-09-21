@@ -8,7 +8,7 @@ Develop the script with a chapter outline: audience question, evidence or mechan
 
 Maintain a compact chapter overview in `implementation-plan.md` (or reference an existing `production-plan.md`). Include chapter IDs, scene IDs, purpose, measured duration, recurring people/objects, required asset IDs, and known production gaps. An initial 8–20-second visual beat is a useful estimate for a calm explainer, not a required scene length. One narration segment can contain several visual beats in scene code. The current scaffold requires one audio file per scene; it does not independently schedule arbitrarily many shots over a single full-length narration file.
 
-Prepare a short representative sequence before producing every illustration: an opening/story beat, a dense chart explanation, and a transition with continuing narration. Verify visual style, character continuity, actual caption space, speech cadence, and sound. Use that sequence for the already-required preview review or proceed when choices are delegated. Do not promise a complete reference-quality video based on one successful still.
+Plan a representative opening/story beat, dense chart explanation, and transition. Implement and review these in the approved scene order; do not prebuild a representative batch before the required scene approvals. Verify visual style, character continuity, actual caption space, speech cadence, and sound. Use that sequence for the already-required preview review or proceed when choices are delegated. Do not promise a complete reference-quality video based on one successful still.
 
 ## Assets and division of work
 
@@ -20,7 +20,7 @@ The agent can research source material, draft narration, design diagrams, author
 
 ## Production and revisions
 
-Produce in coherent chapter batches. Reuse approved helpers and assets; create bespoke scenes where the explanation requires them. Keep numerical assumptions in a shared data file. Track each scene as planned, assets ready, authored, previewed, or reviewed; track problems by master timestamp and scene ID.
+Organize the plan by chapter, but implement/review one active scene at a time unless the user explicitly delegates batch review. Reuse approved helpers and assets; create bespoke scenes where the explanation requires them. Keep numerical assumptions in a shared data file. Track each scene as planned, assets ready, authored, previewed, or reviewed; track problems by master timestamp and scene ID.
 
 The current TTS helper regenerates its input scenes; it is not a resumable chapter scheduler. For a partial regeneration, synthesize to a scratch directory, map the new files to stable scene IDs, preserve unaffected originals, update measured metadata, and recompile timing. Changes in duration invalidate later master timestamps and sound cues. Review all affected joins, regenerate caption offsets and chapter markers, and rerender the master.
 

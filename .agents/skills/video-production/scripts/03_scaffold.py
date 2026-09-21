@@ -432,7 +432,7 @@ def main() -> None:
         for name in ("09_check_production.py", "production.py", "workflow_v2.py"):
             write(guards / name, (Path(__file__).parent / name).read_text())
         write(project_dir / "scripts/production-export.cjs", (Path(__file__).parent.parent / "assets/production-export.cjs").read_text())
-        state_path = str(Path(args.production_state).expanduser().resolve()) if args.production_state else str(project_dir / "production-state.json")
+        state_path = str(Path(args.production_state).expanduser().resolve()) if args.production_state else "production-state.json"
         write(guards / "export-config.json", json.dumps({"python": sys.executable, "state": state_path, "lastFrame": total_frames - 1}))
     write(project_dir / "tsconfig.json", make_tsconfig())
     config = make_config_ts(args.fps, args.width, args.height, storyboard)

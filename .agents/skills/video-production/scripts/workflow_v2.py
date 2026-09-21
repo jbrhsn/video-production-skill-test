@@ -21,6 +21,8 @@ def validate_v2(state):
     # Reuse the v1 feedback/history checks, but validate expanded approval scopes here.
     base = {**state, "version": 1, "phase": "review", "approvals": []}
     errors = validate_state(base)
+    if type(state.get("version")) is not int or state["version"] != 2:
+        errors.append("Production state version must be integer 2")
     if state.get("phase") not in ("narration", "planning", "assets", "plan-review",
                                    "implementation", "scene-review", "final-review", "delivery"):
         errors.append("Unknown v2 phase")
@@ -29,6 +31,13 @@ def validate_v2(state):
     active = state.get("activeScene")
     if active is not None and (type(active) is not int or active < 1):
         errors.append("activeScene must be null or a positive integer")
+    pending = state.get("pendingReview")
+    if pending is not None:
+        if (not isinstance(pending, dict)
+                or not all(text(pending.get(key)) for key in ("scope", "revision", "reviewTarget", "snapshot"))
+                or not re.fullmatch(r"narration|plan|video|scene:[1-9][0-9]*", pending["scope"])
+                or not re.fullmatch(r"[a-f0-9]{64}", pending["snapshot"])):
+            errors.append("pendingReview requires scope, revision, reviewTarget, and SHA-256 snapshot")
     approvals = state.get("approvals")
     if not isinstance(approvals, list):
         return errors + ["approvals must be an array"]
@@ -62,7 +71,7 @@ def snapshot(project, scope):
         paths.update(project / name for name in ("package.json", "package-lock.json", "tsconfig.json"))
         for path in (project / "src").rglob("*"):
             if scope.startswith("scene:") and path.parent == project / "src/scenes":
-                if path.name != f"Scene{scope.split(':')[1]}.tsx":
+                if re.fullmatch(r"Scene[1-9][0-9]*\.tsx", path.name) and path.name != f"Scene{scope.split(':')[1]}.tsx":
                     continue
             paths.add(path)
         paths.update((project / "public").rglob("*"))

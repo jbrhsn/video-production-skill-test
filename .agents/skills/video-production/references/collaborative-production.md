@@ -63,6 +63,7 @@ Start from assets/production-state.json.template:
 - phase: narration, planning, assets, plan-review, implementation, scene-review, final-review, delivery.
 - narrationRevision, planRevision, projectRevision: nonempty revision IDs.
 - activeScene: null before implementation, positive scene ID during work.
+- pendingReview: null or an object with scope, revision, reviewTarget and snapshot, recorded before handing off. On the user's response, append the scoped approval/changes-requested decision using this exact target/digest, then clear pendingReview; preserve any changed request in feedback history.
 - assetsReadyRevision: null until required dependencies or user-approved substitutes are inspected; then current plan revision.
 - scenes: scene ID, that scene's own revision, status pending/in-review/changes-requested/approved.
 - approvals: append-only scope narration/plan/scene:N/video, revision, decision approved/changes-requested/delegated, date, actual user evidence, explicit reviewTarget, snapshot.
