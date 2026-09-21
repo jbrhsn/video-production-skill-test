@@ -1,0 +1,14 @@
+import React from "react";
+import {AbsoluteFill} from "remotion";
+import type {VisualSceneProps} from "../Timeline";
+
+// Visual-only contract v1. Narration/captions are mounted by the timeline.
+// Use contentFrame for animation (it holds at the first/last content pose during
+// transition handles and explicit holds). rawContentFrame permits authored handles.
+// Do not mount narration or captions here. Replace this placeholder before delivery.
+export const Scene__SCENE__: React.FC<VisualSceneProps> = ({contentFrame, width, height}) => (
+  <AbsoluteFill style={{background: "#171717", color: "white", justifyContent: "center",
+    alignItems: "center", fontSize: Math.min(width, height) * .04}}>
+    {"Unfinished scene: " + __TITLE__}
+  </AbsoluteFill>
+);
