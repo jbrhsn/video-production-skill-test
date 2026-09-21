@@ -232,9 +232,10 @@ def make_visual_root(scenes: list[dict]) -> str:
         import React from "react";
         import {{Composition}} from "remotion";
         import {{VIDEO_CONFIG}} from "./config";
-        import data from "./timeline-data.json";
-        import {{Timeline, TimelineSlice, ScenePreview, SceneEntry}} from "./Timeline";
+        import timelineData from "./timeline-data.json";
+        import {{Timeline, TimelineSlice, ScenePreview, SceneEntry, TimelineData}} from "./Timeline";
         {imports}
+        const data: TimelineData = timelineData;
         const entries: SceneEntry[] = [
         {entries}
         ];

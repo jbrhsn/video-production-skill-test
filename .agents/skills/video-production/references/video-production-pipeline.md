@@ -19,6 +19,8 @@ Use the environment's Scripts/python.exe on Windows. Add .venv-video-production/
 
 For horizontal YouTube use `--profile youtube-horizontal` without explicit dimensions; vertical is the default profile. Width/height flags override profile dimensions. Add `--edit-plan PROJECT/edit-plan.json` for transitions, explicit holds, safe-area insets, and optional sound cues; see [transition contracts](transitions.md). Stage referenced sound assets before scaffolding. Revisit frame-based edit choices whenever fps changes.
 
+Add `--visual-style whiteboard` for the optional original vector/reveal/chart helpers in `src/visuals/`; see [whiteboard production](whiteboard-production.md). This copies helpers and preserves authored copies; it does not generate finished scenes or change aspect ratio. Multi-minute work uses [long-form production](long-form-production.md). Recorded speech can replace synthesis through `06_import_narration.py`; see [audio direction](audio-direction.md). Both sources feed the same measured WAV metadata contract.
+
 Run timestamp extraction for every scene, sequentially. Whisper needs ffmpeg. Model downloads require network access once; cached synthesis/transcription run locally. Use workspace-local caches or normal environment escalation when required.
 
 ## Compatible Kokoro assets
@@ -118,5 +120,8 @@ Prepare a review bundle with `uv run --no-project --python WORKSPACE/.venv-video
 Run from the workspace:
 ```bash
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_pipeline.py
+uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_extensions.py
 ```
 Tests use temporary directories and mock external synthesis/transcription where appropriate. A real integration smoke test should additionally run download, TTS, timestamps, npm install/typecheck, and a small MP4/hero render under the requested test folder. Unit tests alone do not establish end-to-end media quality.
+
+For the optional TypeScript integration test in `test_extensions.py`, set `VIDEO_PRODUCTION_NODE_MODULES` to an existing generated project's absolute `node_modules` path. It checks a single-scene whiteboard project with empty transition/caption arrays using those installed dependencies; without that variable the check is reported skipped. The other extension tests run actual ffmpeg recording conversion and validate calculation identities.
