@@ -2,10 +2,9 @@
 **/node_modules/
 **/__pycache__/
 **/out/
-**/remotion-infographic/**
-**/remotion-infographic
 **/kokoro/**
 **/whisper/**
 **/whisper
 **/kokoro
+**/remotion-infographic/**
 .video_production_assets/inventory.generated.json

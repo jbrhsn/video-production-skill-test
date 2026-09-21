@@ -17,7 +17,7 @@ from typing import Any
 
 
 IGNORED_DIRS = {"kokoro", "whisper", "__pycache__", ".DS_Store"}
-IGNORED_FILES = {"library.json", "inventory.json", "inventory.generated.json", "README.md"}
+IGNORED_FILES = {"library.json", "inventory.json", "inventory.example.json", "inventory.generated.json", "README.md"}
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".avif"}
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v"}
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".m4a", ".aac", ".flac", ".ogg", ".aif", ".aiff"}
