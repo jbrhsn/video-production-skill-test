@@ -1,0 +1,35 @@
+# Asset plan
+
+Plan revision: TODO
+Project assets directory: `assets/`
+Profile / aspect ratio: TODO
+
+## Voiceover-to-visual map
+
+Cover every spoken line using stable beat IDs. Times reference checked scene timestamps; do not invent timing. `none`, reuse, and named `code:` visuals are valid layer entries. Specify action and new understanding, not only objects.
+
+| Scene / beat | Exact voiceover line / word indices / time | Background (BG) | Midground object | Foreground object | Visible action and new understanding |
+|---|---|---|---|---|---|
+| TODO | TODO | Asset ID + exact filename, code visual, or none | TODO | TODO | TODO |
+
+Example only: “Start by connecting what you know” can reuse `A-ROOM / desk-room.png` as BG, `A-PERSON / mannequin-seated.png` as midground, and `code:idea-nodes` as foreground; two symbols combine to demonstrate the mechanism. These example filenames are not selected assets.
+
+## Asset details — repeat per asset ID
+
+- ID / beats / narrative role:
+- Exact user-supplied or user-confirmed filename relative to `assets/`:
+- Status: requested / supplied / accepted / needs-revision / omitted
+- Requirements: format, resolution/aspect ratio, transparency, crop margins, perspective, lighting, placement; separate parts/poses if animated; video/audio length and usable trims.
+- Prompt (optional): subject/action, shot, shared style/reference, lighting, isolation/background, margin and exclusions. Request only the layer needed. Verify actual output and transparency.
+- Recurring identity/reference: proportions, clothing, palette, poses; inspected reference IDs.
+- Source type: user-owned / downloaded / AI-generated / original code
+- Source item URL / creator / license or permission evidence / attribution / usage limits:
+- AI tool/model (if known), prompt/reference provenance, disclosure wording and placement:
+- Rights status / usage basis: cleared / user-owned / unknown / reference-only; AI provenance alone is not clearance.
+- Inspection: actual properties, visual fit, usable motion/poses, rights evidence, accepted by/date.
+- Original path -> staged `public/media/` path:
+- Missing/unsuitable issue, proposed alternative/omission/redesign, user decision:
+
+## Readiness review
+
+List unresolved dependencies with beat, issue, recommendation, and effect on transitions/story. Clear readiness only after required assets are inspected or their replacement/omission is approved. Retain filenames for requests here; only existing inspected selections enter storyboard asset references.

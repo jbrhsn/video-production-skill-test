@@ -37,6 +37,7 @@ from pathlib import Path
 from textwrap import dedent
 
 from timeline import compile_timeline
+from production import check_production
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,6 +45,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--project-dir", required=True, help="Path to the remotion project directory (created if absent).")
     p.add_argument("--storyboard", required=True, help="Path to directorial storyboard.json (or legacy combined storyboard).")
     p.add_argument("--audio-metadata", help="TTS metadata.json; derives timing independently from creative direction.")
+    p.add_argument("--production-state", help="State path; defaults to PROJECT/production-state.json when present.")
+    p.add_argument("--legacy-workflow", action="store_true", help="Explicit compatibility/test path for absent or v1 state; never bypasses v2 gates.")
     p.add_argument("--edit-plan", help="Version 1 transition/hold/audio plan; requires visual-only scenes.")
     p.add_argument("--profile", choices=("vertical", "youtube-horizontal"), default="vertical")
     p.add_argument("--visual-style", choices=("custom", "whiteboard"), default="custom",
@@ -61,7 +64,7 @@ def parse_args() -> argparse.Namespace:
 # File content generators
 # ---------------------------------------------------------------------------
 
-def make_package_json(version: str, total_frames: int) -> str:
+def make_package_json(version: str, total_frames: int, guarded: bool = False) -> str:
     last_frame = max(0, total_frames - 1)
     data = {
         "name": "video-production",
@@ -70,8 +73,8 @@ def make_package_json(version: str, total_frames: int) -> str:
         "scripts": {
             "studio": "npx remotion studio src/index.ts",
             "typecheck": "tsc --noEmit",
-            "render": f"npx remotion render src/index.ts VideoFull out/video.mp4 --codec=h264 --pixel-format=yuv420p",
-            "hero": f"npx remotion still src/index.ts VideoFull out/video-hero.png --frame={last_frame}",
+            "render": "node scripts/production-export.cjs render" if guarded else "npx remotion render src/index.ts VideoFull out/video.mp4 --codec=h264 --pixel-format=yuv420p",
+            "hero": "node scripts/production-export.cjs hero" if guarded else f"npx remotion still src/index.ts VideoFull out/video-hero.png --frame={last_frame}",
         },
         "dependencies": {
             "remotion": version,
@@ -362,6 +365,21 @@ def main() -> None:
         raise ValueError("Use an exact stable Remotion 4.0.x version")
     metadata = json.loads(Path(args.audio_metadata).expanduser().read_text(encoding="utf-8")) if args.audio_metadata else None
     storyboard = resolve_scenes(storyboard, metadata, args.fps)
+    state = check_production(project_dir, "implement", [scene["scene"] for scene in storyboard], args.production_state,
+                             required=not args.legacy_workflow)
+    if state and state["version"] == 1 and not args.legacy_workflow:
+        raise ValueError("V1 production state requires explicit --legacy-workflow; new productions use v2")
+    if state and state["version"] == 2:
+        from workflow_v2 import read, validate_execution
+        execution = validate_execution(project_dir, [scene["scene"] for scene in storyboard])
+        if execution["fps"] != args.fps:
+            raise ValueError("Scaffold fps differs from the approved execution plan")
+        if metadata != read(project_dir / "public/audio/metadata.json"):
+            raise ValueError("Use the approved public/audio/metadata.json for scaffolding")
+        if json.loads(storyboard_path.read_text()) != read(project_dir / "storyboard.json"):
+            raise ValueError("Use the approved project storyboard")
+        if not args.edit_plan or json.loads(Path(args.edit_plan).read_text()) != read(project_dir / "edit-plan.json"):
+            raise ValueError("Pass the approved project --edit-plan")
     marker = project_dir / "src" / "timeline-contract.json"
     existing_scenes = list((project_dir / "src" / "scenes").glob("Scene*.tsx"))
     visual_only = marker.exists() or not existing_scenes
@@ -385,6 +403,8 @@ def main() -> None:
             if not (project_dir / "public" / cue["src"]).is_file():
                 raise ValueError(f"Missing selected audio asset: public/{cue['src']}")
     generated = ["package.json", "tsconfig.json", "src/config.ts", "src/index.ts", "src/Root.tsx"]
+    if state:
+        generated += ["scripts/production-export.cjs", "scripts/production/export-config.json"]
     if visual_only:
         generated += ["src/timeline-data.json", "src/timeline-contract.json", "src/edit-plan.json"]
     conflicts = [name for name in generated if (project_dir / name).exists()]
@@ -405,7 +425,15 @@ def main() -> None:
         path.write_text(content, encoding="utf-8")
         print(f"  Wrote: {path.relative_to(project_dir)}")
 
-    write(project_dir / "package.json", make_package_json(args.remotion_version, total_frames))
+    write(project_dir / "package.json", make_package_json(args.remotion_version, total_frames, guarded=state is not None))
+    if state:
+        guards = project_dir / "scripts/production"
+        guards.mkdir(parents=True, exist_ok=True)
+        for name in ("09_check_production.py", "production.py", "workflow_v2.py"):
+            write(guards / name, (Path(__file__).parent / name).read_text())
+        write(project_dir / "scripts/production-export.cjs", (Path(__file__).parent.parent / "assets/production-export.cjs").read_text())
+        state_path = str(Path(args.production_state).expanduser().resolve()) if args.production_state else str(project_dir / "production-state.json")
+        write(guards / "export-config.json", json.dumps({"python": sys.executable, "state": state_path, "lastFrame": total_frames - 1}))
     write(project_dir / "tsconfig.json", make_tsconfig())
     config = make_config_ts(args.fps, args.width, args.height, storyboard)
     if timeline:
@@ -458,7 +486,7 @@ def main() -> None:
         print(f"{pkg_manager} install completed successfully.")
 
     print(f"\nScaffold complete. Project ready at: {project_dir}")
-    print("Next step: replace placeholder visuals in each SceneN.tsx with an original interpretation of the directorial brief.")
+    print("Next step: implement SceneN.tsx from the approved playbook (or delegated direction), then review in Studio.")
 
 
 def _which(cmd: str) -> bool:

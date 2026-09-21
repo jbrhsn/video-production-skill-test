@@ -80,7 +80,7 @@ class ExtensionTests(unittest.TestCase):
             brief.write_text(json.dumps([{"scene": 1, "direction": {"audience_sees": "A house"}}]))
             metadata = root / "metadata.json"
             metadata.write_text(json.dumps({"scenes": [{"scene": 1, "file": "scene-1.wav", "duration_s": 1}]}))
-            command = [sys.executable, str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root / "project"),
+            command = [sys.executable, str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root / "project"),
                        "--storyboard", str(brief), "--audio-metadata", str(metadata), "--skip-install",
                        "--profile", "youtube-horizontal", "--visual-style", "whiteboard"]
             subprocess.run(command, check=True, capture_output=True)
@@ -97,7 +97,7 @@ class ExtensionTests(unittest.TestCase):
             root = Path(directory)
             (root / "storyboard.json").write_text(json.dumps([{"scene": 1, "direction": {}}]))
             (root / "metadata.json").write_text(json.dumps({"scenes": [{"scene": 1, "file": "scene-1.wav", "duration_s": 1}]}))
-            subprocess.run([sys.executable, str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root),
+            subprocess.run([sys.executable, str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root),
                 "--storyboard", str(root / "storyboard.json"), "--audio-metadata", str(root / "metadata.json"),
                 "--visual-style", "whiteboard", "--skip-install"], check=True, capture_output=True)
             (root / "public/audio/scene-1-timestamps.json").write_text('{"words": []}')

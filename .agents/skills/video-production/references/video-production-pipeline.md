@@ -6,6 +6,8 @@ SKILL means this skill directory; WORKSPACE is the explicit target repository/wo
 
 Create a dedicated environment once (reuse it on later runs). In these examples replace SKILL, WORKSPACE, and PROJECT with actual paths; quote paths containing spaces.
 
+For a new collaborative production, follow [collaborative production](collaborative-production.md): transcript approval -> measured scene audio and checked timestamps -> asset/storyboard/design planning -> asset intake/review -> approved execution playbook -> scene implementation and Studio feedback -> approved export. Copy the three planning/state templates from SKILL/assets without overwriting authored project files. Use PROJECT/assets for submitted files; selected files are staged into public/media. The commands below are pipeline steps, not permission to skip those reviews.
+
 ```bash
 uv venv --python 3.11 WORKSPACE/.venv-video-production
 uv pip install --python WORKSPACE/.venv-video-production/bin/python 'kokoro-onnx>=0.4.0' 'soundfile>=0.12.1' 'numpy>=1.26' 'openai-whisper>=20231117'
@@ -75,11 +77,13 @@ When media is selected, assets entries identify an actual workspace-relative sou
 
 Pass --audio-metadata to join TTS metadata with storyboard scene IDs. The scaffold requires matching scene counts/IDs and derives duration_frames = ceil(duration_s * fps), audio_file from metadata's file, and timestamps_file from that filename's stem plus -timestamps.json. An optional timestamps_file in an audio metadata scene supports custom filenames. It does not parse or render directorial prose. Existing combined technical storyboards still work without --audio-metadata for compatibility.
 
-Exact timing belongs in metadata/edit plans/generated config and scene code. An optional scene-design.md may settle shot beats, typography, composition, camera motion, media trims, caption placement, sound mixing, and visual holds. Revise it after previewing; do not turn it into a mandatory element schema. In-content visual holds do not extend audio duration. Explicit edit-plan holds append frames after narration and shift later starts. Legacy hold_frames stays within duration_frames and does not extend the master. Useful optional direction fields are viewer_question, new_understanding, payoff, and continuity_to_next; see [engagement direction](engagement-direction.md).
+Master timing belongs in metadata/edit plans/generated config. In collaborative production, asset-plan.md maps spoken lines to beats, BG/midground/foreground assets, prompts, exact filenames, and meaningful visual actions. After asset review, implementation-plan.md settles shot beats, design system, framing, crops/trims, speech-local frame actions, caption placement, sound, file/component steps, and review checkpoints. Consolidate or reference an existing scene-design.md; keep one execution authority. Autonomous tests may use a compact plan. In-content visual holds do not extend audio duration. Explicit edit-plan holds append frames after narration and shift later starts. Legacy hold_frames stays within duration_frames and does not extend the master. Useful optional direction fields are viewer_question, new_understanding, payoff, and continuity_to_next; see [engagement direction](engagement-direction.md).
 
 ## Creative media and motion
 
 Inventory images, B-roll, video, and sound effects recursively under WORKSPACE/.video_production_assets. Exclude runtime models under kokoro/ and whisper/. For reusable libraries, follow [asset-library.md](asset-library.md): `library.json` retains IDs, provenance, rights and creative notes, while `07_index_assets.py` generates a non-destructive technical report. Before storyboard preparation, use `08_search_assets.py` with terms from the topic and planned visual beats; it reads the curated JSON rather than guessing from filenames. Inspect shortlisted files and rights before selecting them. No matching or cleared file is a valid result: retain the planned scope and use original code visuals or newly authorized media instead. Check images visually; use ffprobe for clip dimensions, duration, frame rate, and audio streams, then inspect representative frames or playback. Select assets based on narrative fit. Existing source assets stay intact; copy only chosen media to PROJECT/public/media and record their source and role in the storyboard or scene-design.md.
+
+Also inspect PROJECT/assets submissions and record their exact names, generation prompts/provenance or source/licensing evidence, actual properties, acceptance, and public/media destinations in asset-plan.md. Search an existing library when available; its absence does not block planning. Requests may name files before they exist, but selected storyboard asset references must identify real inspected files. Resolve missing required assets through user-approved alternatives, omission, or redesign (unless delegated), updating transitions and the execution plan. Original code visuals require no external file.
 
 Compose each scene around its action or insight. Without supplied media, use original SVG/React illustration, diagrams that transform, particles, procedural environments, object/character motion, simulated interactions, and camera-like staging as appropriate. With media, consider live-action footage with tracked-looking callouts, image parallax, collage, masks, or graphic overlays. These are examples, not required ingredients. Do not use repetitive text cards as the fallback for an empty asset folder. Asset availability does not gate animation or motion graphics.
 
@@ -93,11 +97,15 @@ Generated files: package.json, tsconfig.json, src/config.ts, src/index.ts, src/R
 
 The default refuses to overwrite structural files; --refresh-generated explicitly replaces them. Existing scenes, WordCaptions.tsx, and Timeline.tsx are preserved and may need manual updates. Saved src/edit-plan.json choices are reused unless --edit-plan supplies a replacement. Existing scenes without a timeline-contract marker keep their legacy renderer and reject edit plans; see [migration guidance](transitions.md). The script only adds node_modules/ and out/ ignores inside PROJECT; the caller manages workspace model ignores.
 
+03_scaffold.py automatically discovers PROJECT/production-state.json or accepts --production-state PATH. When present, it checks recorded current plan approval and asset readiness plus required planning documents before writes. Legacy invocations without state are unchanged. Use 09_check_production.py --project-dir PROJECT --stage implement or --stage render for a standalone check (state required). The state schema, explicit autonomous delegation, feedback statuses, and revision-maintenance responsibilities are in [collaborative production](collaborative-production.md). These checks do not detect file edits or establish creative/rights correctness; maintain revisions when dependencies change.
+
 The local WordCaptions groups phrases using punctuation, pauses, word count, and a width-based character budget. It supports optional word highlighting and safe-area fractions, and hides captions in gaps. The heuristic is not font measurement; inspect actual text bounds. Existing projects preserve their authored caption component. See [Remotion caption utilities](https://www.remotion.dev/docs/captions/) for advanced layouts; do not import a nonexistent Captions component.
 
 New visual-only scenes receive contentFrame, rawContentFrame, durationFrames, fps, width, and height. contentFrame clamps at content endpoints during handles/holds; rawContentFrame allows authored pre/post action. The master mounts @remotion/media Audio and captions once per narration segment, independent of visual overlap. Captions receive speech-local time = frame / fps. Optional sound cues have separate gain/fade/duck envelopes; see [audio direction](audio-direction.md). Legacy scenes still own local-frame-zero audio/captions. No CSS transitions or wall-clock animation. JSON imports use resolveJsonModule; no @ts-expect-error is needed.
 
 ## Rendering and checks
+
+During collaborative implementation, use `npm run typecheck` and `npm run studio`. Provide the actual Studio URL and scene/boundary/master checkpoints, record user feedback, and obtain approval of the current video revision before video/still exports. Record all feedback and approval history in production-state.json. Scripts never infer that a successful render means approval. The following export commands apply after the relevant approval or explicit delegation.
 
 From PROJECT:
 ```bash
@@ -109,18 +117,21 @@ ffprobe -v error -show_streams -show_format -of json out/video.mp4
 ```
 Repeat preview rendering for each scene and BoundaryN composition. VideoFull uses the compiled timeline in new projects and Series.Sequence for legacy projects. SafeAreaReview adds inset guides. BoundaryN slices the actual master including its mix; SceneN isolates speech/visuals without global music/effects.
 
+Render the deliverable from VideoFull, not by concatenating isolated SceneN files. Scene files are separate exports; they lack master overlap and global mix. Direct npm/Remotion render commands do not enforce production-state checks: run the standalone render preflight first when state exists and honor the recorded workflow.
+
 New TOTAL_FRAMES = sum(contentFrames + explicit hold frames); visual overlap does not shorten speech or the total. Legacy TOTAL_FRAMES = sum(scene.duration_frames). LAST_FRAME = TOTAL_FRAMES - 1. Regenerate timing/config/hero commands after edit changes. Compare output duration to TOTAL_FRAMES / fps, allowing container/audio encoder rounding. Narration quantization adds less than one frame per scene; explicit holds are additional intentional duration.
 
 Inspect opening, dense middle, transitions, and last decoded video frame; compare hero content with the latter allowing H.264 compression differences. Check audio presence and nonzero samples, caption alignment, readability, contrast, safe areas, asset loading, and final settled takeaway. Report still inspection separately from playback listening.
 
 ## Regression tests
 
-Prepare a review bundle with `uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/05_review_bundle.py --project-dir PROJECT`. It writes commands and a pending-review report. Add `--render` to execute scene/boundary/full renders and stills, make a contact sheet, and capture ffprobe metadata. The manifest records completion or partial failure, never claiming listening or creative review occurred. See [creative review](creative-review.md) for editorial checks and optional analytics-based iteration. Honor any requested pause before testing/rendering.
+Prepare a review bundle with `uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/05_review_bundle.py --project-dir PROJECT`. It writes commands and a pending-review report, preserving prior reports as review-previous-N.md. Add `--render` to check current recorded export readiness when state exists, then execute scene/boundary/full renders and stills, make a contact sheet, and capture ffprobe metadata. --production-state PATH selects explicit state. The manifest records completion or partial failure, never claiming listening or creative review occurred. The helper never modifies production-state.json. See [creative review](creative-review.md) for editorial checks and optional analytics-based iteration. Honor any requested pause before testing/rendering.
 
 Run from the workspace:
 ```bash
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_pipeline.py
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_extensions.py
+uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_production.py
 ```
 Tests use temporary directories and mock external synthesis/transcription where appropriate. A real integration smoke test should additionally run download, TTS, timestamps, npm install/typecheck, and a small MP4/hero render under the requested test folder. Unit tests alone do not establish end-to-end media quality.
 

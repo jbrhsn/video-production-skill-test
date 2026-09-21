@@ -1,6 +1,8 @@
 # Video Production
 
-Local narrated-video skill: directorial storyboards, original animation and motion graphics, optional local footage/images/sound effects, Kokoro speech, Whisper word timestamps, editable Remotion scenes, MP4, and exact final-frame PNG. Storyboards describe audience experience; optional scene-design.md handles project-specific execution choices.
+Local narrated-video skill: reviewed narration, measured scene audio/timestamps, voiceover-to-visual asset planning, approved execution playbooks, editable Remotion scenes, Studio feedback, MP4, and exact final-frame PNG. Storyboards describe audience experience; implementation-plan.md specifies execution. Original animation and code visuals remain available alongside supplied media.
+
+For new user-reviewed work, follow [collaborative production](references/collaborative-production.md): collect visuals in PROJECT/assets/, document filenames/prompts/provenance in asset-plan.md, review required assets, approve the implementation playbook, implement and review in Studio, then export after approval. Copy the three templates in assets/ into the project. production-state.json preserves feedback and revision-specific approvals; scripts/09_check_production.py checks recorded readiness. Explicitly delegated tests remain autonomous, and existing projects without state keep their current commands. The checker cannot infer visual quality, rights, or file changes.
 
 Start with [SKILL.md](SKILL.md) for workflow and [the pipeline reference](references/video-production-pipeline.md) for executable commands and contracts. [Voice guidance](references/kokoro-voices.md) describes selection and compatibility.
 

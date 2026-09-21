@@ -122,7 +122,7 @@ class PipelineTests(unittest.TestCase):
             metadata.write_text(json.dumps({"scenes": [{"scene": 1, "file": "voice.wav",
                 "duration_s": 1.01, "timestamps_file": "words.json"}]}))
             subprocess.run(["uv", "run", "--no-project", "--python", sys.executable,
-                "python", str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root),
+                "python", str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root),
                 "--storyboard", str(brief), "--audio-metadata", str(metadata), "--skip-install"],
                 check=True, capture_output=True)
             config = (root / "src/config.ts").read_text()
@@ -138,7 +138,7 @@ class PipelineTests(unittest.TestCase):
                 duration_s=1.01, duration_frames=31, audio_file="custom.wav",
                 timestamps_file="custom.json", hold_frames=0)]))
             command = ["uv", "run", "--no-project", "--python", sys.executable,
-                       "python", str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root),
+                       "python", str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root),
                        "--storyboard", str(storyboard), "--skip-install"]
             subprocess.run(command, check=True, capture_output=True)
             manifest = root / "package.json"
@@ -243,7 +243,7 @@ class TimelineTests(unittest.TestCase):
             plan = root / "edit-plan.json"
             plan.write_text('{"version":1}')
             command = ["uv", "run", "--no-project", "--python", sys.executable, "python",
-                str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root), "--storyboard", str(brief),
+                str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root), "--storyboard", str(brief),
                 "--edit-plan", str(plan), "--skip-install"]
             result = subprocess.run(command, capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
@@ -262,7 +262,7 @@ class TimelineTests(unittest.TestCase):
                 {"afterScene": 1, "kind": "slide", "frames": 12}],
                 "holds": [{"afterScene": 2, "frames": 15}]}))
             command = ["uv", "run", "--no-project", "--python", sys.executable, "python",
-                str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root), "--storyboard", str(brief),
+                str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root), "--storyboard", str(brief),
                 "--profile", "youtube-horizontal", "--skip-install"]
             subprocess.run(command + ["--edit-plan", str(plan)], check=True, capture_output=True)
             before = json.loads((root / "src/timeline-data.json").read_text())

@@ -1,0 +1,38 @@
+# Implementation playbook
+
+Plan revision: TODO
+Inputs: transcript, checked WAV metadata/timestamp paths, asset-plan revision, storyboard, edit plan.
+Profile / dimensions / fps: TODO
+Approval is recorded in `production-state.json` for this revision.
+
+## Creative direction and design system
+
+Audience / promise / final takeaway:
+Visual argument and recurring identities:
+Palette / semantic colors / local fonts / hierarchy:
+Lighting / backgrounds / compositing conventions:
+Captions / safe areas / text contrast:
+Motion / easing / transition vocabulary:
+Audio mix / sound intent:
+
+## Scene execution — repeat per scene
+
+Scene ID / title / purpose:
+Narration references / measured duration / speech frames:
+Beat IDs and checked word-index ranges:
+Assets: IDs, exact staged paths, crop/trim, anchor, position/scale, masks, layer order, independently moving parts.
+Code visuals and shared helpers:
+
+| Speech-local frame interval [start, end) | Beat / visible action | Initial -> final state / easing | Understanding / caption and sound coordination |
+|---|---|---|---|
+| TODO | TODO | TODO | TODO |
+
+Word-time rounding convention:
+Entry/exit state and neighboring continuity:
+Transition handles / holds (mechanical timing in edit-plan.json):
+Ordered coding steps with files/components and expected results:
+Review checkpoints: SceneN frames, BoundaryN, master context; expected visible/audible behavior:
+
+## Review-driven revisions
+
+Reference feedback IDs and describe the current approved behavior. Preserve feedback history in production-state.json. Resolve material creative decisions before coding; return unexpected material changes for review.

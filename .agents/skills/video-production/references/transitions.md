@@ -15,6 +15,8 @@ Read when planning joins or implementing the visual-only timeline. Scene-by-scen
 
 Use a coherent subset for each project. Start around 8–18 frames at 30 fps when appropriate, then adjust to the action; this is an editorial starting point, not a mandated speed. Do not add a whoosh automatically. A deliberate cut is valid. Transition direction describes travel: a left slide moves both scenes left; a left wipe reveals incoming content from the right edge toward the left.
 
+In collaborative production, settle joins in the approved implementation playbook/edit plan and review BoundaryN plus VideoFull in Studio. An asset substitution, timing change, or edited join reopens affected neighboring reviews; record decisions and revision changes using [collaborative production](collaborative-production.md). Render the final master directly rather than concatenating isolated scene exports.
+
 ## Edit plan v1
 
 Pass `--edit-plan PROJECT/edit-plan.json` to the scaffold. An example for at least two scenes:

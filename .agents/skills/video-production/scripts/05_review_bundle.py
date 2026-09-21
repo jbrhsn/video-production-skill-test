@@ -12,6 +12,8 @@ import math
 import subprocess
 from pathlib import Path
 
+from production import check_production
+
 
 def build_commands(data):
     samples = {0, data["totalFrames"] - 1}
@@ -42,6 +44,8 @@ def build_commands(data):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-dir", required=True)
+    parser.add_argument("--production-state", help="State path; defaults to PROJECT/production-state.json when present.")
+    parser.add_argument("--legacy-workflow", action="store_true", help="Explicit compatibility/test path for projects without state.")
     parser.add_argument("--render", action="store_true", help="Execute planned renders and contact-sheet generation")
     args = parser.parse_args()
     project = Path(args.project_dir).expanduser().resolve()
@@ -49,6 +53,11 @@ def main():
     if not marker.exists() or json.loads(marker.read_text()) != {"version": 1, "sceneContract": "visual-only"}:
         raise ValueError("Review bundle requires visual-only timeline v1; use manual previews for legacy projects")
     data = json.loads((project / "src/timeline-data.json").read_text())
+    if args.render:
+        check_production(project, "render", [scene["scene"] for scene in data["scenes"]], args.production_state,
+                         required=not args.legacy_workflow)
+    elif args.production_state and not Path(args.production_state).expanduser().is_file():
+        raise ValueError(f"Missing production state: {args.production_state}")
     commands, frames = build_commands(data)
     output = project / "out/review"
     output.mkdir(parents=True, exist_ok=True)
@@ -58,10 +67,18 @@ def main():
     def save():
         path.write_text(json.dumps(manifest, indent=2) + "\n")
     save()
-    (output / "review.md").write_text(
+    report = output / "review.md"
+    if report.exists():
+        index = 1
+        while (output / f"review-previous-{index}.md").exists():
+            index += 1
+        report.rename(output / f"review-previous-{index}.md")
+    report.write_text(
         "# Review bundle\n\nSee manifest.json for actual command execution status. "
         "Files from earlier runs may exist; only the current manifest establishes what was rendered.\n\n"
         "Playback/listening and creative review: NOT PERFORMED by this helper.\n\n"
+        "Durable user feedback and approvals belong in PROJECT/production-state.json; this generated report is not approval evidence. "
+        "Prior reports are retained as review-previous-N.md.\n\n"
         "Record observations by master frame/time: opening promise and payoff; useful progression; "
         "visual explanation; boundary continuity; caption readability; voice/mix clarity; "
         "platform fit. For each issue, record evidence and a concrete correction.\n\n"
