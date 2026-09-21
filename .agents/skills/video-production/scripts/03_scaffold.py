@@ -46,6 +46,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--audio-metadata", help="TTS metadata.json; derives timing independently from creative direction.")
     p.add_argument("--edit-plan", help="Version 1 transition/hold/audio plan; requires visual-only scenes.")
     p.add_argument("--profile", choices=("vertical", "youtube-horizontal"), default="vertical")
+    p.add_argument("--visual-style", choices=("custom", "whiteboard"), default="custom",
+                   help="Optional visual helper kit; independent of aspect ratio. Preserves existing helpers.")
     p.add_argument("--fps", type=int, default=30, help="Frames per second (default: 30).")
     p.add_argument("--width", type=int, help="Override profile width in pixels.")
     p.add_argument("--height", type=int, help="Override profile height in pixels.")
@@ -430,6 +432,14 @@ def main() -> None:
     caption_path = project_dir / "src" / "WordCaptions.tsx"
     if not caption_path.exists():
         write(caption_path, (Path(__file__).parent.parent / "assets" / "WordCaptions.tsx").read_text())
+
+    if args.visual_style == "whiteboard":
+        visuals = project_dir / "src" / "visuals"
+        visuals.mkdir(exist_ok=True)
+        for name in ("Whiteboard.tsx", "DoodleAssets.tsx"):
+            target = visuals / name
+            if not target.exists():
+                write(target, (Path(__file__).parent.parent / "assets" / name).read_text())
 
     # Update .gitignore
     update_gitignore(project_dir)
