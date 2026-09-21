@@ -8,6 +8,8 @@ Profile / aspect ratio: TODO
 
 Cover every spoken line using stable beat IDs. Times reference checked scene timestamps; do not invent timing. `none`, reuse, and named `code:` visuals are valid layer entries. Specify action and new understanding, not only objects.
 
+One row per defined beat; a whole-scene duration or “Model 2” is not exact voiceover coverage. Request independent cutouts/parts/poses for independent motion. Whole-frame opaque images need an intentional complete-shot use, not a midground label. Ask the user for external assets/choices and wait before finalizing the refined plan.
+
 | Scene / beat | Exact voiceover line / word indices / time | Background (BG) | Midground object | Foreground object | Visible action and new understanding |
 |---|---|---|---|---|---|
 | TODO | TODO | Asset ID + exact filename, code visual, or none | TODO | TODO | TODO |
@@ -27,6 +29,7 @@ Example only: “Start by connecting what you know” can reuse `A-ROOM / desk-r
 - AI tool/model (if known), prompt/reference provenance, disclosure wording and placement:
 - Rights status / usage basis: cleared / user-owned / unknown / reference-only; AI provenance alone is not clearance.
 - Inspection: actual properties, visual fit, usable motion/poses, rights evidence, accepted by/date.
+- Defects/exceptions: text, artifacts, resolution/crop or missing movable parts; effect on planned action and actual user acceptance or replacement decision.
 - Original path -> staged `public/media/` path:
 - Missing/unsuitable issue, proposed alternative/omission/redesign, user decision:
 
