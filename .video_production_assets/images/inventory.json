@@ -282,6 +282,359 @@
         "Platform-specific visual language may be inappropriate when no social-media context is intended.",
         "Wide internal button shape can be difficult to fit cleanly in a narrow vertical layout without cropping or downscaling."
       ]
+    },
+    {
+      "file_name": "reused_content_stamp.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/reused_content_stamp.png",
+      "dimensions": {
+        "width_px": 1024,
+        "height_px": 1024,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Distressed red rubber stamp with text REUSED CONTENT inside a grunge double border, keyed to an RGBA transparent background.",
+      "visual": {
+        "subject": [
+          "rubber stamp",
+          "reused content label",
+          "demonetization penalty",
+          "warning mark"
+        ],
+        "action_or_state": [
+          "slamming down",
+          "penalizing",
+          "rejecting",
+          "authoritative disapproval"
+        ],
+        "style": [
+          "distressed grunge",
+          "rubber stamp texture",
+          "bold graphic alert",
+          "editorial intervention"
+        ],
+        "color_palette": [
+          "crimson red",
+          "transparent"
+        ],
+        "background": "Transparent alpha channel; suitable for layering directly over video footage, slides, or graphics.",
+        "composition": "Centered horizontal rectangular text within circular/rounded distressed seal.",
+        "text_present": true,
+        "text_content": [
+          "REUSED CONTENT"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Ideal for sudden drop, rotation, and impact shudder animations over low-effort content."
+      },
+      "best_for": [
+        "youtube policy and demonetization explainers",
+        "ai content trap warnings",
+        "reused content penalties",
+        "editorial rejection motifs",
+        "algorithmic failure case studies"
+      ],
+      "keywords": [
+        "reused content",
+        "demonetized",
+        "youtube",
+        "penalty",
+        "stamp",
+        "red stamp",
+        "ai channel",
+        "rejection"
+      ],
+      "limitations": [
+        "Contains English text REUSED CONTENT.",
+        "Aggressive warning tone unsuited for positive or neutral editorial topics."
+      ]
+    },
+    {
+      "file_name": "workflow_screencast.jpg",
+      "file_type": "jpg",
+      "file_path": ".video_production_assets/images/workflow_screencast.jpg",
+      "dimensions": {
+        "width_px": 1792,
+        "height_px": 1024,
+        "aspect_ratio": "16:9"
+      },
+      "has_alpha_channel": false,
+      "description": "Realistic dark-mode developer automation dashboard showcasing automated webhook flow, code snippets, and execution telemetry.",
+      "visual": {
+        "subject": [
+          "developer dashboard",
+          "webhook pipeline",
+          "code editor",
+          "automation nodes",
+          "api workflow"
+        ],
+        "action_or_state": [
+          "active data flow",
+          "high-intent utility",
+          "executing automation",
+          "silent workflow"
+        ],
+        "style": [
+          "modern dark-mode ui",
+          "technical ide",
+          "sleek developer tool",
+          "crisp vector-like interfaces"
+        ],
+        "color_palette": [
+          "slate navy",
+          "emerald green",
+          "cyan blue",
+          "white",
+          "dark charcoal"
+        ],
+        "background": "Dark slate IDE background with subtle grid lines.",
+        "composition": "Central workflow canvas with interactive nodes connected by glowing lines; sidebars for code and logs.",
+        "text_present": true,
+        "text_content": [
+          "AlphaFlow",
+          "Webhook",
+          "Process Order",
+          "Status: 200 OK"
+        ],
+        "visual_weight": "medium-high",
+        "transparency_use": "Opaque 16:9 background plate; serves as hero UI canvas for simulated screencasts."
+      },
+      "best_for": [
+        "developer and coding walkthroughs",
+        "saas and api automation explainers",
+        "technical tutorials and no-fluff guides",
+        "workflow optimization and productivity videos",
+        "software affiliate monetization showcases"
+      ],
+      "keywords": [
+        "developer",
+        "screencast",
+        "code",
+        "webhook",
+        "api",
+        "automation",
+        "dashboard",
+        "dark mode",
+        "ui",
+        "tutorial"
+      ],
+      "limitations": [
+        "Opaque 16:9 format; requires full-screen or card staging.",
+        "Contains technical UI labels specific to software/webhooks."
+      ]
+    },
+    {
+      "file_name": "map_data_graphic.jpg",
+      "file_type": "jpg",
+      "file_path": ".video_production_assets/images/map_data_graphic.jpg",
+      "dimensions": {
+        "width_px": 1792,
+        "height_px": 1024,
+        "aspect_ratio": "16:9"
+      },
+      "has_alpha_channel": false,
+      "description": "Cinematic dark navy world map visualization plate with illuminated global trade routes, glowing coordinate markers, and timeline charts.",
+      "visual": {
+        "subject": [
+          "world map",
+          "global trade routes",
+          "data visualization",
+          "timeline chart",
+          "telemetry markers"
+        ],
+        "action_or_state": [
+          "global interconnectedness",
+          "data progression",
+          "analytical depth",
+          "cinematic telemetry"
+        ],
+        "style": [
+          "cinematic data journalism",
+          "vox-style documentary graphic",
+          "illuminated vector routes",
+          "dark aesthetic"
+        ],
+        "color_palette": [
+          "dark navy",
+          "neon cyan",
+          "gold",
+          "electric blue",
+          "slate"
+        ],
+        "background": "Deep navy world topography grid with subtle latitude/longitude markers.",
+        "composition": "Global perspective spanning the frame with high concentration of glowing nodes and trade arcs across oceans.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Opaque 16:9 backdrop plate; ideal for dynamic camera zooms, coordinate overlays, and data essay animations."
+      },
+      "best_for": [
+        "data journalism and visual data essays",
+        "geopolitical and economic explainers",
+        "supply chain and trade route documentaries",
+        "motion graphics showcases",
+        "high-retention educational videos"
+      ],
+      "keywords": [
+        "world map",
+        "data visualization",
+        "geopolitics",
+        "shipping routes",
+        "motion graphics",
+        "infographic",
+        "visual essay",
+        "economics"
+      ],
+      "limitations": [
+        "Opaque 16:9 plate.",
+        "Strong dark aesthetic requires light or neon overlay graphics for high contrast."
+      ]
+    },
+    {
+      "file_name": "pomodoro_study_room.jpg",
+      "file_type": "jpg",
+      "file_path": ".video_production_assets/images/pomodoro_study_room.jpg",
+      "dimensions": {
+        "width_px": 1792,
+        "height_px": 1024,
+        "aspect_ratio": "16:9"
+      },
+      "has_alpha_channel": false,
+      "description": "Aesthetic dusk study desk workspace with warm lamp illumination, laptop displaying active Pomodoro timer, studio headphones, and houseplant.",
+      "visual": {
+        "subject": [
+          "study desk",
+          "pomodoro timer",
+          "laptop",
+          "headphones",
+          "desk lamp",
+          "indoor plant",
+          "cozy room"
+        ],
+        "action_or_state": [
+          "deep work",
+          "focus session",
+          "ambient study",
+          "calm concentration"
+        ],
+        "style": [
+          "3d architectural render",
+          "lo-fi aesthetic",
+          "warm atmospheric lighting",
+          "cinematic dusk interior"
+        ],
+        "color_palette": [
+          "warm amber",
+          "dusk blue",
+          "terracotta",
+          "matte dark gray",
+          "soft gold"
+        ],
+        "background": "Cozy home office interior with soft evening window light.",
+        "composition": "Desk centered in lower half, laptop displaying circular timer ring, headphones hanging nearby.",
+        "text_present": true,
+        "text_content": [
+          "25:00",
+          "Focus"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Opaque 16:9 backdrop; excellent for ambient audio visualizers, countdown clocks, and study streams."
+      },
+      "best_for": [
+        "functional audio environments and study rooms",
+        "lo-fi music and ambient soundscape videos",
+        "pomodoro productivity explainers",
+        "deep work and concentration sessions",
+        "streaming royalties and content id case studies"
+      ],
+      "keywords": [
+        "pomodoro",
+        "study room",
+        "ambient",
+        "deep work",
+        "lo-fi",
+        "desk",
+        "workspace",
+        "focus",
+        "dusk",
+        "headphones",
+        "timer"
+      ],
+      "limitations": [
+        "Opaque 16:9 render.",
+        "Atmospheric desk style is specific to study/deep work contexts."
+      ]
+    },
+    {
+      "file_name": "funnel_blueprint.jpg",
+      "file_type": "jpg",
+      "file_path": ".video_production_assets/images/funnel_blueprint.jpg",
+      "dimensions": {
+        "width_px": 1792,
+        "height_px": 1024,
+        "aspect_ratio": "16:9"
+      },
+      "has_alpha_channel": false,
+      "description": "Architectural marketing funnel blueprint diagram detailing multi-stage audience capture from top-of-funnel video traffic to owned newsletter and products.",
+      "visual": {
+        "subject": [
+          "marketing funnel",
+          "architectural blueprint",
+          "traffic tiers",
+          "conversion architecture",
+          "newsletter capture"
+        ],
+        "action_or_state": [
+          "converting traffic",
+          "capturing audience",
+          "building sustainable business",
+          "funneling"
+        ],
+        "style": [
+          "architectural blueprint",
+          "technical vector diagram",
+          "engineering schematic",
+          "clean modern business visual"
+        ],
+        "color_palette": [
+          "slate cyan",
+          "blueprint blue",
+          "emerald green",
+          "white",
+          "charcoal"
+        ],
+        "background": "Deep slate blueprint canvas with technical measurement grid.",
+        "composition": "Wide top funnel tapering down through mid-tier project resources to a solid owned ecosystem base.",
+        "text_present": true,
+        "text_content": [
+          "Discovery Traffic",
+          "Digital Resources",
+          "Owned Email Newsletter",
+          "Compounding Revenue"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Opaque 16:9 blueprint plate; ideal for sequential tier reveals, arrow animations, and business model synthesis."
+      },
+      "best_for": [
+        "creator economics and monetization models",
+        "marketing and sales funnel explainers",
+        "audience capture and email newsletter strategies",
+        "digital product and template business videos",
+        "summary architectures and final hero takeaways"
+      ],
+      "keywords": [
+        "funnel",
+        "blueprint",
+        "marketing",
+        "business model",
+        "traffic conversion",
+        "newsletter",
+        "youtube funnel",
+        "creator economics",
+        "monetization"
+      ],
+      "limitations": [
+        "Opaque 16:9 diagram.",
+        "Contains conceptual funnel stage labels in English."
+      ]
     }
   ]
 }
