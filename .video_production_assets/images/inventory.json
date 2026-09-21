@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0",
+  "asset_directory": ".video_production_assets/images",
+  "purpose": "Machine-readable inventory of reusable image assets for video scenes and motion graphics.",
+  "assets": [
+    {
+      "file_name": "brain_light_bulb.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/brain_light_bulb.png",
+      "dimensions": {
+        "width_px": 2048,
+        "height_px": 2048,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Stylized illustration of a peach-colored human head silhouette containing a yellow light bulb with circuit-board traces and colored nodes.",
+      "visual": {
+        "subject": [
+          "human head profile",
+          "brain",
+          "light bulb",
+          "circuit board",
+          "idea"
+        ],
+        "action_or_state": [
+          "thinking",
+          "insight",
+          "idea emerging",
+          "technology and cognition"
+        ],
+        "style": [
+          "flat illustration",
+          "bold graphic icon",
+          "clean vector-like shapes",
+          "playful educational"
+        ],
+        "color_palette": [
+          "peach",
+          "yellow",
+          "black",
+          "blue",
+          "green",
+          "red"
+        ],
+        "background": "Black-looking canvas in preview; use as a transparent-background cutout only after confirming alpha rendering in the target composition.",
+        "composition": "Large right-facing head profile and oversized bulb fill most of the square frame; strongest visual weight is on the right and upper half.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Suitable for layering over solid backgrounds, gradients, diagrams, or paper textures if transparency is preserved."
+      },
+      "best_for": [
+        "psychology or neuroscience explainers",
+        "ideas and insight",
+        "creative thinking",
+        "learning and education",
+        "technology-meets-human-behavior visuals"
+      ],
+      "keywords": [
+        "brain",
+        "mind",
+        "thought",
+        "idea",
+        "inspiration",
+        "intelligence",
+        "learning",
+        "innovation",
+        "cognition",
+        "lightbulb"
+      ],
+      "limitations": [
+        "Square composition may need cropping or scaling for a 9:16 reel.",
+        "Strong black outlines and saturated colors may clash with muted editorial palettes.",
+        "Does not communicate a specific emotion or behavior without supporting context."
+      ]
+    },
+    {
+      "file_name": "creative_light_bulb.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/creative_light_bulb.png",
+      "dimensions": {
+        "width_px": 4096,
+        "height_px": 4096,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Bright colorful illustration of a glowing light bulb used as a creative container, with paint brushes, a small castle-like form, floating shapes, and blue and pink decorative elements.",
+      "visual": {
+        "subject": [
+          "light bulb",
+          "paint brushes",
+          "creative tools",
+          "castle-like imagination scene",
+          "art and invention"
+        ],
+        "action_or_state": [
+          "creating",
+          "imagination",
+          "creative energy",
+          "visualizing an idea"
+        ],
+        "style": [
+          "colorful digital illustration",
+          "glossy cartoon",
+          "whimsical fantasy",
+          "high-detail decorative graphic"
+        ],
+        "color_palette": [
+          "yellow",
+          "orange",
+          "cyan",
+          "blue",
+          "pink",
+          "red",
+          "purple"
+        ],
+        "background": "Black-looking canvas in preview; use as a transparent-background cutout only after confirming alpha rendering in the target composition.",
+        "composition": "Centered bulb-shaped illustration with a wide silhouette, dense detail in the middle, and floating decorative fragments around the edges.",
+        "text_present": false,
+        "visual_weight": "high",
+        "transparency_use": "Suitable as a hero illustration or layered sticker-like element over a simple background."
+      },
+      "best_for": [
+        "creativity and imagination",
+        "content ideation",
+        "art and design explainers",
+        "innovation and invention",
+        "positive educational hooks"
+      ],
+      "keywords": [
+        "creative",
+        "creativity",
+        "imagination",
+        "art",
+        "design",
+        "invention",
+        "inspiration",
+        "idea",
+        "lightbulb",
+        "fantasy"
+      ],
+      "limitations": [
+        "Very detailed and saturated; may compete with captions or dense diagrams.",
+        "Square composition requires deliberate cropping for vertical video.",
+        "Whimsical style may not suit serious, minimalist, or documentary treatments."
+      ]
+    },
+    {
+      "file_name": "yellow_star_emoji.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/yellow_star_emoji.png",
+      "dimensions": {
+        "width_px": 4096,
+        "height_px": 4096,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Friendly yellow five-point star character with a smiling face, rosy cheeks, glossy highlights, and a smaller floating star accent.",
+      "visual": {
+        "subject": [
+          "yellow star",
+          "smiling character",
+          "small star accent",
+          "emoji"
+        ],
+        "action_or_state": [
+          "happiness",
+          "approval",
+          "success",
+          "reward",
+          "celebration"
+        ],
+        "style": [
+          "cute cartoon",
+          "emoji-like character",
+          "glossy 3D-inspired illustration",
+          "playful"
+        ],
+        "color_palette": [
+          "yellow",
+          "orange",
+          "dark brown",
+          "white",
+          "pink"
+        ],
+        "background": "Black-looking canvas in preview; use as a transparent-background cutout only after confirming alpha rendering in the target composition.",
+        "composition": "Large centered star character with a small detached star in the upper-right; the face is readable at medium size.",
+        "text_present": false,
+        "visual_weight": "medium",
+        "transparency_use": "Good as a sticker, reward token, badge, reaction, or end-state accent."
+      },
+      "best_for": [
+        "positive feedback",
+        "small reward moments",
+        "success or completion",
+        "favorite or standout item",
+        "friendly transitions"
+      ],
+      "keywords": [
+        "star",
+        "emoji",
+        "happy",
+        "success",
+        "reward",
+        "approval",
+        "celebration",
+        "favorite",
+        "positive",
+        "cute"
+      ],
+      "limitations": [
+        "Communicates a generic positive reaction rather than a specific concept.",
+        "Cute emoji styling may undermine serious or restrained subject matter.",
+        "Square canvas and centered subject leave limited built-in space for adjacent text."
+      ]
+    },
+    {
+      "file_name": "youtube_like_button_click.png",
+      "file_type": "png",
+      "file_path": ".video_production_assets/images/youtube_like_button_click.png",
+      "dimensions": {
+        "width_px": 4000,
+        "height_px": 4000,
+        "aspect_ratio": "1:1"
+      },
+      "has_alpha_channel": true,
+      "description": "Red rounded rectangular LIKE button graphic with a white thumbs-up icon, large white LIKE lettering, and a hand cursor pressing the right side.",
+      "visual": {
+        "subject": [
+          "like button",
+          "thumbs-up icon",
+          "hand cursor",
+          "social media interaction"
+        ],
+        "action_or_state": [
+          "clicking",
+          "liking",
+          "engagement",
+          "call to action"
+        ],
+        "style": [
+          "bold social-media graphic",
+          "button illustration",
+          "high-contrast iconography",
+          "instructional"
+        ],
+        "color_palette": [
+          "red",
+          "white",
+          "light gray",
+          "dark gray"
+        ],
+        "background": "White background in the inspected preview; treat as a light-background asset unless alpha transparency is confirmed during import.",
+        "composition": "Large horizontal button centered in the square canvas, with the cursor overlapping the lower-right edge; strong left-to-right reading from icon to text to click action.",
+        "text_present": true,
+        "text_content": [
+          "LIKE"
+        ],
+        "visual_weight": "high",
+        "transparency_use": "Best on a clean light or transparent-compatible composition; avoid placing on a busy background because of the white outer border and cursor."
+      },
+      "best_for": [
+        "social engagement call to action",
+        "like or approval behavior",
+        "creator economy and platform explainers",
+        "reaction feedback",
+        "end-card interaction prompts"
+      ],
+      "keywords": [
+        "youtube",
+        "like",
+        "thumbs up",
+        "click",
+        "button",
+        "engagement",
+        "social media",
+        "call to action",
+        "feedback",
+        "interaction"
+      ],
+      "limitations": [
+        "Contains the word LIKE, so it is not language-neutral.",
+        "Platform-specific visual language may be inappropriate when no social-media context is intended.",
+        "Wide internal button shape can be difficult to fit cleanly in a narrow vertical layout without cropping or downscaling."
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: video-production
-description: Produce or revise narrated Remotion videos for horizontal YouTube and vertical short-form, with engagement-focused direction, original motion graphics, animated scene transitions, local Kokoro speech, captions, optional media and sound, review previews, MP4, and a final-frame PNG.
+description: Produce or revise narrated Remotion videos for horizontal YouTube and vertical short-form, including long-form explainers and illustrated whiteboard videos, with original motion graphics, local or recorded narration, captions, review previews, MP4, and a final-frame PNG.
 ---
 
 # Video Production
@@ -10,6 +10,8 @@ Deliver an editable Remotion project, narrated MP4, and hero PNG from the exact 
 ## Scope and review
 
 Honor the user's requested folder, duration, aspect ratio, and existing approvals. Default to 20–45 seconds, 4–8 scenes, 30 fps, vertical 1080 × 1920 if unspecified. Estimate narration at about 2.5 words/second; use measured audio durations for production.
+
+For multi-minute explainers or a reference with a sustained argument, read [long-form production](references/long-form-production.md). The short defaults are not limits. Plan chapters and visual beats, maintain recurring identities and a shared asset inventory, and validate a representative sequence before scaling production. For reference matching, distinguish inspected frames/captions from actual motion and listening review; never infer production methods or sound quality from stills.
 
 Read [engagement direction](references/engagement-direction.md) before scripting: define the audience's situation, opening promise, intermediate discoveries, and final takeaway. Use the principles as editorial guidance, not guaranteed psychology or retention outcomes. For platform/aspect-ratio choices or adaptations, read [platform composition](references/platform-composition.md). Horizontal YouTube needs deliberate spatial staging and pacing; vertical versions need their own readable composition. Re-stage rather than merely crop.
 
@@ -32,6 +34,7 @@ Add .video_production_assets/, node_modules/, and output/cache paths to the appr
 ## Narration and timestamps
 
 Write the approved/delegated narration to PROJECT/transcript.txt, separating scenes with a line containing only ---.
+For supplied recordings, use `scripts/06_import_narration.py` as described in [audio direction](references/audio-direction.md), then use the same timestamp and scaffold pipeline. Imported recordings do not require Kokoro models. Audition the chosen voice before generating a long script.
 Read [audio direction](references/audio-direction.md) for phrasing, scene-to-scene cadence, optional mixing, and readable captions. Use supported voice controls and audition joins; do not invent speech-engine capabilities.
 Use scripts/01_tts.py with --assets-dir WORKSPACE/.video_production_assets and --out-dir PROJECT/public/audio. Default voice: af_heart; see [voice guidance](references/kokoro-voices.md). Confirm every WAV is nonempty, finite, nonsilent, and matches metadata. Report measured scene durations.
 
@@ -40,6 +43,8 @@ Run scripts/02_timestamps.py sequentially for each WAV with --model base, --lang
 ## Visual direction and composition
 
 Choose a visual language for this audience, topic, and emotional arc. Possibilities include documentary footage with graphic interventions, illustrated storytelling, simulations, tactile collage, character/object animation, cinematic environments, and kinetic typography. These are possibilities, not a menu or mandatory formula. Motion graphics and original animation remain available with or without supplied media. Avoid inheriting the previous project's palette, card layout, pacing, or vibe by habit. Establish coherent art direction while varying shot scale, staging, and rhythm where the story benefits. Use a meaningful first frame and a settled final takeaway. Keep the explanation understandable muted.
+
+For doodle/whiteboard direction, read [whiteboard production](references/whiteboard-production.md). Scaffold with `--visual-style whiteboard` to copy an original SVG starter kit and reveal/camera/chart helpers. This is independent of aspect ratio; it supplies building blocks, not finished illustration or automatic storyboard rendering. For numerical comparisons, read [data explainers](references/data-explainers.md); generate chart values from explicit assumptions and tested calculations rather than hand-entering animated totals.
 
 For a publishable project, consult current primary platform guidance and relevant examples where useful. Distinguish observed popularity from measured retention; do not promise virality. A functional smoke test needs no trend research.
 

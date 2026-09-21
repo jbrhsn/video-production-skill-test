@@ -1,5 +1,6 @@
-.video_production_assets/
 .venv-video-production/
 **/node_modules/
 **/__pycache__/
 **/out/
+**/remotion-infographic/**
+**/remotion-infographic
