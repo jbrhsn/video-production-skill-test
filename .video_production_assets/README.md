@@ -18,6 +18,8 @@ This is the workspace's reusable creative-media library. It is deliberately sepa
 
 The four high-resolution sample images in `images/` form the first collection. Three visually read as transparent cutouts; the LIKE graphic uses a white canvas. Their detailed visual descriptions live in `images/inventory.json`; their searchable IDs, source status, and reuse rules live in `library.json`.
 
+For copyable entries and discovery sources for every folder, see `inventory.example.json`. Those are examples of where to look, not an authorization to use every item from a provider.
+
 ## Add an asset
 
 1. Put the original file in the appropriate folder using a descriptive, lowercase, hyphenated name: `person-presenting-side-profile.png`, not `IMG_4821.png`.
@@ -32,6 +34,19 @@ uv run --no-project --python .venv-video-production/bin/python python \
 ```
 
 `inventory.generated.json` is a disposable inspection report. `library.json` is the source of truth for human judgment, rights, and creative meaning.
+
+## Find candidates before a storyboard
+
+Before writing a video storyboard, search the curated metadata using words from the topic, audience problem, and visual beats. Include unreviewed material only to form a review shortlist:
+
+```bash
+uv run --no-project --python .venv-video-production/bin/python python \
+  .agents/skills/video-production/scripts/08_search_assets.py \
+  --assets-dir .video_production_assets \
+  --query "creative thinking and ideas" --include-unusable
+```
+
+The result is a candidate list, not a command to use the highest-ranked asset. Inspect each candidate and its rights. Only `cleared` or `user-owned` assets may be selected for an output. If nothing fits, the video can use original motion graphics, illustration, footage acquired for that project, or no media at all.
 
 ## Before using an asset in a video
 

@@ -13,6 +13,8 @@ Every output-eligible asset needs a stable ID, workspace-relative path, kind, us
 
 Do not mistake an asset's presence in the workspace for permission to publish it. Existing user-provided files start as `unknown` unless the user has supplied a rights basis.
 
+`WORKSPACE/.video_production_assets/inventory.example.json` provides copyable entries and provider examples for images, footage, music, sound effects, fonts, brand assets, and reference study. It is a discovery aid, not a downloadable stock catalog or blanket license. Use the exact item page and its current license/terms; providers can apply different terms to individual assets.
+
 ## Intake and indexing
 
 Name files descriptively with lowercase hyphens, retain the original where possible, and inspect media before selection. Add human judgment to `library.json` and collection-specific inventories. Then generate a technical report:
@@ -23,6 +25,18 @@ uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python 
 ```
 
 The report is `inventory.generated.json`, which can be regenerated at any time. The indexer excludes model caches and deliberately refuses to overwrite curated `library.json`. It reads PNG/JPEG/SVG dimensions directly and uses `ffprobe` for audio/video when present. It does not determine image transparency, copyright status, visual quality, or actual usage rights.
+
+## Candidate search before storyboarding
+
+Before preparing a storyboard, read `library.json`, collection inventories, and run a small number of topic/visual-beat searches:
+
+```bash
+uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python \
+  SKILL/scripts/08_search_assets.py --assets-dir WORKSPACE/.video_production_assets \
+  --query "focus distraction desk" --include-unusable
+```
+
+The command performs transparent token matching against curated metadata and collection details. `--include-unusable` makes `unknown` and `reference-only` entries visible for review; it does not make them usable. Inspect shortlisted files, confirm project-specific rights, and mention only real, suitable selected assets in the storyboard. When no asset is appropriate, proceed with original code visuals or acquire/generate media under the user's authorization. Inventory scarcity must not shrink the narrative, dictate a visual style, or turn the video into generic text slides.
 
 ## Selecting media for a project
 
