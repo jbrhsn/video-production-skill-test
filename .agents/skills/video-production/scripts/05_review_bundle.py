@@ -50,7 +50,7 @@ def main():
     args = parser.parse_args()
     project = Path(args.project_dir).expanduser().resolve()
     marker = project / "src/timeline-contract.json"
-    if not marker.exists() or json.loads(marker.read_text()) != {"version": 1, "sceneContract": "visual-only"}:
+    if not marker.exists() or json.loads(marker.read_text()) != {"version": 2, "sceneContract": "visual-only"}:
         raise ValueError("Review bundle requires the visual-only v2 production timeline")
     data = json.loads((project / "src/timeline-data.json").read_text())
     if args.render:

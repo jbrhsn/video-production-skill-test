@@ -17,25 +17,26 @@ Use a coherent subset for each project. Start around 8–18 frames at 30 fps whe
 
 In collaborative production, settle joins in the approved implementation playbook/edit plan and review BoundaryN plus VideoFull in Studio. An asset substitution, timing change, or edited join reopens affected neighboring reviews; record decisions and revision changes using [collaborative production](collaborative-production.md). Render the final master directly rather than concatenating isolated scene exports.
 
-## Edit plan v1
+## Edit plan v2
 
 Pass `--edit-plan PROJECT/edit-plan.json` to the scaffold. An example for at least two scenes:
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "transitions": [
     {"afterScene": 1, "kind": "slide", "frames": 12, "direction": "left", "easing": "smooth"}
   ],
   "holds": [{"afterScene": 2, "frames": 12}],
   "safeArea": {"top": 0.08, "right": 0.12, "bottom": 0.18, "left": 0.08},
-  "audio": []
+  "audio": [],
+  "mix": {"targetLufs": -16, "toleranceLufs": 1, "maxTruePeakDbtp": -1}
 }
 ```
 
 Scene numbers are 1-based; transitions reference distinct interior boundaries. Omitted joins are cuts. `kind` is cut/fade/slide/wipe; `direction` is left/right/up/down; `easing` is linear/smooth. Smooth is deterministic smoothstep. Non-cut transitions require at least two frames; cut requires zero. Holds are nonnegative integer frames appended after measured narration, including an optional final hold. Safe-area values are fractional insets, adjustable per placement. Unknown fields fail rather than silently hiding misspellings.
 
-`scripts/timeline.py` compiles version-1 or version-2 plans once into `src/timeline-data.json`. Master, scene-review slices, boundary previews and hero duration use that output. `src/edit-plan.json` saves the input choices for refresh; pass an explicitly reviewed replacement to reset them. Version 2 adds event/word/scene/boundary-anchored sound and project mix targets. Changing fps requires revisiting all frame-based edit decisions.
+`scripts/timeline.py` compiles the version-2 plan once into `src/timeline-data.json`. Master, scene-review slices, boundary previews and hero duration use that output. `src/edit-plan.json` saves the input choices for refresh; pass an explicitly reviewed replacement to reset them. The plan supports event/word/scene/boundary-anchored sound and project mix targets. Changing fps requires revisiting all frame-based edit decisions.
 
 Narration content length is `ceil(duration_s * fps)`. Holds extend its scene span and shift later starts. A D-frame visual transition around narration boundary B spans `[B - floor(D/2), B + ceil(D/2))`; only visuals overlap. Two 90-frame speech segments and a 12-frame transition still total 180 frames, with narration at 0 and 90, and visuals overlapping on frames 84–95. Added holds change that total explicitly. The compiler rejects transition windows that consume a scene's stable interval.
 
@@ -47,8 +48,6 @@ Use `contentFrame` for ordinary scene animation: it clamps to the first/last con
 
 The included renderer uses frame-driven opacity, transforms, and clip paths; it does not require an extra transition package. For advanced presentations, Remotion's [TransitionSeries](https://www.remotion.dev/docs/transitions/transitionseries) is an option: pin `@remotion/transitions` to the project's exact Remotion version and account for its overlap duration. Do not wrap the existing complete speech-owning scenes in overlapping sequences. Replacing the primitive renderer must preserve the compiled narration and caption schedule.
 
-## Legacy projects and previews
-
-Existing scene files without `src/timeline-contract.json` retain the old complete-scene renderer. An edit plan is rejected for that contract. `--refresh-generated` preserves authored scenes, `WordCaptions.tsx`, and `Timeline.tsx`; it is not an automatic migration. To migrate, work in a separate copy, extract audio/captions from each scene, adopt visual props, ensure the updated caption/helper interfaces exist, then write `{"version":1,"sceneContract":"visual-only"}` to the marker before refresh. Check every scene; a marker alone cannot prove that audio was removed.
+## Previews
 
 `SceneN` compositions show isolated visuals plus their speech/captions and holds. They omit global music/effects. `SceneNReview` and `BoundaryN` are bounded slices of the actual master, preserving source position, neighboring visuals where applicable, captions and mix. `SafeAreaReview` adds adjustable inset guides. Review joins in playback for black gaps, motion discontinuity, object duplication, text collisions, voice overlap, and chopped words. Exact frame/stream checks cannot replace listening.

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from production import check_production
 from workflow_v2 import snapshot, validate_execution
+from timeline import compile_timeline
 
 SCRIPTS = Path(__file__).resolve().parent
 
@@ -243,6 +244,34 @@ class WorkflowV2Tests(unittest.TestCase):
         path.write_text(json.dumps(timestamps))
         with self.assertRaisesRegex(ValueError, "inconsistent timestamps"):
             validate_execution(self.root, [1, 2])
+
+    def test_event_anchor_moves_after_hold_and_rejects_bad_audio_asset(self):
+        self.ready_plan()
+        execution = json.loads((self.root / "execution-plan.json").read_text())
+        execution["scenes"][1]["beats"][0]["events"] = [{"id": "contact", "frame": 6, "word": 0}]
+        (self.root / "execution-plan.json").write_text(json.dumps(execution))
+        media = self.root / "public/media"
+        media.mkdir(parents=True)
+        with wave.open(str(media / "click.wav"), "wb") as wav:
+            wav.setparams((1, 2, 24000, 0, "NONE", "not compressed")); wav.writeframes(b"\x01\x00" * 24000)
+        manifest = {"version": 1, "assets": [{"id": "click", "kind": "audio", "stagedPath": "public/media/click.wav",
+            "source": "fixture", "rightsStatus": "cleared", "usageBasis": "test fixture", "attribution": "none",
+            "status": "accepted", "inspection": "One second synthetic click fixture."}]}
+        (self.root / "asset-manifest.json").write_text(json.dumps(manifest))
+        cue = {"id": "contact-cue", "assetId": "click", "role": "effect", "purpose": "Confirm contact",
+               "required": True, "anchor": {"type": "event", "scene": 2, "beat": "S2-B1", "event": "contact"},
+               "durationFrames": 6, "sourceStartSeconds": 0, "gainDb": -9, "duckGainDb": -9,
+               "duckAttackFrames": 3, "duckReleaseFrames": 3, "fadeInFrames": 0, "fadeOutFrames": 1,
+               "acceptance": "Click occurs at the contact frame."}
+        edit = {"version": 2, "transitions": [], "holds": [{"afterScene": 1, "frames": 12}], "audio": [cue],
+                "mix": {"targetLufs": -16, "toleranceLufs": 1, "maxTruePeakDbtp": -1}}
+        scenes = [{"scene": 1, "duration_frames": 30}, {"scene": 2, "duration_frames": 30}]
+        words = {(2, 0, "start"): 0, (2, 0, "end"): 15}
+        compiled = compile_timeline(scenes, 30, edit, execution, manifest, words)
+        self.assertEqual(compiled["audio"][0]["startFrame"], 48)
+        manifest["assets"][0]["kind"] = "image"
+        with self.assertRaisesRegex(ValueError, "audio asset"):
+            compile_timeline(scenes, 30, edit, execution, manifest, words)
 
     @unittest.skipUnless(os.environ.get("VIDEO_PRODUCTION_RENDER_SMOKE") and os.environ.get("VIDEO_PRODUCTION_NODE_MODULES"),
                          "Set VIDEO_PRODUCTION_RENDER_SMOKE and VIDEO_PRODUCTION_NODE_MODULES for real guarded export")

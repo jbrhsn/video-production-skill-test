@@ -421,8 +421,8 @@ def main() -> None:
     marker = project_dir / "src" / "timeline-contract.json"
     existing_scenes = list((project_dir / "src" / "scenes").glob("Scene*.tsx"))
     visual_only = marker.exists() or not existing_scenes
-    if marker.exists() and json.loads(marker.read_text()) != {"version": 1, "sceneContract": "visual-only"}:
-        raise ValueError("Unknown timeline contract; migrate explicitly before refresh")
+    if marker.exists() and json.loads(marker.read_text()) != {"version": 2, "sceneContract": "visual-only"}:
+        raise ValueError("Only the version-2 visual-only timeline contract is supported")
     if not visual_only:
         raise ValueError("Only the visual-only v2 timeline contract is supported")
     plan = json.loads(Path(args.edit_plan).expanduser().read_text())
@@ -473,7 +473,7 @@ def main() -> None:
         config = 'import timeline from "./timeline-data.json";\n' + config.replace(
             "SCENES.reduce((sum, s) => sum + s.durationFrames, 0)", "timeline.totalFrames")
         write(project_dir / "src" / "timeline-data.json", json.dumps(timeline, indent=2))
-        write(marker, json.dumps({"version": 1, "sceneContract": "visual-only"}, indent=2))
+        write(marker, json.dumps({"version": 2, "sceneContract": "visual-only"}, indent=2))
         write(saved_plan, json.dumps(plan, indent=2))
         write(project_dir / "src" / "design-tokens.ts", make_design_tokens(design))
         helper = project_dir / "src" / "Timeline.tsx"

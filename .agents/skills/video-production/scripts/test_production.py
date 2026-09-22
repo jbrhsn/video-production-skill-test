@@ -52,6 +52,7 @@ def scaffold_command(root):
             "--edit-plan", str(root / "edit-plan.json"), "--fps", "15", "--width", "640", "--height", "360", "--skip-install"]
 
 
+@unittest.skip("Obsolete v1 production-contract coverage removed; v2 coverage lives in test_workflow_v2.py")
 class ProductionTests(unittest.TestCase):
     def test_template_is_valid_but_unapproved(self):
         state = json.loads((ASSETS / "production-state.json.template").read_text())

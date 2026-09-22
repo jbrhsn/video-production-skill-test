@@ -174,6 +174,10 @@ def compile_timeline(scenes, fps, plan=None, execution=None, assets=None, word_f
         if asset_id not in asset_map:
             raise ValueError(f"audio cue {cue_id} references unknown asset {asset_id!r}")
         item = asset_map[asset_id]
+        if item.get("kind") != "audio":
+            raise ValueError(f"audio cue {cue_id} must reference an audio asset")
+        if type(cue.get("required")) is not bool:
+            raise ValueError(f"audio cue {cue_id} requires a boolean required field")
         src = item.get("stagedPath", "")
         if src.startswith("public/"):
             src = src[len("public/"):]
