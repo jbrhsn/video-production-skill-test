@@ -52,7 +52,7 @@ For supplied recordings, use `scripts/06_import_narration.py` as described in [a
 Read [audio direction](references/audio-direction.md) for phrasing, scene-to-scene cadence, optional mixing, and readable captions. Use supported voice controls and audition joins; do not invent speech-engine capabilities.
 Use scripts/01_tts.py with --assets-dir WORKSPACE/.video_production_assets and --out-dir PROJECT/public/audio. Default voice: af_heart; see [voice guidance](references/kokoro-voices.md). Confirm every WAV is nonempty, finite, nonsilent, and matches metadata. Report measured scene durations.
 
-Run scripts/02_timestamps.py sequentially for each WAV with --model base, --language en for English narration, and --model-dir WORKSPACE/.video_production_assets/whisper. Check words against the approved transcript; recognition is not forced alignment. Inspect and correct mistranscriptions without inventing timing. Short clips under 0.5 seconds produce an empty words array; empty captions for longer narration require investigation.
+Run scripts/02_timestamps.py sequentially for each WAV with --model base, --language en for English narration, and --model-dir WORKSPACE/.video_production_assets/whisper. Check words against the narration transcript; recognition is not forced alignment. Inspect and correct mistranscriptions without inventing timing, then present the narration package for approval. Short clips under 0.5 seconds produce an empty words array; empty captions for longer narration require investigation.
 
 ## Visual direction and composition
 

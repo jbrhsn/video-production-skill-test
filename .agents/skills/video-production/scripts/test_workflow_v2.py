@@ -200,6 +200,42 @@ class WorkflowV2Tests(unittest.TestCase):
         self.assertIn("Missing production state", result.stderr)
         self.assertFalse((self.root / "src").exists())
 
+    def test_hero_uses_updated_timeline_after_renewed_approval(self):
+        self.ready_plan()
+        result = scaffold(self.root)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        timeline_path = self.root / "src/timeline-data.json"
+        timeline = json.loads(timeline_path.read_text())
+        timeline["scenes"][-1]["spanFrames"] += 30
+        timeline["scenes"][-1]["visualEnd"] += 30
+        timeline["totalFrames"] += 30
+        timeline_path.write_text(json.dumps(timeline))
+        edit = {"version": 1, "holds": [{"afterScene": 2, "frames": 30}]}
+        for name in ("edit-plan.json", "src/edit-plan.json"):
+            (self.root / name).write_text(json.dumps(edit))
+        approve(self.root, self.state, "plan", "plan-1")
+        cli = self.root / "node_modules/@remotion/cli"
+        cli.mkdir(parents=True)
+        (cli / "package.json").write_text('{"name":"@remotion/cli","version":"4.0.526"}')
+        (cli / "remotion-cli.js").write_text('require("fs").writeFileSync("renderer-args", JSON.stringify(process.argv.slice(2)));')
+        self.state["phase"] = "final-review"
+        for row in self.state["scenes"]:
+            row["status"] = "approved"
+            approve(self.root, self.state, f"scene:{row['scene']}", row["revision"])
+        approve(self.root, self.state, "video", "project-1")
+        result = subprocess.run(["npm", "run", "hero"], cwd=self.root, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("--frame=89", json.loads((self.root / "renderer-args").read_text()))
+
+    def test_nonfinite_timestamp_duration_rejected(self):
+        self.ready_plan()
+        path = self.root / "public/audio/scene-1-timestamps.json"
+        timestamps = json.loads(path.read_text())
+        timestamps["duration_s"] = float("nan")
+        path.write_text(json.dumps(timestamps))
+        with self.assertRaisesRegex(ValueError, "inconsistent timestamps"):
+            validate_execution(self.root, [1, 2])
+
     @unittest.skipUnless(os.environ.get("VIDEO_PRODUCTION_RENDER_SMOKE") and os.environ.get("VIDEO_PRODUCTION_NODE_MODULES"),
                          "Set VIDEO_PRODUCTION_RENDER_SMOKE and VIDEO_PRODUCTION_NODE_MODULES for real guarded export")
     def test_real_guarded_exports(self):

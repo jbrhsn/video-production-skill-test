@@ -3,6 +3,7 @@
 Plan revision: TODO
 Project assets directory: `assets/`
 Profile / aspect ratio: TODO
+Selected visual recipe / rationale: TODO
 
 ## Voiceover-to-visual map
 
@@ -32,6 +33,12 @@ Example only: “Start by connecting what you know” can reuse `A-ROOM / desk-r
 - Defects/exceptions: text, artifacts, resolution/crop or missing movable parts; effect on planned action and actual user acceptance or replacement decision.
 - Original path -> staged `public/media/` path:
 - Missing/unsuitable issue, proposed alternative/omission/redesign, user decision:
+
+Use `asset-manifest.json` as the authoritative machine-readable register for accepted visual and audio files. Keep requests and human decisions here; reference stable manifest IDs after acceptance rather than maintaining competing technical status.
+
+## Music, ambience and sound effects
+
+Music and SFX may be deliberately `none`. For each selected cue asset, record its narrative purpose, sonic character, exact filename, useful source region, intended beat/event, duration, source/creator, license or usage basis, attribution, technical inspection and listening status. A generic “whoosh on transitions” is not a plan. Request sounds for meaningful contacts, reveals or environmental continuity, and preserve deliberate silence.
 
 ## Readiness review
 

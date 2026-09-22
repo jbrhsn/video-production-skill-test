@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "recipe": "professional-process",
+  "rationale": "Replace with the approved reason this treatment serves the audience and argument.",
+  "backgroundStrategy": "Replace with the approved material, depth and variation rules.",
+  "colors": {
+    "background": "#F6F8FA",
+    "surface": "#FFFFFF",
+    "ink": "#172B4D",
+    "muted": "#526581",
+    "primary": "#2457C5",
+    "secondary": "#087F8C",
+    "positive": "#26734D",
+    "warning": "#A05A00"
+  },
+  "typography": {
+    "fontFamily": "Arial, sans-serif",
+    "titleWeight": 750,
+    "bodyWeight": 500,
+    "dataWeight": 700
+  },
+  "shape": {
+    "strokeWidth": 3,
+    "radius": 18,
+    "shadow": "0 12px 30px rgba(23,43,77,0.14)",
+    "texture": "none"
+  },
+  "motion": {
+    "fastFrames": 8,
+    "standardFrames": 15,
+    "settleFrames": 8,
+    "easing": "smooth",
+    "cameraRule": "Use camera motion only to reveal scale or move from overview to evidence.",
+    "transitions": ["cut", "wipe"]
+  },
+  "captions": {
+    "fontFamily": "Arial, sans-serif",
+    "text": "#172B4D",
+    "background": "#FFFFFF",
+    "active": "#2457C5",
+    "radius": 6
+  },
+  "avoid": [
+    "generic dark gradients",
+    "repeated title-and-card layouts",
+    "decorative motion that does not explain the narration"
+  ]
+}

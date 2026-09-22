@@ -59,6 +59,7 @@ For each scene, record a beat acceptance checklist in feedback/history: planned 
 ## Version 2 state
 
 Start from assets/production-state.json.template:
+
 - version: 2; mode: collaborative (autonomous only under explicit scope-specific delegation).
 - phase: narration, planning, assets, plan-review, implementation, scene-review, final-review, delivery.
 - narrationRevision, planRevision, projectRevision: nonempty revision IDs.
@@ -77,6 +78,7 @@ uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python 
 ```
 
 Snapshot scopes:
+
 - narration: transcript and public/audio files.
 - plan: narration plus storyboard, asset/playbook/execution/edit plans, source assets and staged media.
 - scene:N: plan plus that scene, shared src, package/lock/TypeScript configuration and public files.
@@ -89,6 +91,7 @@ Snapshots compare covered files; they do not authenticate user statements, prove
 ## Preflight and exports
 
 Run 09_check_production.py with:
+
 - --stage plan after narration approval (phase planning/assets/plan-review).
 - --stage implement before scaffold (phase implementation or later).
 - --stage scene --scene N before active-scene edits (phase implementation/scene-review).

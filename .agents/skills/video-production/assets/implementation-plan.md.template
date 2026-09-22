@@ -2,6 +2,7 @@
 
 Plan revision: TODO
 Inputs: approved narration package, asset-plan revision, storyboard, edit plan, execution-plan.json.
+Authoritative tokens / media register: design-system.json / asset-manifest.json.
 Profile / dimensions / fps: TODO
 Approval is recorded in `production-state.json` for this revision.
 
@@ -10,10 +11,13 @@ Approval is recorded in `production-state.json` for this revision.
 Audience / promise / final takeaway:
 Visual argument and recurring identities:
 Palette / semantic colors / local fonts / hierarchy:
+Selected visual recipe / rationale / asset burden:
 Lighting / backgrounds / compositing conventions:
 Captions / safe areas / text contrast:
 Motion / easing / transition vocabulary:
 Audio mix / sound intent:
+Music decision and narrative role (or intentional none):
+SFX/ambience decision and event vocabulary (or intentional none):
 
 ## Scene execution — repeat per scene
 
@@ -23,7 +27,7 @@ Beat IDs: reference execution-plan.json for authoritative checked word/frame ran
 Assets: IDs, exact staged paths, crop/trim, anchor, position/scale, masks, layer order, independently moving parts.
 Code visuals and shared helpers:
 
-| Speech-local frame interval [start, end) | Beat / visible action | Initial -> final state / easing | Understanding / caption and sound coordination |
+| Speech-local frame interval [start, end) | Beat / visible action | Initial -> final state / easing | Event IDs / understanding / caption and sound coordination |
 |---|---|---|---|
 | TODO | TODO | TODO | TODO |
 

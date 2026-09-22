@@ -18,9 +18,18 @@ if (check.error || check.status !== 0) {
   process.exit(check.status || 1);
 }
 const cli = path.join(path.dirname(require.resolve('@remotion/cli/package.json', {paths: [root]})), 'remotion-cli.js');
+// Duration can change after scaffolding. The compiled timeline owns the last frame.
+const timelinePath = path.join(root, 'src/timeline-data.json');
+const lastFrame = fs.existsSync(timelinePath)
+  ? JSON.parse(fs.readFileSync(timelinePath, 'utf8')).totalFrames - 1
+  : config.lastFrame; // Explicit legacy complete-scene projects have no compiled timeline.
+if (!Number.isSafeInteger(lastFrame) || lastFrame < 0) {
+  console.error('Invalid final frame; recompile the timeline before exporting.');
+  process.exit(1);
+}
 const args = mode === 'render'
   ? ['render', 'src/index.ts', 'VideoFull', 'out/video.mp4', '--codec=h264', '--pixel-format=yuv420p']
-  : ['still', 'src/index.ts', 'VideoFull', 'out/video-hero.png', `--frame=${config.lastFrame}`];
+  : ['still', 'src/index.ts', 'VideoFull', 'out/video-hero.png', `--frame=${lastFrame}`];
 const result = spawnSync(process.execPath, [cli, ...args], {cwd: root, stdio: 'inherit'});
 if (result.error) console.error(result.error.message);
 process.exit(result.status === null ? 1 : result.status);

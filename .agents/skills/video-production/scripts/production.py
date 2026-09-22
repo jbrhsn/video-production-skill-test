@@ -1,7 +1,7 @@
 """Read-only checks for recorded collaborative production decisions.
 
-Revision maintenance and asset/creative inspection remain agent responsibilities.
-This module neither authenticates approval evidence nor detects file content edits.
+V2 delegates to snapshot-aware sequential gates. V1 retains recorded-revision
+compatibility checks. Neither authenticates user evidence or judges creative quality.
 """
 from __future__ import annotations
 

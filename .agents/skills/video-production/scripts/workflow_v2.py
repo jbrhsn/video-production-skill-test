@@ -165,7 +165,9 @@ def narration_data(project):
         stamp = row.get("timestamps_file", audio.stem + "-timestamps.json")
         data = read(local_file(project / "public/audio", stamp))
         words = data["words"]
-        if not words or abs(data["duration_s"] - duration) > .02:
+        timestamp_duration = data["duration_s"]
+        if (not words or type(timestamp_duration) not in (int, float)
+                or not math.isfinite(timestamp_duration) or abs(timestamp_duration - duration) > .02):
             raise ValueError(f"Scene {row['scene']}: empty or inconsistent timestamps")
         previous = 0
         for word in words:
