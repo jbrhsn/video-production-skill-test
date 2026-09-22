@@ -1,15 +1,22 @@
 ---
 name: video-production
-description: Produce or revise narrated Remotion videos for horizontal YouTube and vertical short-form, including long-form explainers and illustrated whiteboard videos, with original motion graphics, local or recorded narration, captions, review previews, MP4, and a final-frame PNG.
+description: Produce or edit Remotion videos, including generated explainers and supplied screen recordings, talking-head footage, or synchronized combinations, with captions, review previews, MP4, and a final-frame PNG.
 ---
 
 # Video Production
 
-Deliver an editable Remotion project, narrated MP4, and hero PNG from the exact last composition frame. Preserve the source's message, evidence, qualifications, and voice. Speech synthesis and transcription run locally after dependency/model downloads.
+Deliver an editable Remotion project, MP4, and hero PNG from the exact last composition frame. Preserve the source's message, evidence, qualifications, voice, and supplied recordings. Speech synthesis and transcription run locally after dependency/model downloads.
+
+## Choose the production track
+
+- For a video created from a script, generated/original visuals, or scene narration, use the version-2 generated-production workflow below and read [collaborative production](references/collaborative-production.md).
+- For editing supplied screen recordings, talking-head footage, or synchronized parallel/sequential combinations, use production-state version 3 and read [recorded-video editing](references/recorded-video-editing.md) plus its [timeline contract](references/recorded-timeline-contract.md). Do not force recorded footage through narration-duration scenes or run speech synthesis unless new narration is requested.
+
+Both tracks preserve concrete review gates, durable feedback, guarded final exports, immutable source media, and local editable output. Do not migrate approvals between track versions.
 
 ## Required sequential gates
 
-Read [collaborative production](references/collaborative-production.md) before starting. New productions default to v2 state and sequential user review. At each gate, present the concrete review target, end the turn, and wait. Do not create next-stage artifacts while waiting. “Proceed” approves only the stage just presented; explicit delegation is scoped.
+For the generated-production track, read [collaborative production](references/collaborative-production.md) before starting. New generated productions default to v2 state and sequential user review. At each gate, present the concrete review target, end the turn, and wait. Do not create next-stage artifacts while waiting. “Proceed” approves only the stage just presented; explicit delegation is scoped.
 
 1. Write transcript → generate/import scene audio → create/check timestamps. Present the narration package and STOP for approval before creative planning. An extra transcript-only gate is optional if requested.
 2. After approval, create creative direction, storyboard, design system and beat-level asset requests. Ask for external assets/choices and STOP; do not silently switch to code-only visuals to avoid the handoff.
@@ -17,7 +24,7 @@ Read [collaborative production](references/collaborative-production.md) before s
 4. Implement only the active scene and typecheck. Ask the user to run `npm run studio`, specifying SceneN and frame checkpoints. STOP for feedback; record and apply it until approved before implementing the next scene. Start Studio yourself only if requested.
 5. After all scenes, review joins and VideoFull in Studio. STOP for export approval, then render scene exports, master and final PNG.
 
-Run `09_check_production.py` for plan/implement/scene/render preflight. Scaffold and generated npm exports require version-2 state. Raw CLI exports must not bypass pending review. Read the reference for snapshot-based approvals and engineering test exceptions.
+Run `09_check_production.py` at the applicable track gates. Generated productions use plan/implement/scene/render with version-2 state; recorded edits add source/edit/delivery gates with version-3 state. Raw CLI exports must not bypass pending review. Read the relevant track reference for snapshot-based approvals and engineering test exceptions.
 
 ## Scope and review
 
@@ -68,7 +75,7 @@ After narration-package approval, map every spoken line to beats in asset-plan.m
 
 Read [transitions](references/transitions.md) before composing scene joins. Choose transitions by the relationship between ideas: cuts, fades, directional slides, masks, or authored shared-object/camera continuity. Favor a coherent vocabulary over an effect quota. Visual scenes separate from narration/captions; visual overlap must not overlap voices or advance captions. Version-2 edit plans anchor music/SFX to checked words, named execution events or timeline boundaries. Missing transition entries mean cuts, not a requirement to animate every boundary.
 
-Run scripts/03_scaffold.py after refined-plan approval with the approved storyboard, narration metadata, edit plan and `--design-system PROJECT/design-system.json`; choose the profile. The skill supports only v2 state and validated execution/design/asset contracts. Scaffold resolves sound anchors into the master clock and checks selected source duration. It creates placeholders and guarded exports, not permission to implement all scenes. Run scene preflight and author only active SceneN.tsx. Compare each planned action to actual code and Studio checkpoints; a fade or image pan does not satisfy a promised transformation. Return material unplanned choices to planning. Existing structural files cause safe refusal; inspect before `--refresh-generated`, which preserves authored scenes/helpers.
+For generated productions, run scripts/03_scaffold.py after refined-plan approval with the approved storyboard, narration metadata, edit plan and `--design-system PROJECT/design-system.json`; choose the profile. It requires v2 state and validated execution/design/asset contracts. Scaffold resolves sound anchors into the master clock and checks selected source duration. It creates placeholders and guarded exports, not permission to implement all scenes. Run scene preflight and author only active SceneN.tsx. Compare each planned action to actual code and Studio checkpoints; a fade or image pan does not satisfy a promised transformation. Return material unplanned choices to planning. Existing structural files cause safe refusal; inspect before `--refresh-generated`, which preserves authored scenes/helpers. Recorded edits use `11_scaffold_recorded.py` and the recorded contract instead.
 
 Stage selected media in PROJECT/public/media with traceable source paths. Combine footage or imagery with animation where useful; choose crops and motion around the subject, and avoid stretching or unintentional looping. Mute source-video audio unless deliberately used. Decide music, ambience and SFX during planning—even when each is intentionally `none`. Tie selected effects to the same named events used by visual code; specify source trims, envelopes, ducking intent and listening acceptance. Control peaks and keep narration intelligible. Never claim generated graphics are real footage or invent assets that are not available. See the pipeline reference for media implementation and review guidance.
 

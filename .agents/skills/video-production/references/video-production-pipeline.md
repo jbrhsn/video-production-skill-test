@@ -6,7 +6,9 @@ SKILL means this skill directory; WORKSPACE is the explicit target repository/wo
 
 Create a dedicated environment once (reuse it on later runs). In these examples replace SKILL, WORKSPACE, and PROJECT with actual paths; quote paths containing spaces.
 
-For a new collaborative production, follow [collaborative production](collaborative-production.md): transcript -> scene audio -> checked timestamps -> narration-package approval -> creative/asset planning and asset-request handoff -> inspected assets and approved refined playbook -> one scene at a time with Studio approval -> master review and export approval. Copy the state/asset/playbook/execution templates from SKILL/assets only at their applicable stage, without overwriting authored files. Use PROJECT/assets for submitted files; selected files are staged into public/media. The commands below are pipeline steps, not permission to skip those reviews.
+For a new generated production, follow [collaborative production](collaborative-production.md): transcript -> scene audio -> checked timestamps -> narration-package approval -> creative/asset planning and asset-request handoff -> inspected assets and approved refined playbook -> one scene at a time with Studio approval -> master review and export approval. Copy the state/asset/playbook/execution templates from SKILL/assets only at their applicable stage, without overwriting authored files. Use PROJECT/assets for submitted files; selected files are staged into public/media. The commands below are pipeline steps, not permission to skip those reviews.
+
+For supplied screen/talking-head footage, follow [recorded-video editing](recorded-video-editing.md) and [the recorded timeline contract](recorded-timeline-contract.md). Ingest with `12_ingest_recorded.py`, use v3 source/edit/plan reviews, and scaffold with `11_scaffold_recorded.py`. Both tracks use the dedicated uv environment and guarded final exports.
 
 ```bash
 uv venv --python 3.11 WORKSPACE/.venv-video-production

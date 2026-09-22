@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "track": "recorded-edit",
+  "mode": "collaborative",
+  "phase": "intake",
+  "sourceRevision": "source-1",
+  "editRevision": "edit-1",
+  "planRevision": "plan-1",
+  "projectRevision": "project-1",
+  "activeScene": null,
+  "reviewOrder": [],
+  "pendingReview": null,
+  "approvals": [],
+  "scenes": [],
+  "feedback": []
+}

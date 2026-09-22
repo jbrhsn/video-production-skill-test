@@ -7,4 +7,5 @@
 **/whisper
 **/kokoro
 **/remotion-infographic/**
+dataops_agent_demo/*
 .video_production_assets/inventory.generated.json

@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "track": "recorded-edit",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "safeArea": {"top": 0.06, "right": 0.06, "bottom": 0.12, "left": 0.06},
+  "scenes": []
+}
