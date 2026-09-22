@@ -56,8 +56,10 @@ def compile_recorded(manifest, sync, cut, execution, words=None):
                                 "durationFrames": frame(event.get("durationUs", 0), fps),
                                 "layout": event["layout"], "corner": event.get("corner", "top-right")})
         layouts.sort(key=lambda item: item["atFrame"])
-        if any(current["atFrame"] <= previous["atFrame"] for previous, current in zip(layouts, layouts[1:])):
-            raise ValueError(f"clip {clip['id']}: layout events must have increasing distinct times")
+        if any(current["atFrame"] < max(previous["atFrame"] + 1,
+                                          previous["atFrame"] + previous["durationFrames"])
+               for previous, current in zip(layouts, layouts[1:])):
+            raise ValueError(f"clip {clip['id']}: layout events must be distinct and cannot overlap")
         default = ("balanced" if set(tracks) == {"screen", "presenter"}
                    else "screen-only" if "screen" in tracks else "presenter-only")
         if not layouts or layouts[0]["atFrame"] != 0:

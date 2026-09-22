@@ -129,6 +129,11 @@ def validate_cut_plan(data, sources, mappings):
         audio = clip.get("primaryAudio")
         if not isinstance(audio, dict) or audio.get("sourceId") not in sources:
             raise ValueError(f"clip {clip_id}: primaryAudio requires a known sourceId")
+        audio_source = sources[audio["sourceId"]]
+        if "audioStreams" in audio_source and not audio_source["audioStreams"]:
+            raise ValueError(f"clip {clip_id}: primaryAudio source has no probed audio stream")
+        if len(audio_source.get("audioStreams", [])) > 1:
+            raise ValueError(f"clip {clip_id}: stage the selected audio stream as a separate source before editing")
         map_session_range_to_source(mappings[audio["sourceId"]], session, clip_id)
         checked.append({**clip, "sessionRangeUs": session})
     return checked
