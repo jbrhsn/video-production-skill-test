@@ -39,7 +39,7 @@ def _resolve_anchor(anchor, tracks, boundaries, total, events, word_frames):
     if not isinstance(anchor, dict) or not isinstance(anchor.get("type"), str):
         raise ValueError("audio anchor must be an object with a type")
     kind = anchor["type"]
-    offset = integer(anchor.get("offsetFrames", 0), "audio.anchor.offsetFrames") if anchor.get("offsetFrames", 0) >= 0 else anchor.get("offsetFrames")
+    offset = anchor.get("offsetFrames", 0)
     if type(offset) is not int:
         raise ValueError("audio.anchor.offsetFrames must be an integer")
     by_scene = {track["scene"]: track for track in tracks}
@@ -98,13 +98,12 @@ def _events(execution, tracks):
 
 
 def compile_timeline(scenes, fps, plan=None, execution=None, assets=None, word_frames=None):
-    plan = {"version": 1} if plan is None else plan
+    if plan is None:
+        raise ValueError("A version-2 edit plan is required")
     version = plan.get("version")
-    allowed = ("version", "transitions", "holds", "audio", "safeArea", "mix") if version == 2 else (
-        "version", "transitions", "holds", "audio", "safeArea")
-    keys(plan, allowed, "edit plan")
-    if type(version) is not int or version not in (1, 2):
-        raise ValueError("edit plan version must be 1 or 2")
+    keys(plan, ("version", "transitions", "holds", "audio", "safeArea", "mix"), "edit plan")
+    if version != 2:
+        raise ValueError("Only edit plan version 2 is supported")
     for field in ("transitions", "holds", "audio"):
         if not isinstance(plan.get(field, []), list):
             raise ValueError(f"{field} must be an array")
@@ -164,52 +163,38 @@ def compile_timeline(scenes, fps, plan=None, execution=None, assets=None, word_f
     asset_map = {item["id"]: item for item in (assets or {}).get("assets", [])}
     cue_ids = set()
     for cue in plan.get("audio", []):
-        if version == 1:
-            keys(cue, ("src", "role", "startFrame", "durationFrames", "volume", "fadeFrames", "duckVolume"), "audio cue")
-            src = cue.get("src")
-            role = cue.get("role")
-            start = integer(cue.get("startFrame"), "audio.startFrame")
-            duration = integer(cue.get("durationFrames"), "audio.durationFrames", 1)
-            fade_in = fade_out = integer(cue.get("fadeFrames", min(round(fps * .1), duration // 2)), "audio.fadeFrames")
-            volume = gain(cue.get("volume", .15 if role == "music" else .35), "audio.volume")
-            duck = gain(cue.get("duckVolume", volume * .4 if role == "music" else volume), "audio.duckVolume")
-            trim_before = 0
-            attack = release = max(1, round(fps * .15))
-            cue_id = f"legacy-{len(audio) + 1}"
-            purpose = "legacy cue"
-        else:
-            keys(cue, ("id", "assetId", "role", "purpose", "required", "anchor", "durationFrames",
-                       "sourceStartSeconds", "gainDb", "duckGainDb", "duckAttackFrames",
-                       "duckReleaseFrames", "fadeInFrames", "fadeOutFrames", "acceptance"), "audio cue")
-            cue_id = cue.get("id")
-            if not isinstance(cue_id, str) or not cue_id.strip() or cue_id in cue_ids:
-                raise ValueError("v2 audio cues require unique nonempty IDs")
-            cue_ids.add(cue_id)
-            asset_id = cue.get("assetId")
-            if asset_id not in asset_map:
-                raise ValueError(f"audio cue {cue_id} references unknown asset {asset_id!r}")
-            item = asset_map[asset_id]
-            src = item.get("stagedPath", "")
-            if src.startswith("public/"):
-                src = src[len("public/"):]
-            role = cue.get("role")
-            start = _resolve_anchor(cue.get("anchor"), tracks, boundaries, cursor, events, word_frames)
-            duration = integer(cue.get("durationFrames"), f"audio {cue_id}.durationFrames", 1)
-            fade_in = integer(cue.get("fadeInFrames", 0), f"audio {cue_id}.fadeInFrames")
-            fade_out = integer(cue.get("fadeOutFrames", 0), f"audio {cue_id}.fadeOutFrames")
-            trim_before = round(number(cue.get("sourceStartSeconds", 0), f"audio {cue_id}.sourceStartSeconds", 0) * fps)
-            volume = db_gain(cue.get("gainDb", -16 if role in ("music", "ambience") else -9), f"audio {cue_id}.gainDb")
-            duck = db_gain(cue.get("duckGainDb", cue.get("gainDb", -16)), f"audio {cue_id}.duckGainDb")
-            attack = integer(cue.get("duckAttackFrames", max(1, round(fps * .15))), f"audio {cue_id}.duckAttackFrames", 1)
-            release = integer(cue.get("duckReleaseFrames", max(1, round(fps * .15))), f"audio {cue_id}.duckReleaseFrames", 1)
-            purpose = cue.get("purpose")
-            if not isinstance(purpose, str) or not purpose.strip() or not isinstance(cue.get("acceptance"), str) or not cue["acceptance"].strip():
-                raise ValueError(f"audio cue {cue_id} requires purpose and listening acceptance")
+        keys(cue, ("id", "assetId", "role", "purpose", "required", "anchor", "durationFrames",
+                   "sourceStartSeconds", "gainDb", "duckGainDb", "duckAttackFrames",
+                   "duckReleaseFrames", "fadeInFrames", "fadeOutFrames", "acceptance"), "audio cue")
+        cue_id = cue.get("id")
+        if not isinstance(cue_id, str) or not cue_id.strip() or cue_id in cue_ids:
+            raise ValueError("audio cues require unique nonempty IDs")
+        cue_ids.add(cue_id)
+        asset_id = cue.get("assetId")
+        if asset_id not in asset_map:
+            raise ValueError(f"audio cue {cue_id} references unknown asset {asset_id!r}")
+        item = asset_map[asset_id]
+        src = item.get("stagedPath", "")
+        if src.startswith("public/"):
+            src = src[len("public/"):]
+        role = cue.get("role")
+        start = _resolve_anchor(cue.get("anchor"), tracks, boundaries, cursor, events, word_frames)
+        duration = integer(cue.get("durationFrames"), f"audio {cue_id}.durationFrames", 1)
+        fade_in = integer(cue.get("fadeInFrames", 0), f"audio {cue_id}.fadeInFrames")
+        fade_out = integer(cue.get("fadeOutFrames", 0), f"audio {cue_id}.fadeOutFrames")
+        trim_before = round(number(cue.get("sourceStartSeconds", 0), f"audio {cue_id}.sourceStartSeconds", 0) * fps)
+        volume = db_gain(cue.get("gainDb", -16 if role in ("music", "ambience") else -9), f"audio {cue_id}.gainDb")
+        duck = db_gain(cue.get("duckGainDb", cue.get("gainDb", -16)), f"audio {cue_id}.duckGainDb")
+        attack = integer(cue.get("duckAttackFrames", max(1, round(fps * .15))), f"audio {cue_id}.duckAttackFrames", 1)
+        release = integer(cue.get("duckReleaseFrames", max(1, round(fps * .15))), f"audio {cue_id}.duckReleaseFrames", 1)
+        purpose = cue.get("purpose")
+        if not isinstance(purpose, str) or not purpose.strip() or not isinstance(cue.get("acceptance"), str) or not cue["acceptance"].strip():
+            raise ValueError(f"audio cue {cue_id} requires purpose and listening acceptance")
         if (not isinstance(src, str) or not src.startswith("media/") or "\\" in src
                 or ":" in src or any(p in ("..", ".") for p in src.split("/"))
                 or PurePosixPath(src).is_absolute()):
             raise ValueError("audio src must be a public-relative media/ path without traversal")
-        if role not in (("music", "effect") if version == 1 else ("music", "effect", "ambience")):
+        if role not in ("music", "effect", "ambience"):
             raise ValueError("invalid audio role")
         if start + duration > cursor or fade_in + fade_out > duration:
             raise ValueError(f"audio cue {cue_id} exceeds timeline or fades consume cue")
@@ -227,11 +212,10 @@ def compile_timeline(scenes, fps, plan=None, execution=None, assets=None, word_f
         gain(value, f"safeArea.{name}")
     if safe["top"] + safe["bottom"] >= 1 or safe["left"] + safe["right"] >= 1:
         raise ValueError("safeArea must leave a visible content region")
-    mix = plan.get("mix") if version == 2 else None
-    if version == 2:
-        keys(mix, ("targetLufs", "toleranceLufs", "maxTruePeakDbtp"), "mix")
-        number(mix.get("targetLufs"), "mix.targetLufs", -36, -5)
-        number(mix.get("toleranceLufs"), "mix.toleranceLufs", 0, 6)
-        number(mix.get("maxTruePeakDbtp"), "mix.maxTruePeakDbtp", -9, 0)
+    mix = plan.get("mix")
+    keys(mix, ("targetLufs", "toleranceLufs", "maxTruePeakDbtp"), "mix")
+    number(mix.get("targetLufs"), "mix.targetLufs", -36, -5)
+    number(mix.get("toleranceLufs"), "mix.toleranceLufs", 0, 6)
+    number(mix.get("maxTruePeakDbtp"), "mix.maxTruePeakDbtp", -9, 0)
     return dict(version=version, totalFrames=cursor, scenes=tracks, boundaries=boundaries,
                 audio=audio, safeArea=safe, mix=mix)

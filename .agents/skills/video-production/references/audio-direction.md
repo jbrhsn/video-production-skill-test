@@ -21,20 +21,27 @@ Import a recorded voiceover using `scripts/06_import_narration.py --manifest PRO
 
 Source paths are relative to the manifest. Omit start/end to import a whole separate scene recording. Choose explicit trims at pauses after listening; this helper does not discover speech boundaries or validate spoken words. It converts the first audio stream to mono 24 kHz float WAV, validates duration and finite nonsilent samples, and produces scaffold-compatible metadata without modifying source recordings or normalizing their loudness. Keep `transcript.txt` consistent with the approved manifest text. Run `02_timestamps.py` for each resulting WAV, correct recognized words against the script, then scaffold normally. Continuous performance is preserved only if the selected trims preserve it; inspect joins and avoid duplicated breaths or cut words.
 
-## Optional mix
+## Planned mix
 
-Stage inspected, usable audio under `public/media/` and record provenance and usage rights. Add cues to edit-plan `audio`:
+Decide music, ambience and effects during creative planning. Each may be deliberately `none`; sound is not an effect quota. Register every selected sound in `asset-manifest.json`, stage it under `public/media/`, and record source, usage rights, attribution, inspection and hash when used. Version-2 edit plans reference the manifest asset ID and a shared visual event or other stable anchor:
 
 ```json
-{"src":"media/music.wav","role":"music","startFrame":0,"durationFrames":180,
- "volume":0.15,"duckVolume":0.06,"fadeFrames":8}
+{"id":"cue-filter-contact","assetId":"sfx-paper-contact","role":"effect",
+ "purpose":"Confirm the note contacting the filter, not decorate the cut","required":true,
+ "anchor":{"type":"event","scene":2,"beat":"s02-b03","event":"contact","offsetFrames":0},
+ "durationFrames":18,"sourceStartSeconds":0.08,"gainDb":-9,"duckGainDb":-9,
+ "duckAttackFrames":4,"duckReleaseFrames":6,"fadeInFrames":0,"fadeOutFrames":4,
+ "acceptance":"Audible at contact without masking the word filter"}
 ```
 
-Set cue duration to the intended range within the compiled timeline; ensure the media actually covers it using ffprobe. Cues start from the beginning of their source; pre-trim a working copy for another in-point. The scaffold verifies file presence, not source duration or rights. `role` is music/effect. Gains range from 0 to 1; duck gain must not exceed normal gain. Fades cannot consume more than half a cue. Music ducks across speech segments with a short ramp; it does not analyze word gaps or source loudness. Effects are not automatically ducked. Neither cue type loops automatically.
+Execution-plan version 2 declares named events inside checked beat frame ranges. Visual code and audio cues reference that same event ID. Other anchors are checked word boundaries, scene speech start/end, scene span end, transition boundary, master start/end, or a reasoned absolute frame. The compiler resolves master frames after holds; do not copy master frame numbers into visual code. Align the audible transient, not merely the beginning of a file.
 
-Treat these as starting controls, not loudness normalization. Measure the full mix, choose a documented delivery target, check peaks and intelligibility, then listen on suitable speakers/headphones. Do not assert a universal platform LUFS rule. A -1 dBFS normalized speech source can still clip when mixed with music/effects. Adjust the mix after measurement. Cue meaningful actions; continuous ambience can bridge scenes; silence is valid.
+Set cue duration and source in-point explicitly. Scaffold uses ffprobe to reject missing/short selected sources. Roles are music, ambience or effect. Gains are dB and are converted once for rendering. Fade-in and fade-out are independent; music duck attack/release applies around scene narration spans, not every word gap. Effects only duck when deliberately configured. Cues do not loop. Use a pre-edited sufficiently long file or explicit repeated segments until seamless loop behavior is intentionally implemented.
 
-Measure a rendered master with `ffmpeg -hide_banner -i PROJECT/out/video.mp4 -af loudnorm=print_format=json -f null -`. Record input integrated loudness and true peak from the report alongside the project's chosen targets. This is analysis with discarded output, not a mastered deliverable or a listening check. Adjust source/cue levels or implement a deliberate mastering pass, then remeasure. Store music/effect source, usage basis, trim, and cue intent in the asset manifest; the skill supplies no licensed music catalog.
+
+Treat gain values as starting controls, not loudness normalization. Measure the full mix, choose a documented delivery target, check peaks and intelligibility, then listen on suitable speakers/headphones. A possible house starting point is -16 LUFS integrated ±1 LU and true peak no higher than -1 dBTP, but it is not a universal platform rule. Short programs or substantial silence can make integrated figures less useful. A -1 dBFS peak-normalized speech source can still clip when mixed. Cue meaningful actions; continuous ambience can bridge scenes; silence is valid.
+
+Measure an authorized rendered master with `scripts/10_audio_qc.py --input PROJECT/out/video.mp4 --out PROJECT/out/audio-qc.json` and the project's target flags. This is analysis, not a mastered deliverable or a listening check. Adjust source/cue levels or implement a deliberate mastering pass, then remeasure and re-review material audible changes. The skill supplies no licensed music catalog.
 
 ## Captions
 

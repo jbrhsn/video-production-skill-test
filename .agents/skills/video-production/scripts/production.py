@@ -17,9 +17,11 @@ def validate_state(state):
     """Return schema errors without changing decisions or feedback."""
     if not isinstance(state, dict):
         return ["Production state must be an object"]
-    if state.get("version") == 2:
-        from workflow_v2 import validate_v2
-        return validate_v2(state)
+    if state.get("version") != 2:
+        return ["Only production state version 2 is supported"]
+    from workflow_v2 import validate_v2
+    return validate_v2(state)
+    # Kept below temporarily for a narrow mechanical diff; it is unreachable and will be removed with v1 tests.
     errors = []
     if type(state.get("version")) is not int or state["version"] != 1:
         errors.append("Production state version must be 1")
@@ -102,9 +104,10 @@ def decision(state, scope, revision):
 
 
 def readiness_errors(state, stage, scene_ids):
-    if isinstance(state, dict) and state.get("version") == 2:
-        from workflow_v2 import readiness_v2
-        return readiness_v2(state, stage, scene_ids)
+    if not isinstance(state, dict) or state.get("version") != 2:
+        return ["Only production state version 2 is supported"]
+    from workflow_v2 import readiness_v2
+    return readiness_v2(state, stage, scene_ids)
     errors = validate_state(state)
     if errors:
         return errors
@@ -137,21 +140,20 @@ def readiness_errors(state, stage, scene_ids):
     return errors
 
 
-def check_production(project, stage, scene_ids, state_path=None, required=False, scene=None):
-    """Check optional project state before a mutation; raise an actionable error."""
+def check_production(project, stage, scene_ids, state_path=None, required=True, scene=None):
+    """Check required version-2 state before a production mutation."""
     project = Path(project)
     path = Path(state_path).expanduser().resolve() if state_path is not None else project / "production-state.json"
     if not path.exists():
-        if required or state_path is not None:
-            raise ValueError(f"Missing production state: {path}")
-        return None
+        raise ValueError(f"Missing production state: {path}")
     try:
         state = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise ValueError(f"Cannot read production state {path}: {exc}") from exc
-    if isinstance(state, dict) and state.get("version") == 2:
-        from workflow_v2 import check_v2
-        return check_v2(project, state, stage, scene_ids, scene)
+    if not isinstance(state, dict) or state.get("version") != 2:
+        raise ValueError("Only version-2 production state is supported; create a new v2 production instead of migrating approvals")
+    from workflow_v2 import check_v2
+    return check_v2(project, state, stage, scene_ids, scene)
     errors = readiness_errors(state, stage, scene_ids)
     for name in ("transcript.txt", "storyboard.json", "asset-plan.md", "implementation-plan.md", "edit-plan.json"):
         target = project / name

@@ -1,6 +1,6 @@
 # Sequential collaborative production
 
-This is the default for new videos. Read current state and the last user decision before acting. A generic request to create a video authorizes work through the next gate. End the turn at each gate and wait; do not write next-stage artifacts while waiting. Explicit delegation applies only to its stated scope. Engineering fixtures may use the documented legacy/test path.
+This is the production contract. Read current state and the last user decision before acting. A generic request to create a video authorizes work through the next gate. End the turn at each gate and wait; do not write next-stage artifacts while waiting. Explicit delegation applies only to its stated scope.
 
 ## Stages and stops
 
@@ -21,7 +21,9 @@ This is the default for new videos. Read current state and the last user decisio
 - `transcript.txt`, `public/audio/`: narration package. Check recognition against speech/transcript; never invent timing.
 - `storyboard.json`: directorial intent; real inspected selected files only.
 - `asset-plan.md`: exact spoken phrase/word coverage, BG/midground/foreground roles, filenames or code references, visible action, prompts, provenance, inspection, and user asset decisions.
-- `execution-plan.json`: authoritative beat timing and before/action/after states, implementation steps, layer paths, observable acceptance; schema below.
+- `design-system.json`: approved visual recipe and authoritative project tokens; scaffold derives code tokens from it.
+- `asset-manifest.json`: accepted selected visual/audio media, staged paths, provenance, rights and inspection.
+- `execution-plan.json`: authoritative beat timing, named action/sound events and before/action/after states, implementation steps, layer paths, observable acceptance; schema below.
 - `implementation-plan.md`: reviewed design system and construction playbook. Reference execution beat IDs/timing; do not maintain competing time tables.
 - `edit-plan.json`: existing mechanical joins/holds/safe-area/audio schema. Compiled timeline remains the master clock.
 - `production-state.json`: v2 phases/revisions, active scene, scoped approvals, persistent feedback. Helpers never approve anything.
@@ -32,7 +34,7 @@ Copy templates only at their stage. Empty future documents do not establish read
 
 A scene/audio file can contain many shots. Do not replace line-to-action mapping with “Model 2, 52 seconds” or undefined “5A–5D.” Cover every checked timestamp word with a concrete beat. Several actions may share a phrase; several lines may share a deliberate sustained shot. No arbitrary cut/motion quota.
 
-execution-plan.json contains `version: 1`, positive integer `fps`, and consecutive `scenes` with `scene` and nonempty `beats`:
+execution-plan.json version 2 contains positive integer `fps` and consecutive `scenes` with `scene` and nonempty `beats`:
 
 | Field | Contract |
 |---|---|
@@ -43,10 +45,13 @@ execution-plan.json contains `version: 1`, positive integer `fps`, and consecuti
 | timingReason | Required for deviation from word anchors; explain anticipation/reading time/hold |
 | layers | bg, mid, fg arrays of actual public/media/... paths or named code:... visuals; empty arrays allowed |
 | initial / action / result | Concrete object states and transformation |
+| events (v2) | Named event IDs with speech-local frames inside the beat; optional checked word index/reason. Visual code and sound cues use the same event rather than copied timing |
 | steps | Ordered coding instructions: files/components, geometry/anchors, timing/easing, masks, caption clearance and sound as relevant |
 | acceptance | Observable outcome and frame checkpoints proving the planned explanation occurs |
 
 Set crops/trims, sizes, independent parts, depth order, entry/exit continuity, and all material construction choices before coding. “Make a chart” is incomplete: specify which relationship changes and how the viewer sees it. Do not defer timing to the implementer. The validator catches missing coverage/ranges/files and placeholder fields; agent review must reject vague instructions and meaningless timingReason text.
+
+Version-2 edit plans resolve music, ambience and effect cues from scene/word/event/boundary anchors into the compiled master timeline. Specify purpose, accepted asset ID, source in-point, duration, gain/duck/fades and listening acceptance. Silence is valid, but it must be a planning decision. Absolute frame anchors require a reason. Holds or earlier timing changes must move downstream anchored cues without copying frame values between files.
 
 ## Motion-capable asset review
 
@@ -103,4 +108,4 @@ Scene N requires prior scenes approved; set activeScene. Checks reject stale/mis
 
 Review-bundle renders also check readiness. Raw Remotion CLI and Studio export buttons can bypass helpers; never use them to evade review. These are workflow controls, not a security boundary against arbitrary edits.
 
-V1/no-state projects require explicit --legacy-workflow at scaffold; fixtures may use it. It never bypasses v2 gates. Existing authored projects are not automatically refreshed or migrated. Fresh user productions use v2. Autonomous v2 work still records scoped delegation and snapshots for each gate, including scenes; a mode flag alone grants nothing.
+Only v2 production files are supported. Existing authored projects are not automatically refreshed or migrated. Autonomous work still records scoped delegation and snapshots for each gate, including scenes; a mode flag alone grants nothing.

@@ -46,14 +46,20 @@ def fixture(root):
 
 def plan(root, state):
     (root / "storyboard.json").write_text(json.dumps([{"scene": 1}, {"scene": 2}]))
-    (root / "edit-plan.json").write_text('{"version":1}')
+    (root / "edit-plan.json").write_text(json.dumps({"version": 2, "transitions": [], "holds": [], "audio": [],
+        "mix": {"targetLufs": -16, "toleranceLufs": 1, "maxTruePeakDbtp": -1}}))
+    design = json.loads((SCRIPTS.parent / "assets/design-system.json.template").read_text())
+    design["rationale"] = "Fixture uses an explicit light workplace treatment."
+    design["backgroundStrategy"] = "Use the light background with semantic accents."
+    (root / "design-system.json").write_text(json.dumps(design))
+    (root / "asset-manifest.json").write_text('{"version":1,"assets":[]}')
     for name in ("asset-plan.md", "implementation-plan.md"):
         (root / name).write_text("Fixture: animate a code circle growing to show increase; no external dependency.")
-    execution = {"version": 1, "fps": 30, "scenes": [
+    execution = {"version": 2, "fps": 30, "scenes": [
         {"scene": n, "beats": [{"id": f"S{n}-B1", "words": [0, 1], "quote": word, "frames": [0, 15],
          "layers": {"bg": ["code:background"], "mid": ["code:circle"], "fg": []},
          "initial": "Circle radius 10 at center", "action": "Increase radius linearly from 10 to 40",
-         "result": "Circle radius 40", "steps": [f"In Scene{n}.tsx interpolate radius over frames 0-14"],
+         "result": "Circle radius 40", "events": [], "steps": [f"In Scene{n}.tsx interpolate radius over frames 0-14"],
          "acceptance": "Circle radius at frame 14 is 40"}]} for n, word in ((1, "One."), (2, "Two."))]}
     (root / "execution-plan.json").write_text(json.dumps(execution))
     state["scenes"] = [{"scene": n, "revision": f"scene-{n}-1", "status": "pending"} for n in (1, 2)]
@@ -64,7 +70,8 @@ def plan(root, state):
 def scaffold(root):
     return subprocess.run([sys.executable, str(SCRIPTS / "03_scaffold.py"), "--project-dir", str(root),
         "--storyboard", str(root / "storyboard.json"), "--audio-metadata", str(root / "public/audio/metadata.json"),
-        "--edit-plan", str(root / "edit-plan.json"), "--width", "640", "--height", "360", "--skip-install"], capture_output=True, text=True)
+        "--edit-plan", str(root / "edit-plan.json"), "--design-system", str(root / "design-system.json"),
+        "--width", "640", "--height", "360", "--skip-install"], capture_output=True, text=True)
 
 
 class WorkflowV2Tests(unittest.TestCase):
@@ -210,7 +217,8 @@ class WorkflowV2Tests(unittest.TestCase):
         timeline["scenes"][-1]["visualEnd"] += 30
         timeline["totalFrames"] += 30
         timeline_path.write_text(json.dumps(timeline))
-        edit = {"version": 1, "holds": [{"afterScene": 2, "frames": 30}]}
+        edit = {"version": 2, "transitions": [], "holds": [{"afterScene": 2, "frames": 30}], "audio": [],
+                "mix": {"targetLufs": -16, "toleranceLufs": 1, "maxTruePeakDbtp": -1}}
         for name in ("edit-plan.json", "src/edit-plan.json"):
             (self.root / name).write_text(json.dumps(edit))
         approve(self.root, self.state, "plan", "plan-1")

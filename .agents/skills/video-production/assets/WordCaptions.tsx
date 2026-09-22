@@ -1,5 +1,6 @@
 import React from "react";
 import {useVideoConfig} from "remotion";
+import {DESIGN_TOKENS} from "./design-tokens";
 
 export type Word = {word: string; start: number; end: number};
 
@@ -36,11 +37,11 @@ export const WordCaptions: React.FC<{words: Word[]; time: number; highlight?: bo
   const group = groupWords(words, budget, vertical ? 6 : 9).find(g => active >= g.first && active < g.first + g.words.length);
   if (!group) return null;
   return <div style={{position: "absolute", bottom: `${area.bottom * 100}%`, left: `${area.left * 100}%`,
-    right: `${area.right * 100}%`, textAlign: "center", fontFamily: "sans-serif",
+    right: `${area.right * 100}%`, textAlign: "center", fontFamily: DESIGN_TOKENS.captions.fontFamily,
     fontSize, lineHeight: 1.4, fontWeight: 700, whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>
     {group.words.map((word, index) =>
-      <span key={group.first + index} style={{color: highlight && group.first + index === active ? "#facc15" : "#ffffff",
-        background: "#111827", padding: "4px 6px", borderRadius: 6}}>
+      <span key={group.first + index} style={{color: highlight && group.first + index === active ? DESIGN_TOKENS.captions.active : DESIGN_TOKENS.captions.text,
+        background: DESIGN_TOKENS.captions.background, padding: "4px 6px", borderRadius: DESIGN_TOKENS.captions.radius}}>
         {word.word + " "}
       </span>)}
   </div>;

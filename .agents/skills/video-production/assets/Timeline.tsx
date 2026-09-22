@@ -2,15 +2,17 @@ import React from "react";
 import {AbsoluteFill, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {Audio} from "@remotion/media";
 import {WordCaptions, Word} from "./WordCaptions";
+import {DESIGN_TOKENS} from "./design-tokens";
 
 export type VisualSceneProps = {contentFrame: number; rawContentFrame: number;
   durationFrames: number; fps: number; width: number; height: number};
 type Track = {scene: number; start: number; contentFrames: number; spanFrames: number;
-  visualStart: number; visualEnd: number};
+  visualStart: number; visualEnd: number; reviewStart: number; reviewFrames: number};
 type Boundary = {afterScene: number; frame: number; kind: string; frames: number;
   direction: string; easing: string; previewStart: number; previewFrames: number};
-type Cue = {src: string; role: string; startFrame: number; durationFrames: number;
-  volume: number; duckVolume: number; fadeFrames: number};
+type Cue = {id: string; src: string; role: string; startFrame: number; durationFrames: number;
+  trimBefore: number; volume: number; duckVolume: number; fadeInFrames: number;
+  fadeOutFrames: number; duckAttackFrames: number; duckReleaseFrames: number};
 export type TimelineData = {totalFrames: number; scenes: Track[]; boundaries: Boundary[];
   audio: Cue[]; safeArea: {top: number; right: number; bottom: number; left: number}};
 export type SceneEntry = {Visual: React.ComponentType<VisualSceneProps>; audioFile: string; words: Word[]};
@@ -62,20 +64,21 @@ const Speech: React.FC<{entry: SceneEntry; safeArea: TimelineData["safeArea"]}> 
 // Duck around narration segments, including their internal pauses, not word by word.
 const CueAudio: React.FC<{cue: Cue; tracks: Track[]}> = ({cue, tracks}) => {
   const {fps} = useVideoConfig();
-  const ramp = Math.max(1, Math.round(fps * .15));
+  const attack = cue.duckAttackFrames || Math.max(1, Math.round(fps * .15));
+  const release = cue.duckReleaseFrames || attack;
   return <Audio src={staticFile(cue.src)} volume={(local) => {
     const global = cue.startFrame + local;
     const speech = cue.role === "music" ? Math.max(0, ...tracks.map(t =>
-      Math.min(clamp((global - t.start + ramp) / ramp),
-        clamp((t.start + t.contentFrames + ramp - global) / ramp)))) : 0;
-    const edge = cue.fadeFrames ? Math.min(clamp(local / cue.fadeFrames),
-      clamp((cue.durationFrames - 1 - local) / cue.fadeFrames)) : 1;
+      Math.min(clamp((global - t.start + attack) / attack),
+        clamp((t.start + t.contentFrames + release - global) / release)))) : 0;
+    const edge = Math.min(cue.fadeInFrames ? clamp(local / cue.fadeInFrames) : 1,
+      cue.fadeOutFrames ? clamp((cue.durationFrames - 1 - local) / cue.fadeOutFrames) : 1);
     return edge * (cue.volume + (cue.duckVolume - cue.volume) * speech);
-  }} />;
+  }} trimBefore={cue.trimBefore || 0} />;
 };
 
 export const Timeline: React.FC<{data: TimelineData; entries: SceneEntry[]; showSafeArea?: boolean}> =
-({data, entries, showSafeArea = false}) => <AbsoluteFill style={{background: "#000", overflow: "hidden"}}>
+({data, entries, showSafeArea = false}) => <AbsoluteFill style={{background: DESIGN_TOKENS.colors.background, overflow: "hidden"}}>
   {data.scenes.map((track, i) => <Sequence key={`visual-${i}`} from={track.visualStart}
     durationInFrames={track.visualEnd - track.visualStart}>
     <Visual entry={entries[i]} track={track} incoming={data.boundaries[i - 1]} outgoing={data.boundaries[i]} />

@@ -22,7 +22,7 @@ const cli = path.join(path.dirname(require.resolve('@remotion/cli/package.json',
 const timelinePath = path.join(root, 'src/timeline-data.json');
 const lastFrame = fs.existsSync(timelinePath)
   ? JSON.parse(fs.readFileSync(timelinePath, 'utf8')).totalFrames - 1
-  : config.lastFrame; // Explicit legacy complete-scene projects have no compiled timeline.
+  : NaN;
 if (!Number.isSafeInteger(lastFrame) || lastFrame < 0) {
   console.error('Invalid final frame; recompile the timeline before exporting.');
   process.exit(1);

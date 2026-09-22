@@ -17,10 +17,16 @@ def read(path):
 
 
 def validate_v2(state):
-    from production import validate_state
-    # Reuse the v1 feedback/history checks, but validate expanded approval scopes here.
-    base = {**state, "version": 1, "phase": "review", "approvals": []}
-    errors = validate_state(base)
+    errors = []
+    if not isinstance(state, dict):
+        return ["Production state must be an object"]
+    for key in ("mode", "planRevision", "projectRevision", "approvals", "scenes", "feedback"):
+        if key not in state:
+            errors.append(f"Production state requires {key}")
+    if state.get("mode") not in ("collaborative", "autonomous"):
+        errors.append("mode must be collaborative or autonomous")
+    if not isinstance(state.get("scenes"), list) or not isinstance(state.get("feedback"), list):
+        errors.append("scenes and feedback must be arrays")
     if type(state.get("version")) is not int or state["version"] != 2:
         errors.append("Production state version must be integer 2")
     if state.get("phase") not in ("narration", "planning", "assets", "plan-review",
@@ -63,7 +69,8 @@ def snapshot(project, scope):
     paths = {project / "transcript.txt"}
     paths.update((project / "public/audio").rglob("*"))
     if scope != "narration":
-        paths.update(project / name for name in ("storyboard.json", "asset-plan.md", "implementation-plan.md",
+        paths.update(project / name for name in ("storyboard.json", "asset-plan.md", "asset-manifest.json",
+                                                 "design-system.json", "implementation-plan.md",
                                                  "execution-plan.json", "edit-plan.json"))
         for folder in ("assets", "public/media"):
             paths.update((project / folder).rglob("*"))
@@ -180,13 +187,83 @@ def narration_data(project):
     return rows, timestamps
 
 
+RECIPES = {"professional-process", "editorial-evidence", "doodle-whiteboard", "tactile-collage",
+           "flat-character-story", "screen-tutorial", "data-systems", "documentary-hybrid",
+           "kinetic-type", "intentional-dark", "custom"}
+
+
+def validate_design_system(project):
+    design = read(local_file(project, "design-system.json"))
+    if design.get("version") != 1 or design.get("recipe") not in RECIPES:
+        raise ValueError("Design system requires version 1 and a known visual recipe (or custom)")
+    required = {"version", "recipe", "rationale", "backgroundStrategy", "colors", "typography",
+                "shape", "motion", "captions", "avoid"}
+    if set(design) != required or not text(design["rationale"]) or not text(design["backgroundStrategy"]):
+        raise ValueError("Design system is incomplete or has unknown fields")
+    if re.search(r"\b(TODO|TBD|replace with)\b", design["rationale"] + " " + design["backgroundStrategy"], re.I):
+        raise ValueError("Design system still contains placeholder decisions")
+    colors = design["colors"]
+    color_keys = {"background", "surface", "ink", "muted", "primary", "secondary", "positive", "warning"}
+    if not isinstance(colors, dict) or set(colors) != color_keys or not all(
+            isinstance(value, str) and re.fullmatch(r"#[0-9A-Fa-f]{6}", value) for value in colors.values()):
+        raise ValueError("Design system colors require all named six-digit hex tokens")
+    typography, shape, motion, captions = (design[name] for name in ("typography", "shape", "motion", "captions"))
+    if (not isinstance(typography, dict) or not text(typography.get("fontFamily"))
+            or any(type(typography.get(key)) not in (int, float) for key in ("titleWeight", "bodyWeight", "dataWeight"))):
+        raise ValueError("Design system typography is incomplete")
+    if (not isinstance(shape, dict) or type(shape.get("strokeWidth")) not in (int, float)
+            or type(shape.get("radius")) not in (int, float) or not text(shape.get("shadow"))
+            or not text(shape.get("texture"))):
+        raise ValueError("Design system shape tokens are incomplete")
+    if (not isinstance(motion, dict) or any(type(motion.get(key)) is not int or motion[key] < 1
+            for key in ("fastFrames", "standardFrames", "settleFrames"))
+            or not all(text(motion.get(key)) for key in ("easing", "cameraRule"))
+            or not isinstance(motion.get("transitions"), list) or not motion["transitions"]):
+        raise ValueError("Design system motion tokens are incomplete")
+    if (not isinstance(captions, dict) or set(captions) != {"fontFamily", "text", "background", "active", "radius"}
+            or not text(captions["fontFamily"]) or type(captions["radius"]) not in (int, float)
+            or not all(re.fullmatch(r"#[0-9A-Fa-f]{6}", captions[key]) for key in ("text", "background", "active"))):
+        raise ValueError("Design system caption tokens are incomplete")
+    if not isinstance(design["avoid"], list) or not design["avoid"] or not all(text(item) for item in design["avoid"]):
+        raise ValueError("Design system requires a concrete avoid list")
+    return design
+
+
+def validate_asset_manifest(project):
+    manifest = read(local_file(project, "asset-manifest.json"))
+    if manifest.get("version") != 1 or not isinstance(manifest.get("assets"), list):
+        raise ValueError("Asset manifest requires version 1 and an assets array")
+    ids, paths = set(), set()
+    for item in manifest["assets"]:
+        required = ("id", "kind", "stagedPath", "source", "rightsStatus", "usageBasis",
+                    "attribution", "status", "inspection")
+        if not isinstance(item, dict) or not all(text(item.get(key)) for key in required):
+            raise ValueError("Each manifest asset requires identity, path, provenance, rights and inspection")
+        if item["id"] in ids or item["stagedPath"] in paths:
+            raise ValueError("Asset manifest IDs and staged paths must be unique")
+        ids.add(item["id"]); paths.add(item["stagedPath"])
+        if item["kind"] not in ("image", "video", "audio", "font"):
+            raise ValueError(f"Asset {item['id']}: unsupported kind")
+        if item["rightsStatus"] not in ("cleared", "user-owned") or item["status"] != "accepted":
+            raise ValueError(f"Asset {item['id']}: selected assets must be accepted with a usable rights status")
+        if not item["stagedPath"].startswith("public/media/"):
+            raise ValueError(f"Asset {item['id']}: stagedPath must be under public/media/")
+        path = local_file(project, item["stagedPath"])
+        expected = item.get("sha256")
+        if expected is not None:
+            actual = hashlib.sha256(path.read_bytes()).hexdigest()
+            if not isinstance(expected, str) or not re.fullmatch(r"[a-f0-9]{64}", expected) or expected != actual:
+                raise ValueError(f"Asset {item['id']}: SHA-256 does not match the staged file")
+    return manifest
+
+
 def validate_execution(project, scene_ids):
     """Validate coverage and concrete fields, not artistic quality or listening."""
     plan = read(local_file(project, "execution-plan.json"))
     rows, timestamps = narration_data(project)
     fps = plan.get("fps")
-    if plan.get("version") != 1 or type(fps) is not int or fps <= 0:
-        raise ValueError("Execution plan requires version 1 and positive integer fps")
+    if plan.get("version") != 2 or type(fps) is not int or fps <= 0:
+        raise ValueError("Execution plan requires version 2 and positive integer fps")
     scenes = plan["scenes"]
     if [row["scene"] for row in scenes] != list(scene_ids) or list(scene_ids) != [row["scene"] for row in rows]:
         raise ValueError("Execution plan must match narration and storyboard scene coverage")
@@ -236,6 +313,21 @@ def validate_execution(project, scene_ids):
             steps = beat.get("steps")
             if not isinstance(steps, list) or not steps or not all(text(step) for step in steps):
                 raise ValueError("Beat requires ordered implementation steps")
+            events = beat.get("events")
+            event_ids = set()
+            if not isinstance(events, list):
+                raise ValueError("Beats require an events array; it may be empty")
+            for event in events:
+                if (not isinstance(event, dict) or set(event) - {"id", "frame", "word", "reason"}
+                        or not text(event.get("id")) or event["id"] in event_ids
+                        or type(event.get("frame")) is not int
+                        or not start_frame <= event["frame"] < end_frame):
+                    raise ValueError("Execution events require unique IDs and speech-local frames inside their beat")
+                event_ids.add(event["id"])
+                if "word" in event and (type(event["word"]) is not int or not first <= event["word"] < end):
+                    raise ValueError("Execution event word anchor must fall inside the beat word range")
+                if "reason" in event and not text(event["reason"]):
+                    raise ValueError("Execution event reason cannot be empty")
         if covered != set(range(len(words))):
             raise ValueError(f"Scene {planned['scene']}: narration words are not fully mapped to beats")
     return plan
@@ -250,6 +342,8 @@ def check_v2(project, state, stage, scene_ids, scene=None):
         if stage != "plan":
             for name in ("storyboard.json", "asset-plan.md", "implementation-plan.md", "edit-plan.json"):
                 local_file(project, name)
+            validate_design_system(project)
+            validate_asset_manifest(project)
             validate_execution(project, scene_ids)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         errors.append(f"Artifact check: {exc}")

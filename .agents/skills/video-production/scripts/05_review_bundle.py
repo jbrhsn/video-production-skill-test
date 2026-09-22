@@ -18,6 +18,7 @@ from production import check_production
 def build_commands(data):
     samples = {0, data["totalFrames"] - 1}
     compositions = [f"Scene{s['scene']}" for s in data["scenes"]]
+    compositions += [f"Scene{s['scene']}Review" for s in data["scenes"]]
     compositions += [f"Boundary{b['afterScene']}" for b in data["boundaries"]]
     compositions.append("VideoFull")
     base = ["npx", "--no-install", "remotion"]
@@ -45,17 +46,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-dir", required=True)
     parser.add_argument("--production-state", help="State path; defaults to PROJECT/production-state.json when present.")
-    parser.add_argument("--legacy-workflow", action="store_true", help="Explicit compatibility/test path for projects without state.")
     parser.add_argument("--render", action="store_true", help="Execute planned renders and contact-sheet generation")
     args = parser.parse_args()
     project = Path(args.project_dir).expanduser().resolve()
     marker = project / "src/timeline-contract.json"
     if not marker.exists() or json.loads(marker.read_text()) != {"version": 1, "sceneContract": "visual-only"}:
-        raise ValueError("Review bundle requires visual-only timeline v1; use manual previews for legacy projects")
+        raise ValueError("Review bundle requires the visual-only v2 production timeline")
     data = json.loads((project / "src/timeline-data.json").read_text())
     if args.render:
-        check_production(project, "render", [scene["scene"] for scene in data["scenes"]], args.production_state,
-                         required=not args.legacy_workflow)
+        check_production(project, "render", [scene["scene"] for scene in data["scenes"]], args.production_state)
     elif args.production_state and not Path(args.production_state).expanduser().is_file():
         raise ValueError(f"Missing production state: {args.production_state}")
     commands, frames = build_commands(data)
@@ -82,8 +81,9 @@ def main():
         "Record observations by master frame/time: opening promise and payoff; useful progression; "
         "visual explanation; boundary continuity; caption readability; voice/mix clarity; "
         "platform fit. For each issue, record evidence and a concrete correction.\n\n"
-        "Contact sheet frames are listed in manifest order. Scene previews omit global music/effects; "
-        "boundary and full-video previews include the master mix.\n")
+        "Contact sheet frames are listed in manifest order. SceneN is isolated visual/narration inspection. "
+        "SceneNReview is the bounded master-timeline view with continuing music/effects; BoundaryN and "
+        "VideoFull also preserve the master mix.\n")
     if args.render:
         manifest["status"] = "rendering"
         save()

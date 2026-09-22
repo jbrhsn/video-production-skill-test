@@ -4,6 +4,8 @@ Use only when the user's reference or chosen direction calls for this style. `--
 
 ## Art direction
 
+Select `doodle-whiteboard` in the approved `design-system.json` and read [visual direction](visual-direction.md). The defaults below are a recipe, not permission to override a brand or reviewed custom palette.
+
 Start with a warm white background, dark rounded strokes, generous empty space, and a few semantic accent colors. Choose project-specific proportions and a consistent drawing vocabulary. Use readable sans-serif typography for labels; do not rely on generated-image lettering. Paper texture is optional and must remain subtle. The included kit is deliberately simple original vector art, not a professionally illustrated character library or a copy of a reference creator's artwork.
 
 `DoodleAsset` includes person (neutral/happy/worried, standing/pointing/walking), house, apartment, coin, key, document, clock, and arrow. It accepts a palette and draw progress. Compose cityscapes, money groups, and comparisons from these, and author additional paths or acquire/generate illustrations where the kit lacks narrative specificity. Raster image generation can help establish richer illustrations when available; inspect consistency and use layered assets for independent movement. A flattened image supports crops/fades/masks, not authentic per-stroke drawing or character rigging.
