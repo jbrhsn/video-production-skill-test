@@ -20,6 +20,12 @@
       "path": "images",
       "inventory": "images/inventory.json",
       "description": "Authentic hand-drawn doodle, whiteboard sketch, and marker explainer cutouts."
+    },
+    {
+      "id": "creator-whiteboard-sfx-v1",
+      "path": "audio/sfx",
+      "inventory": "audio/sfx/inventory.json",
+      "description": "Clean, punchy sound effects curated for whiteboard animations, UI interactions, and storytelling beats."
     }
   ],
   "assets": [
@@ -503,6 +509,624 @@
         "expires_on": null
       },
       "output_notes": "Hand-drawn retro megaphone bullhorn with radiating soundwave arcs and orange accent lines; keyed to transparent RGBA."
+    },
+    {
+      "id": "sfx-block-slide-v1",
+      "path": "audio/sfx/block-slide.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "block",
+        "slide",
+        "puzzle",
+        "motion",
+        "ui",
+        "modular",
+        "movement",
+        "wooden"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Short wooden or plastic block sliding into alignment. (1.92s). Sliding puzzle animations."
+    },
+    {
+      "id": "sfx-bulb-ding-v1",
+      "path": "audio/sfx/bulb-ding.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "bulb",
+        "ding",
+        "chime",
+        "lightbulb",
+        "idea",
+        "insight",
+        "eureka",
+        "spark"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Crisp bright metallic idea ding chime. (1.70s). Eureka lightbulb moments."
+    },
+    {
+      "id": "sfx-clock-tick-v1",
+      "path": "audio/sfx/clock-tick.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "clock",
+        "tick",
+        "timer",
+        "ticking",
+        "time",
+        "urgency",
+        "countdown",
+        "seconds"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Steady rhythmic analog clock ticking sequence. (4.92s). 10-minute timer sprints."
+    },
+    {
+      "id": "sfx-domino-cascade-v1",
+      "path": "audio/sfx/domino-cascade.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "domino",
+        "cascade",
+        "chain-reaction",
+        "topple",
+        "momentum",
+        "clatter"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Fast tumbling clatter of cascading sequential dominos. (2.66s). Chain reaction demonstrations."
+    },
+    {
+      "id": "sfx-domino-click-v1",
+      "path": "audio/sfx/domino-click.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "domino",
+        "click",
+        "tap",
+        "trigger",
+        "nudge",
+        "start",
+        "micro-action"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Single crisp tactile click of a domino being tipped. (1.10s). Initial triggers."
+    },
+    {
+      "id": "sfx-drum-roll-riser-v1",
+      "path": "audio/sfx/drum-roll-riser.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "drum-roll",
+        "riser",
+        "anticipation",
+        "tension",
+        "build-up",
+        "reveal"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Snare drum roll rising in dynamic tension. (1.52s). Pre-reveal suspense."
+    },
+    {
+      "id": "sfx-gem-chime-v1",
+      "path": "audio/sfx/gem-chime.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "gem",
+        "chime",
+        "sparkle",
+        "crystal",
+        "treasure",
+        "achievement",
+        "success",
+        "ping"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Luminous crystal gem chime ping. (1.91s). Rewarding achievements."
+    },
+    {
+      "id": "sfx-keyboard-typing-v1",
+      "path": "audio/sfx/keyboard-typing.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "keyboard",
+        "typing",
+        "keys",
+        "mechanical",
+        "coding",
+        "writing",
+        "tech"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Crisp tactile mechanical keyboard typing sequence. (1.02s). Code drafting."
+    },
+    {
+      "id": "sfx-light-applause-v1",
+      "path": "audio/sfx/light-applause.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "applause",
+        "clapping",
+        "cheer",
+        "celebration",
+        "audience",
+        "praise"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Warm polite audience clapping and cheering. (3.43s). Milestone achievement."
+    },
+    {
+      "id": "sfx-lightning-spark-v1",
+      "path": "audio/sfx/lightning-spark.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "lightning",
+        "spark",
+        "electric",
+        "zap",
+        "energy",
+        "burst",
+        "charge"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Quick crackling electric lightning zap. (1.22s). Creative energy sparks."
+    },
+    {
+      "id": "sfx-marker-strike-v1",
+      "path": "audio/sfx/marker-strike.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "marker",
+        "strike",
+        "slash",
+        "scribble",
+        "cross-out",
+        "whiteboard",
+        "felt-tip"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Heavy squeaky whiteboard marker strike / cross-out. (1.32s). Crossing out myths."
+    },
+    {
+      "id": "sfx-mouse-click-v1",
+      "path": "audio/sfx/mouse-click.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "mouse",
+        "click",
+        "tap",
+        "ui",
+        "button",
+        "cursor",
+        "subscribe"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Clean tactile computer mouse button click. (0.37s). Ui button clicks."
+    },
+    {
+      "id": "sfx-notification-bell-v1",
+      "path": "audio/sfx/notification-bell.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "notification",
+        "bell",
+        "ring",
+        "ding",
+        "alert",
+        "youtube",
+        "reminder"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Clear resonant notification bell chime. (1.85s). Youtube bell icon activation."
+    },
+    {
+      "id": "sfx-page-turn-v1",
+      "path": "audio/sfx/page-turn.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "page",
+        "turn",
+        "paper",
+        "flip",
+        "book",
+        "notebook",
+        "read",
+        "swipe"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Crisp paper page flip and notebook opening sound. (1.23s). Notebook opening transitions."
+    },
+    {
+      "id": "sfx-paper-flutter-v1",
+      "path": "audio/sfx/paper-flutter.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "paper",
+        "flutter",
+        "sheet",
+        "sticky-note",
+        "rustle",
+        "drop",
+        "slide"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Soft fluttering rustle of falling paper or sticky notes. (1.39s). Sticky notes appearing."
+    },
+    {
+      "id": "sfx-pencil-scribble-v1",
+      "path": "audio/sfx/pencil-scribble.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "pencil",
+        "scribble",
+        "write",
+        "sketch",
+        "graphite",
+        "doodle",
+        "drawing"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Rhythmic graphite pencil sketching and writing across paper. (1.13s). Handwriting text lines."
+    },
+    {
+      "id": "sfx-poof-dissolve-v1",
+      "path": "audio/sfx/poof-dissolve.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "poof",
+        "dissolve",
+        "smoke",
+        "puff",
+        "vanish",
+        "magic",
+        "disappear"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Soft magical smoke poof and dust cloud dissipate. (1.59s). Vanishing distractions."
+    },
+    {
+      "id": "sfx-pop-sprout-v1",
+      "path": "audio/sfx/pop-sprout.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "pop",
+        "sprout",
+        "grow",
+        "bubble",
+        "bloom",
+        "appear",
+        "organic"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Subtle organic cartoon bubble pop / sprout sound. (1.06s). Seedlings emerging."
+    },
+    {
+      "id": "sfx-snap-lock-v1",
+      "path": "audio/sfx/snap-lock.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "snap",
+        "lock",
+        "click",
+        "latch",
+        "connect",
+        "fit",
+        "puzzle"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Crisp mechanical snap / locking click. (0.55s). Puzzle pieces fitting together."
+    },
+    {
+      "id": "sfx-sparkle-outro-v1",
+      "path": "audio/sfx/sparkle-outro.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "sparkle",
+        "outro",
+        "magic",
+        "chime",
+        "shimmer",
+        "finale",
+        "glow"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Lush celestial sparkle and shimmer sweep. (4.34s). Video conclusions."
+    },
+    {
+      "id": "sfx-stamp-impact-v1",
+      "path": "audio/sfx/stamp-impact.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "stamp",
+        "impact",
+        "thud",
+        "slam",
+        "reject",
+        "rubber-stamp",
+        "seal"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Heavy authoritative rubber stamp slam with wood impact thud. (1.66s). Rejection stamps."
+    },
+    {
+      "id": "sfx-whoosh-split-v1",
+      "path": "audio/sfx/whoosh-split.mp3",
+      "kind": "sound-effect",
+      "collection": "creator-whiteboard-sfx-v1",
+      "tags": [
+        "sfx",
+        "whoosh",
+        "split",
+        "swipe",
+        "swoosh",
+        "transition",
+        "air",
+        "fast"
+      ],
+      "source": {
+        "type": "user-provided",
+        "creator_or_provider": "user",
+        "source_url": null
+      },
+      "rights": {
+        "status": "cleared",
+        "usage_basis": "Licensed royalty-free SFX supplied by user",
+        "attribution": "User supplied audio library",
+        "expires_on": null
+      },
+      "output_notes": "Fast dynamic air whoosh / slicing swoop. (1.38s). Split-screen division."
     }
   ]
 }

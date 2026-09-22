@@ -1,0 +1,525 @@
+{
+  "schema_version": "1.0",
+  "collection": "creator-whiteboard-sfx-v1",
+  "description": "Curated sound effects library for whiteboard animation and video production.",
+  "assets": [
+    {
+      "file_name": "block-slide.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/block-slide.mp3",
+      "duration": "1.92s",
+      "description": "Short wooden or plastic block sliding into alignment.",
+      "action": "block sliding into position",
+      "best_for": [
+        "sliding puzzle animations",
+        "modular component reveals",
+        "diagram step positioning",
+        "tactile UI shifts"
+      ],
+      "tags": [
+        "sfx",
+        "block",
+        "slide",
+        "puzzle",
+        "motion",
+        "ui",
+        "modular",
+        "movement",
+        "wooden"
+      ]
+    },
+    {
+      "file_name": "bulb-ding.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/bulb-ding.mp3",
+      "duration": "1.70s",
+      "description": "Crisp bright metallic idea ding chime.",
+      "action": "eureka moment and idea lightbulb burst",
+      "best_for": [
+        "eureka lightbulb moments",
+        "concept breakthroughs",
+        "insight pop-ins",
+        "key takeaway reveals"
+      ],
+      "tags": [
+        "sfx",
+        "bulb",
+        "ding",
+        "chime",
+        "lightbulb",
+        "idea",
+        "insight",
+        "eureka",
+        "spark"
+      ]
+    },
+    {
+      "file_name": "clock-tick.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/clock-tick.mp3",
+      "duration": "4.92s",
+      "description": "Steady rhythmic analog clock ticking sequence.",
+      "action": "steady ticking timer countdown",
+      "best_for": [
+        "10-minute timer sprints",
+        "time pressure metaphors",
+        "countdown sequences",
+        "thinking intervals"
+      ],
+      "tags": [
+        "sfx",
+        "clock",
+        "tick",
+        "timer",
+        "ticking",
+        "time",
+        "urgency",
+        "countdown",
+        "seconds"
+      ]
+    },
+    {
+      "file_name": "domino-cascade.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/domino-cascade.mp3",
+      "duration": "2.66s",
+      "description": "Fast tumbling clatter of cascading sequential dominos.",
+      "action": "sequential domino chain reaction toppling",
+      "best_for": [
+        "chain reaction demonstrations",
+        "compounding momentum",
+        "domino effect metaphors",
+        "habit progression"
+      ],
+      "tags": [
+        "sfx",
+        "domino",
+        "cascade",
+        "chain-reaction",
+        "topple",
+        "momentum",
+        "clatter"
+      ]
+    },
+    {
+      "file_name": "domino-click.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/domino-click.mp3",
+      "duration": "1.10s",
+      "description": "Single crisp tactile click of a domino being tipped.",
+      "action": "pen nudging first domino",
+      "best_for": [
+        "initial triggers",
+        "starting small steps",
+        "pen nudging first domino",
+        "micro-action moments"
+      ],
+      "tags": [
+        "sfx",
+        "domino",
+        "click",
+        "tap",
+        "trigger",
+        "nudge",
+        "start",
+        "micro-action"
+      ]
+    },
+    {
+      "file_name": "drum-roll-riser.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/drum-roll-riser.mp3",
+      "duration": "1.52s",
+      "description": "Snare drum roll rising in dynamic tension.",
+      "action": "anticipatory drum roll build-up",
+      "best_for": [
+        "pre-reveal suspense",
+        "building anticipation before key insight",
+        "transition climax"
+      ],
+      "tags": [
+        "sfx",
+        "drum-roll",
+        "riser",
+        "anticipation",
+        "tension",
+        "build-up",
+        "reveal"
+      ]
+    },
+    {
+      "file_name": "gem-chime.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/gem-chime.mp3",
+      "duration": "1.91s",
+      "description": "Luminous crystal gem chime ping.",
+      "action": "high-value idea discovery and achievement chime",
+      "best_for": [
+        "rewarding achievements",
+        "golden ideas",
+        "gem discoveries",
+        "star badge outlines"
+      ],
+      "tags": [
+        "sfx",
+        "gem",
+        "chime",
+        "sparkle",
+        "crystal",
+        "treasure",
+        "achievement",
+        "success",
+        "ping"
+      ]
+    },
+    {
+      "file_name": "keyboard-typing.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/keyboard-typing.mp3",
+      "duration": "1.02s",
+      "description": "Crisp tactile mechanical keyboard typing sequence.",
+      "action": "mechanical keyboard fast typing burst",
+      "best_for": [
+        "code drafting",
+        "prompting AI",
+        "typing text overlays",
+        "creative drafting"
+      ],
+      "tags": [
+        "sfx",
+        "keyboard",
+        "typing",
+        "keys",
+        "mechanical",
+        "coding",
+        "writing",
+        "tech"
+      ]
+    },
+    {
+      "file_name": "light-applause.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/light-applause.mp3",
+      "duration": "3.43s",
+      "description": "Warm polite audience clapping and cheering.",
+      "action": "audience clapping and congratulatory applause",
+      "best_for": [
+        "milestone achievement",
+        "congratulations",
+        "outro celebratory wrap-up"
+      ],
+      "tags": [
+        "sfx",
+        "applause",
+        "clapping",
+        "cheer",
+        "celebration",
+        "audience",
+        "praise"
+      ]
+    },
+    {
+      "file_name": "lightning-spark.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/lightning-spark.mp3",
+      "duration": "1.22s",
+      "description": "Quick crackling electric lightning zap.",
+      "action": "crackling lightning electric zap",
+      "best_for": [
+        "creative energy sparks",
+        "sudden flash connections",
+        "high-voltage ideas"
+      ],
+      "tags": [
+        "sfx",
+        "lightning",
+        "spark",
+        "electric",
+        "zap",
+        "energy",
+        "burst",
+        "charge"
+      ]
+    },
+    {
+      "file_name": "marker-strike.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/marker-strike.mp3",
+      "duration": "1.32s",
+      "description": "Heavy squeaky whiteboard marker strike / cross-out.",
+      "action": "bold marker strike crossing out myth",
+      "best_for": [
+        "crossing out myths",
+        "debunking misconceptions",
+        "bold whiteboard underline strokes"
+      ],
+      "tags": [
+        "sfx",
+        "marker",
+        "strike",
+        "slash",
+        "scribble",
+        "cross-out",
+        "whiteboard",
+        "felt-tip"
+      ]
+    },
+    {
+      "file_name": "mouse-click.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/mouse-click.mp3",
+      "duration": "0.37s",
+      "description": "Clean tactile computer mouse button click.",
+      "action": "computer mouse cursor click",
+      "best_for": [
+        "UI button clicks",
+        "Subscribe button click",
+        "Bell toggle",
+        "cursor actions"
+      ],
+      "tags": [
+        "sfx",
+        "mouse",
+        "click",
+        "tap",
+        "ui",
+        "button",
+        "cursor",
+        "subscribe"
+      ]
+    },
+    {
+      "file_name": "notification-bell.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/notification-bell.mp3",
+      "duration": "1.85s",
+      "description": "Clear resonant notification bell chime.",
+      "action": "notification bell ringing",
+      "best_for": [
+        "YouTube bell icon activation",
+        "notification reminders",
+        "alert popups"
+      ],
+      "tags": [
+        "sfx",
+        "notification",
+        "bell",
+        "ring",
+        "ding",
+        "alert",
+        "youtube",
+        "reminder"
+      ]
+    },
+    {
+      "file_name": "page-turn.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/page-turn.mp3",
+      "duration": "1.23s",
+      "description": "Crisp paper page flip and notebook opening sound.",
+      "action": "crisp notebook page turning",
+      "best_for": [
+        "notebook opening transitions",
+        "chapter flips",
+        "reading journal pages"
+      ],
+      "tags": [
+        "sfx",
+        "page",
+        "turn",
+        "paper",
+        "flip",
+        "book",
+        "notebook",
+        "read",
+        "swipe"
+      ]
+    },
+    {
+      "file_name": "paper-flutter.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/paper-flutter.mp3",
+      "duration": "1.39s",
+      "description": "Soft fluttering rustle of falling paper or sticky notes.",
+      "action": "sticky note paper fluttering down",
+      "best_for": [
+        "sticky notes appearing",
+        "cascading cards",
+        "fluttering documents"
+      ],
+      "tags": [
+        "sfx",
+        "paper",
+        "flutter",
+        "sheet",
+        "sticky-note",
+        "rustle",
+        "drop",
+        "slide"
+      ]
+    },
+    {
+      "file_name": "pencil-scribble.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/pencil-scribble.mp3",
+      "duration": "1.13s",
+      "description": "Rhythmic graphite pencil sketching and writing across paper.",
+      "action": "pencil sketching handwriting lineart",
+      "best_for": [
+        "handwriting text lines",
+        "pencil doodles",
+        "rough drafting sketches"
+      ],
+      "tags": [
+        "sfx",
+        "pencil",
+        "scribble",
+        "write",
+        "sketch",
+        "graphite",
+        "doodle",
+        "drawing"
+      ]
+    },
+    {
+      "file_name": "poof-dissolve.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/poof-dissolve.mp3",
+      "duration": "1.59s",
+      "description": "Soft magical smoke poof and dust cloud dissipate.",
+      "action": "soft puff smoke dissolve",
+      "best_for": [
+        "vanishing distractions",
+        "discarding bad drafts",
+        "erasing elements"
+      ],
+      "tags": [
+        "sfx",
+        "poof",
+        "dissolve",
+        "smoke",
+        "puff",
+        "vanish",
+        "magic",
+        "disappear"
+      ]
+    },
+    {
+      "file_name": "pop-sprout.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/pop-sprout.mp3",
+      "duration": "1.06s",
+      "description": "Subtle organic cartoon bubble pop / sprout sound.",
+      "action": "seedling popping and sprouting",
+      "best_for": [
+        "seedlings emerging",
+        "idea sprouting",
+        "UI pill pop-ins",
+        "accent badge blooms"
+      ],
+      "tags": [
+        "sfx",
+        "pop",
+        "sprout",
+        "grow",
+        "bubble",
+        "bloom",
+        "appear",
+        "organic"
+      ]
+    },
+    {
+      "file_name": "snap-lock.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/snap-lock.mp3",
+      "duration": "0.55s",
+      "description": "Crisp mechanical snap / locking click.",
+      "action": "puzzle pieces snapping into place",
+      "best_for": [
+        "puzzle pieces fitting together",
+        "locks closing",
+        "alignment snaps",
+        "rule enforcement"
+      ],
+      "tags": [
+        "sfx",
+        "snap",
+        "lock",
+        "click",
+        "latch",
+        "connect",
+        "fit",
+        "puzzle"
+      ]
+    },
+    {
+      "file_name": "sparkle-outro.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/sparkle-outro.mp3",
+      "duration": "4.34s",
+      "description": "Lush celestial sparkle and shimmer sweep.",
+      "action": "celestial sparkle shimmer sweep",
+      "best_for": [
+        "video conclusions",
+        "final takeaway banner reveals",
+        "grand outro flourishes"
+      ],
+      "tags": [
+        "sfx",
+        "sparkle",
+        "outro",
+        "magic",
+        "chime",
+        "shimmer",
+        "finale",
+        "glow"
+      ]
+    },
+    {
+      "file_name": "stamp-impact.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/stamp-impact.mp3",
+      "duration": "1.66s",
+      "description": "Heavy authoritative rubber stamp slam with wood impact thud.",
+      "action": "heavy rubber stamp slamming down",
+      "best_for": [
+        "rejection stamps",
+        "official seal impressions",
+        "harsh judgment slamming down"
+      ],
+      "tags": [
+        "sfx",
+        "stamp",
+        "impact",
+        "thud",
+        "slam",
+        "reject",
+        "rubber-stamp",
+        "seal"
+      ]
+    },
+    {
+      "file_name": "whoosh-split.mp3",
+      "file_type": "mp3",
+      "file_path": ".video_production_assets/audio/sfx/whoosh-split.mp3",
+      "duration": "1.38s",
+      "description": "Fast dynamic air whoosh / slicing swoop.",
+      "action": "fast whoosh air swipe",
+      "best_for": [
+        "split-screen division",
+        "fast scene swipes",
+        "rapid element sweeps"
+      ],
+      "tags": [
+        "sfx",
+        "whoosh",
+        "split",
+        "swipe",
+        "swoosh",
+        "transition",
+        "air",
+        "fast"
+      ]
+    }
+  ]
+}
