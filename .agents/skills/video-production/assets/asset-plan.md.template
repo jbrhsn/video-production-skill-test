@@ -5,15 +5,15 @@ Project assets directory: `assets/`
 Profile / aspect ratio: TODO
 Selected visual recipe / rationale: TODO
 
-## Voiceover-to-visual map
+## Beat-to-media map
 
-Cover every spoken line using stable beat IDs. Times reference checked scene timestamps; do not invent timing. `none`, reuse, and named `code:` visuals are valid layer entries. Specify action and new understanding, not only objects.
+Cover every editorial beat using stable IDs. For speech-led work, cover the approved dialogue or narration; for silent, musical, ambient, or performance-led work, use checked source/master time. `none`, reuse, and named `code:` visuals are valid entries. Specify progression and intended effect, not only objects.
 
 One row per defined beat; a whole-scene duration or “Model 2” is not exact voiceover coverage. Request independent cutouts/parts/poses for independent motion. Whole-frame opaque images need an intentional complete-shot use, not a midground label. Ask the user for external assets/choices and wait before finalizing the refined plan.
 
-| Scene / beat | Exact voiceover line / word indices / time | Background (BG) | Midground object | Foreground object | Visible action and new understanding |
+| Scene / beat | Checked dialogue/word timing or source/master range | Editorial purpose / intended effect | Primary media role | Authored addition or transformation | Entry → development → exit; caption/sound policy |
 |---|---|---|---|---|---|
-| TODO | TODO | Asset ID + exact filename, code visual, or none | TODO | TODO | TODO |
+| TODO | TODO | TODO | Source/asset ID and role, or none | Asset ID, `code:` visual, edit operation, reuse, or none | TODO |
 
 Example only: “Start by connecting what you know” can reuse `A-ROOM / desk-room.png` as BG, `A-PERSON / mannequin-seated.png` as midground, and `code:idea-nodes` as foreground; two symbols combine to demonstrate the mechanism. These example filenames are not selected assets.
 

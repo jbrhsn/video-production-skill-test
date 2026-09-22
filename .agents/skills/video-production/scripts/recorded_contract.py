@@ -172,6 +172,9 @@ def validate_recorded_execution(data, clip_ids):
     used = []
     events = []
     masks = []
+    annotations = []
+    beat_ids = []
+    creative_core = any("beats" in scene or "treatment" in scene for scene in scenes if isinstance(scene, dict))
     for number, scene in enumerate(scenes, 1):
         if not isinstance(scene, dict) or scene.get("scene") != number or not text(scene.get("id")):
             raise ValueError("recorded scenes need consecutive scene numbers and stable IDs")
@@ -179,6 +182,30 @@ def validate_recorded_execution(data, clip_ids):
         if not isinstance(ids, list) or not ids or any(item not in clip_ids for item in ids):
             raise ValueError(f"scene {number}: clipIds must reference cut-plan clips")
         used.extend(ids)
+        if creative_core:
+            if not text(scene.get("treatment")) or not isinstance(scene.get("beats"), list) or not scene["beats"]:
+                raise ValueError(f"scene {number}: creative plans require treatment and nonempty beats")
+            for beat in scene["beats"]:
+                if not isinstance(beat, dict) or not text(beat.get("id")) or beat.get("clipId") not in ids:
+                    raise ValueError(f"scene {number}: invalid creative beat")
+                timing_key = "correctedTranscriptRangeUs" if "correctedTranscriptRangeUs" in beat else "timelineRangeUs"
+                range_us(beat.get(timing_key), f"beat {beat.get('id')}.{timing_key}")
+                modern_text = ("editorialPurpose", "intendedEffect", "primaryMediaRole", "authoredAdditionRole")
+                legacy_text = ("viewerQuestion", "sourceEvidenceRole", "authoredVisualRole", "newUnderstanding")
+                if (not all(text(beat.get(key)) for key in modern_text)
+                        and not all(text(beat.get(key)) for key in legacy_text)):
+                    raise ValueError(f"beat {beat.get('id')}: editorial purpose, audience effect, and media roles are required")
+                if not all(text(beat.get(key)) for key in ("captionPolicy", "soundPolicy")):
+                    raise ValueError(f"beat {beat.get('id')}: caption and sound decisions are required")
+                progression = beat.get("progression")
+                states = beat.get("states")
+                modern_progression = isinstance(progression, dict) and all(
+                    text(progression.get(key)) for key in ("entry", "development", "exit"))
+                legacy_progression = isinstance(states, dict) and all(
+                    text(states.get(key)) for key in ("initial", "action", "result"))
+                if not modern_progression and not legacy_progression:
+                    raise ValueError(f"beat {beat.get('id')}: entry/development/exit progression is required")
+                beat_ids.append(beat["id"])
         for event in scene.get("layoutEvents", []):
             if (not isinstance(event, dict) or event.get("clipId") not in ids
                     or event.get("layout") not in LAYOUTS):
@@ -187,6 +214,8 @@ def validate_recorded_execution(data, clip_ids):
             integer(event.get("durationUs", 0), "layout event durationUs")
             if event.get("corner", "top-right") not in CORNERS:
                 raise ValueError("layout event corner is invalid")
+            if event.get("fromLayout") is not None and event["fromLayout"] not in LAYOUTS:
+                raise ValueError("layout event fromLayout is invalid")
             if not text(event.get("id")):
                 raise ValueError("layout events require IDs")
             events.append(event["id"])
@@ -203,8 +232,26 @@ def validate_recorded_execution(data, clip_ids):
             if mask.get("strategy") not in ("solid", "blur"):
                 raise ValueError(f"mask {mask.get('id')}: strategy must be solid or blur")
             masks.append({**mask, "clipRangeUs": relative})
+        for annotation in scene.get("annotations", []):
+            if not isinstance(annotation, dict) or annotation.get("clipId") not in ids or not text(annotation.get("id")):
+                raise ValueError(f"scene {number}: invalid annotation")
+            relative = range_us(annotation.get("clipRangeUs"), f"annotation {annotation.get('id')}.clipRangeUs")
+            rect = annotation.get("rect")
+            if (not isinstance(rect, list) or len(rect) != 4
+                    or any(type(value) not in (int, float) or not math.isfinite(value) for value in rect)
+                    or rect[0] < 0 or rect[1] < 0 or rect[2] <= 0 or rect[3] <= 0
+                    or rect[0] + rect[2] > 1 or rect[1] + rect[3] > 1):
+                raise ValueError(f"annotation {annotation.get('id')}: rect must be normalized [x,y,width,height]")
+            if annotation.get("style", "outline") not in ("outline", "highlight"):
+                raise ValueError(f"annotation {annotation.get('id')}: unsupported style")
+            if (not text(annotation.get("sourceFrame")) or type(annotation.get("sourceTimeUs")) is not int
+                    or annotation["sourceTimeUs"] < 0 or not text(annotation.get("invalidatedBy"))):
+                raise ValueError(f"annotation {annotation.get('id')}: sourceFrame, sourceTimeUs, and invalidatedBy are required")
+            annotations.append({**annotation, "clipRangeUs": relative})
     if used != clip_ids:
         raise ValueError("execution scenes must cover cut-plan clips exactly once in order")
-    if len(events) != len(set(events)) or len([m["id"] for m in masks]) != len(set(m["id"] for m in masks)):
-        raise ValueError("layout and mask IDs must be unique")
+    if (len(events) != len(set(events)) or len([m["id"] for m in masks]) != len(set(m["id"] for m in masks))
+            or len([a["id"] for a in annotations]) != len(set(a["id"] for a in annotations))
+            or len(beat_ids) != len(set(beat_ids))):
+        raise ValueError("beat, layout, mask, and annotation IDs must be unique")
     return {**data, "fps": fps, "scenes": scenes}

@@ -220,9 +220,15 @@ def validate_design_system(project):
             or not all(text(motion.get(key)) for key in ("easing", "cameraRule"))
             or not isinstance(motion.get("transitions"), list) or not motion["transitions"]):
         raise ValueError("Design system motion tokens are incomplete")
-    if (not isinstance(captions, dict) or set(captions) != {"fontFamily", "text", "background", "active", "radius"}
+    caption_required = {"fontFamily", "text", "background", "active", "radius"}
+    caption_optional = {"fontScale", "paddingX", "paddingY", "bottomInset"}
+    if (not isinstance(captions, dict) or not caption_required.issubset(captions)
+            or set(captions) - caption_required - caption_optional
             or not text(captions["fontFamily"]) or type(captions["radius"]) not in (int, float)
-            or not all(re.fullmatch(r"#[0-9A-Fa-f]{6}", captions[key]) for key in ("text", "background", "active"))):
+            or not all(re.fullmatch(r"#[0-9A-Fa-f]{6}", captions[key]) for key in ("text", "background", "active"))
+            or any(type(captions.get(key)) not in (int, float) or captions[key] <= 0
+                   for key in caption_optional if key in captions)
+            or any(captions[key] >= 1 for key in ("fontScale", "bottomInset") if key in captions)):
         raise ValueError("Design system caption tokens are incomplete")
     if not isinstance(design["avoid"], list) or not design["avoid"] or not all(text(item) for item in design["avoid"]):
         raise ValueError("Design system requires a concrete avoid list")

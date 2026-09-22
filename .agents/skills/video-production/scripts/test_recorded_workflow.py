@@ -51,17 +51,24 @@ class RecordedWorkflowTests(unittest.TestCase):
             {"id": "w3", "word": "theory", "sessionRangeUs": [6_000_000, 6_500_000]},
         ]})
         self.write("execution-plan.json", {"version": 3, "track": "recorded-edit", "fps": 30,
-            "width": 1920, "height": 1080, "scenes": [
+            "width": 1920, "height": 1080,
+            "safeArea": {"top": .05, "right": .05, "bottom": .12, "left": .05}, "scenes": [
                 {"scene": 1, "id": "intro", "clipIds": ["c1"], "layoutEvents": [
                     {"id": "l1", "clipId": "c1", "atUs": 0, "durationUs": 0, "layout": "screen-focus"},
                     {"id": "l2", "clipId": "c1", "atUs": 2_000_000, "durationUs": 500_000,
                      "layout": "presenter-focus", "corner": "bottom-right"}], "masks": []},
-                {"scene": 2, "id": "demo", "clipIds": ["c2"], "layoutEvents": [], "masks": [
+                {"scene": 2, "id": "demo", "clipIds": ["c2"], "layoutEvents": [
+                    {"id": "l3", "clipId": "c2", "atUs": 0, "durationUs": 500_000,
+                     "layout": "balanced", "fromLayout": "presenter-focus"}], "annotations": [
+                    {"id": "a1", "clipId": "c2", "clipRangeUs": [2_000_000, 3_000_000],
+                     "rect": [.2, .2, .25, .1], "sourceFrame": "review/source.png", "sourceTimeUs": 7_000_000,
+                     "invalidatedBy": "next scroll", "style": "outline"}], "masks": [
                     {"id": "m1", "clipId": "c2", "clipRangeUs": [1_000_000, 2_000_000],
                      "rect": [.1, .1, .2, .1], "strategy": "solid"}]},
             ]})
-        self.write("design-system.json", {"version": 1, "captions": {"fontFamily": "Arial",
-            "text": "#fff", "background": "#111", "active": "#ff0", "radius": 4}})
+        self.write("design-system.json", {"version": 1, "colors": {"background": "#f4f1e8"},
+            "captions": {"fontFamily": "Arial", "text": "#fff", "background": "#111",
+                         "active": "#ff0", "radius": 4, "fontScale": .029, "bottomInset": .045}})
         for name in ("brief.md", "storyboard.json", "edit-plan.json", "asset-plan.md", "asset-manifest.json",
                      "implementation-plan.md", "source/derivatives.json", "analysis/observations.json",
                      "analysis/cut-proposals.json", "source/sensitive-regions.json"):
@@ -99,6 +106,31 @@ class RecordedWorkflowTests(unittest.TestCase):
         self.assertEqual(data["clips"][0]["tracks"]["screen"]["sourceStartFrame"], 3)
         self.assertEqual(data["clips"][0]["layouts"][1]["layout"], "presenter-focus")
         self.assertEqual(data["clips"][1]["masks"][0]["startFrame"], 30)
+        self.assertEqual(data["clips"][1]["layouts"][0]["fromLayout"], "presenter-focus")
+        self.assertEqual(data["clips"][1]["annotations"][0]["startFrame"], 60)
+        self.assertEqual(data["boundaries"][0], {"afterScene": 1, "frame": 120,
+            "startFrame": 90, "durationFrames": 90})
+
+    def test_partial_creative_plan_is_rejected(self):
+        plan = json.loads((self.root / "execution-plan.json").read_text())
+        plan["scenes"][0]["treatment"] = "evidence-focus"
+        self.write("execution-plan.json", plan)
+        with self.assertRaisesRegex(ValueError, "creative plans require"):
+            compile_project(self.root)
+
+    def test_generic_creative_beat_contract_accepts_non_speech_timing(self):
+        plan = json.loads((self.root / "execution-plan.json").read_text())
+        for scene in plan["scenes"]:
+            clip_id = scene["clipIds"][0]
+            scene["treatment"] = "observational"
+            scene["beats"] = [{"id": f"beat-{scene['scene']}", "clipId": clip_id,
+                "timelineRangeUs": [0, 1_000_000], "editorialPurpose": "Establish the moment",
+                "intendedEffect": "Let the audience notice the change", "primaryMediaRole": "Carries action",
+                "authoredAdditionRole": "none", "progression": {"entry": "hold", "development": "action",
+                "exit": "settle"}, "captionPolicy": "none", "soundPolicy": "preserve source"}]
+        self.write("execution-plan.json", plan)
+        data = compile_project(self.root)
+        self.assertEqual(len(data["scenes"]), 2)
 
     def test_stale_source_and_plan_are_rejected(self):
         check_v3(self.root, self.state, "implement")
@@ -119,6 +151,7 @@ class RecordedWorkflowTests(unittest.TestCase):
         marker = json.loads((self.root / "src/timeline-contract.json").read_text())
         self.assertEqual(marker, {"version": 3, "track": "recorded-edit"})
         self.assertIn("playbackRate", (self.root / "src/RecordedTimeline.tsx").read_text())
+        self.assertIn('id={`Boundary${boundary.afterScene}`}', (self.root / "src/Root.tsx").read_text())
         self.assertEqual(json.loads((self.root / "src/timeline-data.json").read_text())["totalFrames"], 330)
         modules = os.environ.get("VIDEO_PRODUCTION_NODE_MODULES")
         if modules:

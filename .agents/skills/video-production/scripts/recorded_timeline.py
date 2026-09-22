@@ -54,7 +54,8 @@ def compile_recorded(manifest, sync, cut, execution, words=None):
                     raise ValueError(f"layout event {event['id']} lies outside its clip")
                 layouts.append({"id": event["id"], "atFrame": frame(event["atUs"], fps),
                                 "durationFrames": frame(event.get("durationUs", 0), fps),
-                                "layout": event["layout"], "corner": event.get("corner", "top-right")})
+                                "layout": event["layout"], "fromLayout": event.get("fromLayout"),
+                                "corner": event.get("corner", "top-right")})
         layouts.sort(key=lambda item: item["atFrame"])
         if any(current["atFrame"] < max(previous["atFrame"] + 1,
                                           previous["atFrame"] + previous["durationFrames"])
@@ -74,12 +75,22 @@ def compile_recorded(manifest, sync, cut, execution, words=None):
                     raise ValueError(f"mask {mask['id']} lies outside its clip")
                 clip_masks.append({**mask, "startFrame": frame(mask["clipRangeUs"][0], fps),
                                    "endFrame": frame(mask["clipRangeUs"][1], fps)})
+        clip_annotations = []
+        for annotation in scene.get("annotations", []):
+            if annotation["clipId"] == clip["id"]:
+                if "screen" not in tracks:
+                    raise ValueError(f"annotation {annotation['id']} requires an active screen track")
+                if annotation["clipRangeUs"][1] > session_end - session_start:
+                    raise ValueError(f"annotation {annotation['id']} lies outside its clip")
+                clip_annotations.append({**annotation,
+                    "startFrame": frame(annotation["clipRangeUs"][0], fps),
+                    "endFrame": frame(annotation["clipRangeUs"][1], fps)})
         compiled.append({"id": clip["id"], "scene": scene["scene"], "startFrame": start_frame,
                          "durationFrames": end_frame - start_frame, "tracks": tracks,
                          "audio": {"sourceId": audio_id, "src": public_src(sources[audio_id]["stagedPath"]),
                                    "sourceStartFrame": frame(audio_start, fps),
                                    "playbackRate": (audio_end - audio_start) / (session_end - session_start)},
-                         "layouts": layouts, "masks": clip_masks})
+                         "layouts": layouts, "masks": clip_masks, "annotations": clip_annotations})
     compiled_words = []
     for word in (words or {}).get("words", []):
         start_us, end_us = word.get("sessionRangeUs", [None, None])
@@ -100,9 +111,16 @@ def compile_recorded(manifest, sync, cut, execution, words=None):
         end = rows[-1]["startFrame"] + rows[-1]["durationFrames"]
         scene_rows.append({"scene": scene["scene"], "id": scene["id"], "startFrame": start,
                            "durationFrames": end - start})
+    boundaries_out = []
+    for prior, following in zip(scene_rows, scene_rows[1:]):
+        join = following["startFrame"]
+        before = min(fps, join)
+        after = min(2 * fps, boundaries[-1] - join)
+        boundaries_out.append({"afterScene": prior["scene"], "frame": join,
+                               "startFrame": join - before, "durationFrames": before + after})
     return {"version": 3, "track": "recorded-edit", "fps": fps, "width": plan["width"],
             "height": plan["height"], "totalFrames": boundaries[-1], "clips": compiled,
-            "scenes": scene_rows, "words": compiled_words,
+            "scenes": scene_rows, "boundaries": boundaries_out, "words": compiled_words,
             "safeArea": plan.get("safeArea", {"top": .06, "right": .06, "bottom": .12, "left": .06})}
 
 

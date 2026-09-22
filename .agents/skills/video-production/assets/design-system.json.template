@@ -38,7 +38,11 @@
     "text": "#172B4D",
     "background": "#FFFFFF",
     "active": "#2457C5",
-    "radius": 6
+    "radius": 6,
+    "fontScale": 0.029,
+    "paddingX": 6,
+    "paddingY": 4,
+    "bottomInset": 0.045
   },
   "avoid": [
     "generic dark gradients",

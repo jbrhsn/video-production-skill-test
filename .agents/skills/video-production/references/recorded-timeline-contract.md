@@ -20,11 +20,13 @@ The approved `cut-plan.json` is the only source-cut authority. A normal clip rem
 - `transcript/source-words.json`: stable words with session ranges; optional when no speech exists.
 - `source/sensitive-regions.json`: findings without secret plaintext.
 - `cut-plan.json`: ordered retained intervals, active visual tracks and selected primary audio.
-- `execution-plan.json`: output settings, scenes, clip coverage, layout events and mask geometry.
+- `execution-plan.json`: output settings, caption safe area, scenes/beats, clip coverage, layout events, annotations and mask geometry.
 - `production-state.json`: v3 review decisions and input snapshots.
 - `src/timeline-data.json`: generated schedule used by Studio and exports; never hand-edit it as a second authority.
 
-Every execution scene covers one or more cut-plan clip IDs. Clips occur exactly once and in cut-plan order in the initial contract. Layout events use clip-local microseconds and target a supported state. Masks use clip-local time and normalized oriented source coordinates `[x, y, width, height]`. A source-to-output change invalidates dependent captions, events, masks and reviews.
+Every execution scene covers one or more cut-plan clip IDs. Clips occur exactly once and in cut-plan order in the initial contract. New plans give every scene a treatment and nonempty beats. Each beat records `correctedTranscriptRangeUs` when dialogue drives timing or `timelineRangeUs` otherwise, plus editorial purpose, intended effect, primary-media role, authored-addition role, entry/development/exit progression, caption policy, and sound policy. Legacy v3 plans and the former evidence-oriented field names remain readable for compatibility; do not use those narrower names as defaults for new work.
+
+In the bundled screen/presenter renderer, layout events use clip-local microseconds and target a supported state; optional `fromLayout` makes an opening transition's predecessor state explicit. Masks and annotations use clip-local time and normalized source coordinates `[x, y, width, height]`. An annotation also records `sourceFrame`, `sourceTimeUs`, and `invalidatedBy`; its active range must not cross that invalidation. Other editing structures require explicit role, layout, and rendering extensions. A source-to-output change invalidates dependent captions, events, masks, annotations and reviews.
 
 ## Commands
 

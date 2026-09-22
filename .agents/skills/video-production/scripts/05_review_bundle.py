@@ -29,7 +29,10 @@ def build_commands(data, output_root="out/review", only_scene=None):
         samples = {start, start + duration - 1}
     compositions = ([] if recorded else [f"Scene{s['scene']}" for s in selected_scenes])
     compositions += [f"Scene{s['scene']}Review" for s in selected_scenes]
-    compositions += ([] if recorded else [f"Boundary{b['afterScene']}" for b in data["boundaries"]])
+    boundary_rows = data.get("boundaries", [])
+    if only_scene is not None:
+        boundary_rows = [b for b in boundary_rows if b["afterScene"] in (only_scene - 1, only_scene)]
+    compositions += [f"Boundary{b['afterScene']}" for b in boundary_rows]
     if only_scene is None:
         compositions.append("VideoFull")
     base = ["npx", "--no-install", "remotion"]
@@ -42,10 +45,24 @@ def build_commands(data, output_root="out/review", only_scene=None):
         else:
             samples.update((scene["start"], scene["start"] + scene["contentFrames"] // 2,
                             scene["start"] + scene["spanFrames"] - 1))
-    for boundary in data.get("boundaries", []):
-        start = boundary["frame"] - boundary["frames"] // 2
-        samples.update((max(0, start - 1), boundary["frame"],
-                        min(data["totalFrames"] - 1, start + boundary["frames"])))
+    if recorded:
+        selected_numbers = {scene["scene"] for scene in selected_scenes}
+        for clip in data["clips"]:
+            if clip["scene"] not in selected_numbers:
+                continue
+            for event in clip.get("layouts", []):
+                anchor = clip["startFrame"] + event["atFrame"]
+                samples.update((max(0, anchor - 15), anchor, min(data["totalFrames"] - 1, anchor + 15)))
+            for annotation in clip.get("annotations", []):
+                for local_anchor in (annotation["startFrame"], annotation["endFrame"]):
+                    anchor = clip["startFrame"] + local_anchor
+                    samples.update((max(0, anchor - 15), min(data["totalFrames"] - 1, anchor),
+                                    min(data["totalFrames"] - 1, anchor + 15)))
+    for boundary in boundary_rows:
+        start = boundary.get("startFrame", boundary["frame"] - boundary.get("frames", 0) // 2)
+        duration = boundary.get("durationFrames", boundary.get("frames", 0))
+        samples.update((max(0, start), boundary["frame"],
+                        min(data["totalFrames"] - 1, start + max(0, duration - 1))))
     ordered = sorted(samples)
     for index, frame in enumerate(ordered):
         commands.append(base + ["still", "src/index.ts", "VideoFull",
@@ -100,6 +117,7 @@ def main():
         report.rename(output / f"review-previous-{index}.md")
     recorded = contract.get("version") == 3
     context_note = ("SceneNReview is a bounded slice of the recorded master with synchronized footage, selected audio, captions and layout. "
+                    "BoundaryN includes one second before and two seconds after the recorded master join. "
                     if recorded else
                     "SceneN is isolated visual/narration inspection. SceneNReview is the bounded master-timeline view with continuing music/effects; "
                     "BoundaryN and VideoFull also preserve the master mix. ")

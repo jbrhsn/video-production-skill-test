@@ -29,8 +29,11 @@ export const WordCaptions: React.FC<{words: Word[]; time: number; highlight?: bo
 ({words, time, highlight = true, safeArea}) => {
   const {width, height} = useVideoConfig();
   const vertical = height > width;
-  const area = safeArea ?? {left: .08, right: vertical ? .12 : .08, bottom: vertical ? .18 : .12, top: .08};
-  const fontSize = Math.min(width, height) * (vertical ? .044 : .038);
+  const tokens = DESIGN_TOKENS.captions as typeof DESIGN_TOKENS.captions & {
+    fontScale?: number; paddingX?: number; paddingY?: number; bottomInset?: number};
+  const fallback = {left: .08, right: vertical ? .12 : .08, bottom: tokens.bottomInset ?? (vertical ? .18 : .12), top: .08};
+  const area = safeArea ? {...safeArea, bottom: Math.max(safeArea.bottom, tokens.bottomInset ?? 0)} : fallback;
+  const fontSize = Math.min(width, height) * (tokens.fontScale ?? (vertical ? .044 : .038));
   const budget = Math.max(8, Math.floor(width * (1 - area.left - area.right) / (fontSize * .6)));
   const active = words.findIndex((word) => time >= word.start && time < word.end);
   if (active < 0) return null;
@@ -41,7 +44,8 @@ export const WordCaptions: React.FC<{words: Word[]; time: number; highlight?: bo
     fontSize, lineHeight: 1.4, fontWeight: 700, whiteSpace: "pre-wrap", overflowWrap: "anywhere"}}>
     {group.words.map((word, index) =>
       <span key={group.first + index} style={{color: highlight && group.first + index === active ? DESIGN_TOKENS.captions.active : DESIGN_TOKENS.captions.text,
-        background: DESIGN_TOKENS.captions.background, padding: "4px 6px", borderRadius: DESIGN_TOKENS.captions.radius}}>
+        background: DESIGN_TOKENS.captions.background,
+        padding: `${tokens.paddingY ?? 4}px ${tokens.paddingX ?? 6}px`, borderRadius: DESIGN_TOKENS.captions.radius}}>
         {word.word + " "}
       </span>)}
   </div>;

@@ -121,6 +121,28 @@ def validate_project_artifacts(project: Path, stage):
     if stage == "edit":
         return [clip["id"] for clip in clips]
     execution = validate_recorded_execution(read_json(project / "execution-plan.json"), [clip["id"] for clip in clips])
+    design = read_json(project / "design-system.json")
+    colors = design.get("colors", {}) if isinstance(design, dict) else {}
+    captions = design.get("captions", {}) if isinstance(design, dict) else {}
+    if not isinstance(colors.get("background"), str) or not colors["background"].strip():
+        raise ValueError("design-system colors.background is required for the composition canvas")
+    words_path = project / "transcript/source-words.json"
+    speech_present = False
+    if words_path.is_file():
+        words_data = read_json(words_path)
+        speech_present = isinstance(words_data.get("words"), list) and bool(words_data["words"])
+    if speech_present:
+        for key in ("fontScale", "bottomInset"):
+            value = captions.get(key)
+            if type(value) not in (int, float) or not 0 < value < 1:
+                raise ValueError(f"design-system captions.{key} must be a normalized positive number when speech captions are present")
+    safe = execution.get("safeArea")
+    if not isinstance(safe, dict) or any(type(safe.get(key)) not in (int, float) for key in ("top", "right", "bottom", "left")):
+        raise ValueError("recorded execution plan requires normalized safeArea edges")
+    if any(not 0 <= safe[key] < .5 for key in ("top", "right", "bottom", "left")):
+        raise ValueError("recorded execution safeArea edges must be between 0 and 0.5")
+    if speech_present and safe["bottom"] < captions["bottomInset"]:
+        raise ValueError("execution safeArea.bottom cannot be smaller than captions.bottomInset")
     if stage in ("implement", "scene", "render", "delivery"):
         compiled = compile_project(project)
         existing = project / "src/timeline-data.json"

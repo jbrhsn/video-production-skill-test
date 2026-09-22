@@ -38,6 +38,10 @@ def root_tsx():
           const Review: React.FC = () => <RecordedTimeline data={data} masterStart={scene.startFrame} />;
           return Review;
         });
+        const boundaries = data.boundaries.map(boundary => {
+          const Boundary: React.FC = () => <RecordedTimeline data={data} masterStart={boundary.startFrame} />;
+          return Boundary;
+        });
         export const Root: React.FC = () => <>
           <Composition id="VideoFull" component={Full} durationInFrames={data.totalFrames}
             fps={data.fps} width={data.width} height={data.height} />
@@ -46,6 +50,9 @@ def root_tsx():
           {data.scenes.map((scene, index) => <Composition key={scene.id} id={`Scene${scene.scene}Review`}
             component={reviews[index]} durationInFrames={scene.durationFrames}
             fps={data.fps} width={data.width} height={data.height} />)}
+          {data.boundaries.map((boundary, index) => <Composition key={`boundary-${boundary.afterScene}`}
+            id={`Boundary${boundary.afterScene}`} component={boundaries[index]}
+            durationInFrames={boundary.durationFrames} fps={data.fps} width={data.width} height={data.height} />)}
         </>;
     ''')
 
