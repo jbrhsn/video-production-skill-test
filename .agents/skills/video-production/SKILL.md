@@ -46,7 +46,7 @@ production-state.json
 delivery/
 ```
 
-`source/manifest.json` uses source-manifest v2. It records each stream separately and never forces B-roll, cameras, audio, or generated media into a screen/presenter role. `editorial/timeline.json` uses editorial-timeline v1: independent audio, video, graphics, music, and effect tracks with source/stream trims, occurrence IDs, playback rates, and master positions. Repeated source ranges are separate clip occurrences. Captions follow primary dialogue occurrences, not picture cuts.
+`source/manifest.json` uses source-manifest v3. It records each stream separately, including source video frame rate and audio layout, and never forces B-roll, cameras, audio, or generated media into a screen/presenter role. `editorial/timeline.json` uses editorial-timeline v2: independent audio, video, generated graphics, music, and effect tracks with source/stream trims, occurrence IDs, constant positive playback rates, explicit freeze stills, z-order, and master positions. Repeated source ranges are separate clip occurrences. Captions follow primary dialogue occurrences, not picture cuts.
 
 Compile only with:
 
@@ -54,7 +54,7 @@ Compile only with:
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python \
   SKILL/scripts/compile_timeline.py \
   --timeline PROJECT/editorial/timeline.json \
-  --sources PROJECT/source/manifest.json \
+  --sources PROJECT/source/manifest.json --visual-events PROJECT/editorial/visual-events.json \
   --out PROJECT/timeline/render.json
 ```
 
@@ -78,7 +78,7 @@ Use `scripts/style_profile.py` with the supplied catalog as the first library. R
 
 Use inspected assets with source, rights basis, transformation lineage, and intended beat role. Stage only selected media. Keep independent parts separate when the planned action needs articulated motion. For each meaningful beat, define initial state, visible action, settled result, caption policy, sound policy, and observable acceptance.
 
-Run deterministic QC after compiling and after rendering affected windows. The current `scripts/qc_timeline.py` verifies schedule and caption bounds. Findings include rule, severity, master range, evidence, coverage, and detector version. Passing QC means only the checks actually run passed.
+Run deterministic QC after compiling and after rendering affected windows. `scripts/qc_production.py` aggregates timeline checks with explicitly instrumented render observations; unavailable or partial detector coverage is reported, never passed silently. `bounded_repair()` only queues enabled mechanical fixes and produces a repair record. Findings include rule, severity, master range, evidence, and coverage. Passing QC means only the checks actually run passed.
 
 Review meaningful event windows, joins, source annotations, muted playback, audio-only playback, combined playback, and the master. Record actual user feedback and scoped approvals in `production-state.json`; implementation is not approval. Read [visual and motion QC](references/visual-motion-qc.md), [editorial collage](references/editorial-collage.md), and [creative review](references/creative-review.md).
 
@@ -89,6 +89,7 @@ Engineering fixtures do not require creative review gates. Run all Python code t
 ```bash
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_editorial_timeline.py
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_production_system.py
+uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python SKILL/scripts/test_follow_on_system.py
 ```
 
 Use a short numbered-video and tone fixture to prove source PTS, picture/audio offsets, playback rate, captions, and final-frame behavior before claiming a renderer supports an edit operation. Unit tests do not establish playback continuity, mix quality, editorial usefulness, or production readiness.

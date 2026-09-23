@@ -32,13 +32,13 @@ uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python 
   SKILL/scripts/route_production.py --request PROJECT/route-request.json
 ```
 
-Probe each original, copy only a staged project-local source, compute a SHA-256 hash, and write source-manifest v2. Each source lists stream IDs, stream kind, duration, and video dimensions where applicable. Keep source timestamps, time base, source coordinate system, stream start offset, rights, and derivative lineage with the source evidence.
+Probe each original, copy only a staged project-local source, compute a SHA-256 hash, and write source-manifest v3. Use `scripts/probe_sources.py` for FFprobe-backed stream facts. Each source lists stream IDs, stream kind, duration, video dimensions and rational source frame rate or audio layout. Keep source timestamps, source coordinate system, rights, and derivative lineage with the source evidence.
 
 Resolve a style profile before implementation. Keep the resolver output with its digest and per-field provenance. The supplied profile catalog is `SKILL/assets/style-profiles.json`; use brand and project overrides to produce the project artifact.
 
 ## Editorial timeline
 
-Write editorial-timeline v1 with independent tracks. A clip binds one source stream to one track and declares source range, master start, and positive rational playback rate. A clip ID is an occurrence ID: reusing the same source region produces another clip ID.
+Write editorial-timeline v2 with independent tracks. A source clip binds one source stream to one track and declares source range, master start, and positive rational playback rate; a generated clip names its generator/payload and duration. A clip ID is an occurrence ID: reusing the same source region produces another clip ID. Freeze clips require an extracted still under `public/`, made with `scripts/extract_freeze.py`; they never rely on a renderer-specific implicit freeze.
 
 Use a single non-overlapping `primary-dialogue` audio track. Picture, B-roll, graphics, music, and effects use separate tracks. Captions are derived from dialogue words matched to each selected dialogue occurrence. Picture cuts do not alter speech or captions.
 
@@ -48,7 +48,7 @@ Compile the edit:
 uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python \
   SKILL/scripts/compile_timeline.py \
   --timeline PROJECT/editorial/timeline.json \
-  --sources PROJECT/source/manifest.json \
+  --sources PROJECT/source/manifest.json --visual-events PROJECT/editorial/visual-events.json \
   --out PROJECT/timeline/render.json
 ```
 
@@ -69,4 +69,4 @@ uv run --no-project --python WORKSPACE/.venv-video-production/bin/python python 
   SKILL/scripts/run_qc.py --timeline PROJECT/timeline/render.json --out PROJECT/qc/report.json
 ```
 
-The report covers only timeline bounds, non-overlap policy, and caption bounds at this stage. Render-level layout, motion, source-frame, audio, and event checks must be added before claiming those checks have run. Render the master composition, verify output streams/duration/fps against `timeline/render.json`, decode and compare the exact final frame, and deliver the project source, MP4, final PNG, requested captions, source/provenance evidence, and QC report.
+The report covers timeline bounds, non-overlap policy, caption bounds, and supplied render-observation coverage. Add observations only from an instrumented render; unavailable coverage is a warning rather than a pass. Use `scripts/qualify_renderer.py` against the disposable FFmpeg fixture before changing supported renderer behavior. Use `scripts/export_interchange.py` to deliver canonical handoff JSON and SRT; it labels generated/freeze operations as baked and unsupported rate ramps/reverse/nesting explicitly. Deliver the project source, MP4, final PNG, requested captions, source/provenance evidence, QC report, and interchange fidelity report.

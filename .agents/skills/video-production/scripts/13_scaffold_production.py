@@ -91,6 +91,7 @@ def main():
     write("scripts/production/export-config.json", json.dumps({"python": sys.executable,
         "project": "project.json", "state": "production-state.json"}, indent=2) + "\n")
     shutil.copy2(Path(__file__).parent / "qc_timeline.py", project / "scripts/production/qc_timeline.py")
+    shutil.copy2(Path(__file__).parent / "qc_production.py", project / "scripts/production/qc_production.py")
     shutil.copy2(Path(__file__).parent / "run_qc.py", project / "scripts/production/run_qc.py")
     shutil.copy2(Path(__file__).parent / "contracts.py", project / "scripts/production/contracts.py")
     shutil.copy2(Path(__file__).parent / "production_workflow.py", project / "scripts/production/production_workflow.py")

@@ -69,6 +69,11 @@ class ProductionSystemTests(unittest.TestCase):
             self.assertEqual(compiled["clips"][0]["src"], "media/camera.mp4")
             self.assertIn("EditorialTimeline", (root / "src/Root.tsx").read_text())
             self.assertTrue((root / "scripts/production/run_qc.py").is_file())
+            self.assertTrue((root / "scripts/production/qc_production.py").is_file())
+
+    def test_style_catalog_contains_all_twenty_direct_profiles(self):
+        self.assertEqual(len(self.catalog["profiles"]), 20)
+        self.assertEqual(self.catalog["profiles"]["screen-recording-tutorial"]["family"], "recorded")
 
     def test_editorial_analysis_preserves_repeats_as_candidates(self):
         transcript = {"schema": "corrected-transcript", "version": 2, "words": [

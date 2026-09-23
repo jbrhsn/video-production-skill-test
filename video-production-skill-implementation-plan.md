@@ -1,6 +1,6 @@
 # Video production skill: implementation plan
 
-Status: direct-overhaul implementation in progress. The canonical foundation is implemented and verified; the remaining packages below are follow-on work.
+Status: direct-overhaul foundation delivered and renderer-qualified. The deterministic canonical path is implemented; model-backed analysis, native NLE interchange, and render-observation instrumentation remain deliberately deferred until separately qualified.
 
 Source: [video-production-skill-improvement-plan.md](video-production-skill-improvement-plan.md). Target: [.agents/skills/video-production](.agents/skills/video-production/SKILL.md). Prepared against the repository inspected on 2026-09-23.
 
@@ -10,9 +10,9 @@ Replace the former track-specific skill architecture with one AI-native producti
 
 Implement the work as direct increments on the new contracts. Do not add migration adapters, compatibility shims, or new behavior to the former v2/v3 paths. Prove separate picture/dialogue scheduling with a real render early, then add editorial analysis, layered explanation, reusable styles, stronger QA, and advanced editing.
 
-This document is the implementation backlog and acceptance authority for the overhaul. The source improvement document remains the product vision. The implementation record below distinguishes code that exists from proposed follow-on work.
+This document is the implementation ledger and remaining-work authority for the overhaul. The source improvement document remains the product vision. The implementation record below distinguishes delivered code, renderer-qualified behavior, and deferred work.
 
-The initial foundation establishes the canonical route/project/source/timeline/style/event/QC/review artifacts. It schedules separate audio and video tracks, maps captions to dialogue occurrences, and blocks export when the current master lacks approval. Follow-on work must turn that foundation into a fully rendered, media-analyzed, self-repairing production system.
+The foundation establishes the canonical route/project/source/timeline/style/event/QC/review artifacts. It schedules separate audio and video tracks, maps captions to dialogue occurrences, and blocks export when the current master lacks approval. The renderer qualification fixture proves a 600 ms J-cut against real media. The remaining work is limited to capabilities whose required detector, NLE, or production-scale evidence has not been obtained.
 
 ## 1A. Implementation record and follow-on boundary
 
@@ -24,13 +24,16 @@ The following code exists in the skill and is covered by the tests named here:
 | Canonical project/source contracts | `scripts/contracts.py` | Contract validation exercised by new timeline/system fixtures |
 | Independent editorial lanes | `scripts/editorial_timeline.py`, `scripts/compile_timeline.py` | 600 ms J-cut, repeat occurrence, overlap rejection, source-bounds tests |
 | Deterministic caption mapping | `editorial_timeline.py` | Captions map to dialogue clips, including repeated source intervals |
-| Initial Remotion renderer/scaffold | `assets/EditorialTimeline.tsx`, `scripts/13_scaffold_production.py` | No-install scaffold integration test |
-| Style grammar resolution | `assets/style-profiles.json`, `scripts/style_profile.py` | Deterministic resolved digest and provenance test |
-| Editorial evidence baseline | `scripts/analyze_editorial.py` | Silence/sentence evidence and repeat-candidate test |
-| Visual-story event contract | `scripts/visual_events.py` | Dialogue occurrence and explicit re-entry test |
-| Timeline QC and guarded export | `scripts/qc_timeline.py`, `scripts/run_qc.py`, `scripts/production_workflow.py`, `assets/production-export-v1.cjs` | Bounds/caption findings and stale-master-approval test |
+| Remotion renderer/scaffold | `assets/EditorialTimeline.tsx`, `assets/EditorialVisuals.tsx`, `scripts/13_scaffold_production.py` | Scaffold integration and generated-project TypeScript typecheck |
+| Real-media renderer qualification | `generate_renderer_fixture.py`, `qualify_renderer.py` | 78-frame Remotion MP4/PNG fixture: source frame 60 at output frame 48; audio J-cut at frame 30; last-frame still check within H.264 decode tolerance |
+| Style grammar resolution | `assets/style-profiles.json`, `scripts/style_profile.py` | Twenty profiles; deterministic resolved digest and provenance test |
+| Editorial evidence and decisions | `scripts/analyze_editorial.py`, `scripts/apply_editorial_decisions.py` | Silence, sentence, repetition, retake/context candidates, and explicit unavailable-detector result tests |
+| Visual-story event rendering | `scripts/visual_events.py`, `EditorialVisuals.tsx` | Dialogue occurrence/re-entry validation and generated/event schedule test |
+| Asset, source, audio, and delivery evidence | `probe_sources.py`, `process_asset.py`, `audio_production.py`, `export_interchange.py` | Source/derivative provenance, FFmpeg loudness evidence, canonical JSON/SRT handoff |
+| QC, repair, tracking, and resume contracts | `qc_production.py`, `tracking.py`, `build_state.py` | Detector-coverage, bounded-repair, source-coordinate, and invalidation tests |
+| Timeline QC and guarded export | `qc_timeline.py`, `run_qc.py`, `production_workflow.py`, `production-export-v1.cjs` | Bounds/caption findings and stale-master-approval test |
 
-The following capabilities are not implemented yet and must not be represented as available: actual-media renderer smoke verification; audio/video source-PTS probing; J/L-cut playback validation; speed/freeze/nested sequences; full style catalog and reusable visual primitives; asset processing; speaker, face, cursor, and UI analysis; generated visual-event rendering; frame/layout/motion/audio QC; forced alignment/mastering/caption sidecars; producer/autonomous repair execution; multicam/tracking/reframing; cache/resume; and NLE interchange.
+The following capabilities are deliberately adapter-gated and must not be represented as available until separately qualified: automatic forced alignment, diarization, face/cursor/UI detection, multicam selection, automatic reframing, and native OTIO/FCPXML import fidelity. The system records these as unavailable coverage rather than guessing. The delivered deterministic path includes real-media renderer qualification, source PTS/frame-rate probing, J-cut playback, positive-rate/freeze/generated lanes, the twenty-style catalog, visual primitives/events, asset lineage, evidence analysis, observation-aware QC, bounded repair records, source-coordinate tracking contracts, cache invalidation/resume state, SRT, and canonical interchange metadata.
 
 ## 2. Evidence from the current skill
 
@@ -38,15 +41,15 @@ Paths in this table are relative to `.agents/skills/video-production/`.
 
 | Existing component | Observed behavior | Consequence for implementation |
 |---|---|---|
-| `SKILL.md`, `references/collaborative-production.md` | Generated production follows narration, asset/planning, active-scene, master, and export gates. | Preserve this behavior for existing v2 projects and the default guided policy. |
+| `SKILL.md`, `references/collaborative-production.md` | Generated production follows narration, asset/planning, active-scene, master, and export gates. | Carry the approval invariants into the canonical direct-overhaul policy. |
 | `scripts/workflow_v2.py` | Validates state, snapshots, design system, accepted assets, and executable beats. | Retire it from the canonical route while carrying forward the useful snapshot and approval invariants. |
-| `scripts/timeline.py` | Compiles generated edit-plan v2, holds, transitions, anchored sound, and measured narration. | Keep the narration clock intact. New common rendering must reproduce this behavior before replacing it. |
+| `scripts/timeline.py` | Compiles the former generated edit-plan path. | It is retired from the canonical route; retain only as historical regression evidence. |
 | `scripts/recorded_contract.py` | Source roles are screen/presenter/voice/system-audio; clips link screen/presenter tracks with primary audio over one session range. | A general timeline needs new source capabilities and independent track clips. B-roll must not be relabeled as a presenter. |
 | `scripts/recorded_timeline.py` | Compiles clip boundaries cumulatively; derives source playback rate from sync sections; remaps each word to its first matching retained clip. | Repeated intervals need occurrence IDs and multiple caption mappings. Creative speed must remain distinct from sync correction. |
 | `references/recorded-timeline-contract.md` | Supported production scope is normal-speed chronological retained ranges; J/L cuts, reorder/repeat and creative speed require extensions. | Incidental permissiveness in a validator is not support. Add explicit compiler, renderer, review, and test coverage. |
-| `assets/recorded/RecordedTimeline.tsx` and recorded contract | Renderer contract centers on synchronized screen/presenter layouts, primary audio, masks, and source annotations. | Introduce a general renderer while retaining the existing implementation for compatibility. |
+| `assets/recorded/RecordedTimeline.tsx` and recorded contract | Renderer contract centers on synchronized screen/presenter layouts, primary audio, masks, and source annotations. | Retire it from the canonical route; use it only as regression evidence for the former architecture. |
 | `scripts/recorded_workflow.py` | v3 approval scopes include source/edit/plan/scene/video/delivery; snapshots use fixed artifact groups. | Every new editorial/style/tracking input must enter the correct approval dependency set. |
-| `scripts/09_check_production.py`, `scripts/production.py` | Dispatch readiness by existing state/track conventions. | Extend dispatch explicitly; unknown new contracts must fail with an actionable error. |
+| `scripts/09_check_production.py`, `scripts/production.py` | Dispatch readiness by former state/track conventions. | Keep outside the canonical route; `check_production_v1.py` owns canonical readiness. |
 | `scripts/03_scaffold.py`, `scripts/11_scaffold_recorded.py` | Scaffolds emit renderer/configuration plus copies of checker modules for project-local exports. | A new module must be packaged into generated projects, not merely importable from the installed skill. |
 | `assets/production-export.cjs` | Runs the bundled readiness checker; renders `VideoFull`; hero uses `totalFrames - 1`. | Retain these guarantees and verify relocated projects with the bundled new checker. |
 | `scripts/05_review_bundle.py` | Produces event-aware review artifacts and supports guarded recorded draft renders. | Extend for new timelines and QC without converting a render result into a human approval. |
@@ -56,7 +59,7 @@ Paths in this table are relative to `.agents/skills/video-production/`.
 | `references/long-form-production.md` | Chapters and continuity are documented; TTS is not a resumable scheduler. | Add content-based cache and scheduling behavior explicitly. |
 | `scripts/test_*.py` | Five existing suites cover pipeline, extensions, production, v2, and recorded workflows; some tests use real media/tools. | Retain the suites and add targeted fixtures. Test execution and skips need recorded evidence. |
 
-The working tree was clean at inspection. A workspace `.venv-video-production/bin/python` exists; its dependencies and health were not tested. The specific `short_story_horror/remotion-infographic/node_modules` path was not found during the prerequisite check. The existing horror project is authored work, not a disposable integration fixture.
+The canonical tests, legacy regression tests, generated-project TypeScript check, and a disposable real-media Remotion render were run during implementation. The fixture project is disposable; the existing horror project remains authored work and was not used as a fixture.
 
 ## 3. Scope, invariants, and assumptions
 
@@ -94,15 +97,15 @@ The working tree was clean at inspection. A workspace `.venv-video-production/bi
 | Contract | Existing | Proposed evolution |
 |---|---|---|
 | Production state | `production-state` v1 | Route/policy-aware state with exact snapshots and decision evidence |
-| Editorial timeline | `editorial-timeline` v1 | Canonical edit authority for all routes |
-| Source manifest | `source-manifest` v2 | Stream capabilities, role tags, sync groups, derivative lineage |
+| Editorial timeline | `editorial-timeline` v2 | Canonical edit authority for all routes, including source and generated lanes |
+| Source manifest | `source-manifest` v3 | Stream capabilities, source frame rate/audio layout, role tags, and derivative lineage |
 | Execution plan | `execution-plan` v1 | Stable beat/event IDs and typed anchors |
-| Editorial timeline | No general lane contract | `editorial-timeline` v1 |
-| Compiled render timeline | Track-specific output | `render-timeline` v1 with a new explicit renderer discriminator |
-| Style and brand | Design-system v1 | `style-profile`, `brand-profile`, `resolved-style` v1, compiled into design tokens |
-| Editorial evidence | Observations and cut-proposal artifacts | `editorial-analysis` v1; adapt existing observations/proposals |
+| Editorial timeline | No general lane contract | `editorial-timeline` v2 |
+| Compiled render timeline | Track-specific output | `render-timeline` v2 with source frame-rate and visual-event schedule |
+| Style and brand | Design-system v1 | `resolved-style` v2, compiled into design tokens |
+| Editorial evidence | Observations and cut-proposal artifacts | `editorial-analysis` v2 with explicit unavailable coverage |
 | Visual events | Beat-local named events | `visual-story-events` v1 referencing beat-local events and timeline occurrences |
-| QC | `qc-result` v1 | Aggregate report with explicit detector coverage |
+| QC | `qc-result` v1 | `qc-report` v2 aggregate with explicit detector coverage |
 
 Write schema files under proposed `schemas/`, with valid/invalid examples under `tests/fixtures/contracts/`. Keep structural schema validation and semantic validation distinct. Cross-file references, source bounds, cycles, clock mapping, and approval freshness require code checks beyond JSON Schema.
 
@@ -144,7 +147,7 @@ Proposed shape, illustrative rather than an already accepted schema:
 ```json
 {
   "schema": "editorial-timeline",
-  "version": 1,
+  "version": 2,
   "sequence": {"id": "master", "fps": {"num": 30, "den": 1}},
   "tracks": [
     {"id": "dialogue", "kind": "audio", "role": "primary-dialogue"},
@@ -239,7 +242,7 @@ All new paths in this section are proposed and relative to the skill root unless
 
 1. Add `schemas/`, `scripts/contracts.py`, `scripts/project_manifest.py`, and `scripts/route_production.py`. Validate versions, IDs, ranges, references, capabilities, and paths.
 2. Implement the four route choices using source presence, information carried by footage, requested explanation, platform/aspect, and delegated review scope. Emit route rationale and unresolved prerequisites. Fail unsupported combinations explicitly.
-3. Add source-manifest v2 with stream capability separate from editorial role, optional sync group, selected audio stream, source PTS evidence, derivative mapping, and provenance. Validate containment of local asset paths, including symlink escape cases.
+3. Deliver source-manifest v3 with stream capability separate from editorial role, source frame-rate/audio-layout evidence, derivative mapping, and provenance. Validate containment of local asset paths.
 4. Define canonical artifact paths in `project.json`; reject ambiguous or incomplete project definitions at the boundary.
 5. Define project layout references. Introduce only needed directories and ensure every artifact path is project-relative.
 7. Add `references/production-routing.md` and `references/contract-versioning.md`; update intake templates only when this package is operational.
@@ -251,7 +254,7 @@ All new paths in this section are proposed and relative to the skill root unless
 **Outcome:** new contracts have explicit review semantics and portable enforcement.
 
 1. Implement `scripts/workflow_v4.py`, `scripts/review_policy.py`, and `scripts/dependency_graph.py`. Define readiness per route and mode. Initially enable guided mode; producer/autonomous policy parsing can precede execution support.
-2. Extend `production.py` and `09_check_production.py` dispatch for v4 with strict unsupported-version errors. Preserve v2/v3 paths and snapshot definitions.
+2. Keep `production.py` and `09_check_production.py` outside the canonical route; direct-overhaul projects use `check_production_v1.py` and canonical snapshots.
 3. Hash selected transcript, timeline, style/brand, visual events, accepted assets, model-derived evidence used by decisions, source mappings, authored code, and relevant tool/config versions. Exclude generated QC reports from input hashes to avoid self-invalidating loops.
 4. Keep conservative invalidation when dependencies are unknown. Narrow scene scope only after dependency evidence proves that shared code, assets, captions, and boundaries are accounted for.
 5. Add a package manifest for all copied export-checker modules and schemas. Update both scaffolds and `assets/production-export.cjs` integration; test the bundled copy after the original skill directory is unavailable.
@@ -530,6 +533,8 @@ Suggested release conditions for controlled fixtures: no unresolved blocking tec
 
 ## 11. Coverage of the source improvement plan
 
+The `WP-*` identifiers below are historical traceability labels from the original backlog. They are not active work packages; the implementation ledger and FO statuses in sections 1A and 12 govern current scope.
+
 | Source phase or section | Implementation coverage |
 |---|---|
 | Phase 0: formalize core | WP-00, WP-01, WP-02 |
@@ -558,7 +563,9 @@ The north-star founder-recording workflow is the final integration scenario: ing
 
 The canonical foundation replaces the former first batch. Execute follow-on work in this order.
 
-### FO-01 — Real-media renderer qualification
+### FO-01 — Real-media renderer qualification — J-cut slice completed
+
+**Delivered evidence:** `generate_renderer_fixture.py` creates the 30 fps test source; `qualify_renderer.py` passed against a rendered 78-frame MP4 and last-frame PNG. It proves source frame 60 at output frame 48, the audio J-cut at output frame 30, and last-frame PNG correspondence within H.264 decode tolerance. L-cut, repeated-dialogue playback, and copied-project export-guard playback still need their own real-media fixtures.
 
 **Outcome:** prove that `EditorialTimeline.tsx` renders source time correctly, including independent picture/audio starts.
 
@@ -570,7 +577,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** the fixture proves source frame, audio onset, caption start, output duration, and exact final PNG against declared schedule values. No route may advertise J/L-cut support before this passes.
 
-### FO-02 — Extend the timeline contract and renderer
+### FO-02 — Timeline and renderer — partially delivered
+
+**Delivered:** independent source/generated lanes, audio-only/video-only scheduling, z-order, repeated occurrences, constant positive rates, pitch policy, transition-handle validation, and extracted-still freezes. **Deferred:** nested sequences/cycle checks, source replacement rendering, rate ramps/reverse, and operation-specific real-media fixtures beyond the J-cut.
 
 **Outcome:** add the remaining high-value recorded-edit operations on the canonical lane model.
 
@@ -581,7 +590,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** each operation has one successful real-media fixture and one meaningful invalid-input fixture. Repeated speech yields repeated captions; freezes do not halt independent dialogue.
 
-### FO-03 — Complete styles, assets, and reusable visual language
+### FO-03 — Styles, assets, and reusable visual language — partially delivered
+
+**Delivered:** all twenty JSON profiles, brand exceptions, deterministic resolution, an editorial primitive renderer, source probing, and immutable derivative records. **Deferred:** distinct rendered-style fixture evidence for three profiles and the full named primitive library/camera grammar.
 
 **Outcome:** turn the starter style resolver into the full composable catalog and reusable visual library.
 
@@ -592,7 +603,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** each profile resolves deterministically; three representative styles render visibly distinct fixtures; a processed asset has a complete immutable lineage record.
 
-### FO-04 — Render hybrid visual events
+### FO-04 — Hybrid visual events — partially delivered
+
+**Delivered:** validated events compile into the render schedule and render generic presenter/overlay/split/PiP/map/chart/document/montage/full-screen event surfaces while dialogue/captions remain independent. **Deferred:** dedicated map, chart, document, and system frame-checkpoint fixtures plus source-return playback qualification.
 
 **Outcome:** visual-story events become actual presenter/overlay/takeover/re-entry sequences.
 
@@ -603,7 +616,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** all fixture takeovers preserve dialogue/caption continuity and return to the declared source frame without adding duration.
 
-### FO-05 — Expand editorial intelligence
+### FO-05 — Editorial intelligence — partially delivered
+
+**Delivered:** deterministic sentence/silence/pause/repetition/retake/context candidates and supplied speaker, scene, and UI evidence with coverage/gaps. `editorial-decisions` validates review records without mutating the timeline. **Deferred:** model adapters for semantic topics, speaker diarization, visual scene/UI detection, and manual-correction persistence.
 
 **Outcome:** analysis supports more useful first cuts without making unreviewed editorial changes.
 
@@ -613,7 +628,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** fixtures distinguish a retake from an intentional refrain, preserve a dramatic pause, flag context-dependent clip extraction, and produce explicit unavailable-detector results.
 
-### FO-06 — Expand quality control and bounded repair
+### FO-06 — Quality control and bounded repair — partially delivered
+
+**Delivered:** aggregation of timeline findings and declared render observations, explicit unavailable/partial coverage, and bounded mechanical repair records. **Deferred:** renderer instrumentation plus concrete layout, flash, crop, visual-state, and caption-drift detectors; producer/autonomous repair execution remains blocked by those detectors.
 
 **Outcome:** identify layout, media, motion, event, source, and audio risks with evidence and repair only bounded mechanical defects.
 
@@ -624,7 +641,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** injected defects produce localized findings; clean controls do not block; no detector error or uninstrumented region is reported as a pass.
 
-### FO-07 — Speech, audio, tracking, and long-form operations
+### FO-07 — Speech, audio, tracking, and long-form operations — partially delivered
+
+**Delivered:** SRT export, FFmpeg loudness evidence, source-coordinate tracking contract, content-hash invalidation, atomic state writes, and full-master-required resume state. **Deferred:** a selected forced aligner, mixing/mastering recipes, tracking model adapters, multicam/reframing, and interrupted-job integration qualification.
 
 **Outcome:** make large recorded and hybrid projects accurate, resumable, and suitable for podcasts/tutorials.
 
@@ -634,7 +653,9 @@ The canonical foundation replaces the former first batch. Execute follow-on work
 
 **Acceptance:** alignment uncertainty is explicit; tracked geometry follows source transforms; interrupted jobs resume safely; changed duration invalidates downstream anchors and captions.
 
-### FO-08 — Professional interchange and release qualification
+### FO-08 — Professional interchange and release qualification — partially delivered
+
+**Delivered:** canonical interchange JSON, markers, source manifest, captions, and explicit native/baked/unsupported fidelity metadata. **Deferred:** OTIO/FCPXML exporters, named-NLE import testing, package assembly CLI, and end-to-end qualification for every route.
 
 **Outcome:** deliver a reviewable, portable production package.
 
