@@ -21,7 +21,7 @@ def _duration(source_range, rate: Fraction) -> Fraction:
 
 def _source_clip(raw, tracks, sources):
     required = {"id", "trackId", "sourceId", "streamId", "sourceRangeUs", "timelineStartUs", "playbackRate"}
-    allowed = required | {"freezeFrameUs", "transitionInUs", "transitionOutUs", "replaceSourceId"}
+    allowed = required | {"freezeFrameUs", "freezeAssetPath", "transitionInUs", "transitionOutUs", "replaceSourceId"}
     if not isinstance(raw, dict) or not required.issubset(raw) or set(raw) - allowed:
         raise ValueError("source clip fields are invalid")
     clip_id = text(raw.get("id"), "clip.id")
@@ -41,7 +41,7 @@ def _source_clip(raw, tracks, sources):
         if name in raw and integer(raw[name], f"clip {clip_id}.{name}") * 2 >= source_range[1] - source_range[0]:
             raise ValueError(f"clip {clip_id}.{name} leaves no transition handle")
     frozen = raw.get("freezeFrameUs")
-    if frozen is not None and (track["kind"] != "video" or type(frozen) is not int or not source_range[0] <= frozen < source_range[1]):
+    if frozen is not None and (track["kind"] != "video" or type(frozen) is not int or not source_range[0] <= frozen < source_range[1] or not isinstance(raw.get("freezeAssetPath"), str) or not raw["freezeAssetPath"].startswith("public/") or ".." in raw["freezeAssetPath"].split("/")):
         raise ValueError(f"clip {clip_id}.freezeFrameUs must be a video source position")
     if raw.get("replaceSourceId") is not None and raw["replaceSourceId"] not in sources:
         raise ValueError(f"clip {clip_id} replacement source is unknown")
@@ -117,7 +117,7 @@ def compile_timeline(data, manifest, visual_events=None):
             row.update({"kind": "generated", "generator": clip["generator"], "payload": clip["payload"]})
         else:
             stream = checked["sources"][clip["sourceId"]]["streams"][clip["streamId"]]
-            row.update({"kind": stream["kind"], "sourceId": clip["sourceId"], "streamId": clip["streamId"], "src": checked["sources"][clip["sourceId"]]["path"].removeprefix("public/"), "sourceRangeUs": list(clip["sourceRangeUs"]), "playbackRate": {"num": clip["playbackRate"].numerator, "den": clip["playbackRate"].denominator}, "sourceFrameRate": ({"num": stream["frameRate"].numerator, "den": stream["frameRate"].denominator} if stream["kind"] == "video" else None), "freezeFrameUs": clip.get("freezeFrameUs"), "pitchPolicy": clip["track"]["pitchPolicy"]})
+            row.update({"kind": stream["kind"], "sourceId": clip["sourceId"], "streamId": clip["streamId"], "src": checked["sources"][clip["sourceId"]]["path"].removeprefix("public/"), "sourceRangeUs": list(clip["sourceRangeUs"]), "playbackRate": {"num": clip["playbackRate"].numerator, "den": clip["playbackRate"].denominator}, "sourceFrameRate": ({"num": stream["frameRate"].numerator, "den": stream["frameRate"].denominator} if stream["kind"] == "video" else None), "freezeFrameUs": clip.get("freezeFrameUs"), "freezeSrc": clip.get("freezeAssetPath", "").removeprefix("public/"), "pitchPolicy": clip["track"]["pitchPolicy"]})
         output.append(row)
     word_ids, captions = set(), []
     dialogue_track = next(key for key, value in checked["tracks"].items() if value["role"] == "primary-dialogue")

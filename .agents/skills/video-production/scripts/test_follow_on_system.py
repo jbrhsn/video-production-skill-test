@@ -20,7 +20,7 @@ class FollowOnTests(unittest.TestCase):
         data = timeline()
         data["tracks"].append({"id": "graphics", "kind": "generated", "role": "graphics", "allowOverlap": True, "zIndex": 2})
         data["clips"].append({"id": "chart", "trackId": "graphics", "timelineStartUs": 5_000_000, "timelineDurationUs": 1_000_000, "generator": "chart", "payload": {"title": "Proof", "items": ["A", "B"]}})
-        data["clips"][1]["freezeFrameUs"] = 1_000_000
+        data["clips"][1].update({"freezeFrameUs": 1_000_000, "freezeAssetPath": "public/assets/freeze.png"})
         compiled = compile_timeline(data, sources())
         self.assertEqual(next(row for row in compiled["clips"] if row["id"] == "chart")["kind"], "generated")
         self.assertTrue(next(row for row in compiled["clips"] if row["id"] == "picture-a")["freezeFrameUs"])
