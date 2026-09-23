@@ -1,0 +1,9 @@
+{
+  "schema": "video-production-asset-library-review",
+  "version": 1,
+  "route": "faceless-standard",
+  "assetsDir": ".video_production_assets",
+  "collections": [],
+  "queries": [],
+  "dispositions": []
+}

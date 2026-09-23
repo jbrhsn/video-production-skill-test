@@ -1,4 +1,6 @@
 .venv-video-production/
+.venv/
+.video_production_tmp/
 **/node_modules/
 **/__pycache__/
 **/out/

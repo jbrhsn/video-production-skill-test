@@ -28,7 +28,7 @@ For copyable entries and discovery sources for every folder, see `inventory.exam
 4. Run the library indexer to produce a fresh technical report. It never overwrites your curated `library.json`.
 
 ```bash
-uv run --no-project --python .venv-video-production/bin/python python \
+uv run --python .venv/bin/python python \
   .agents/skills/video-production/scripts/07_index_assets.py \
   --assets-dir .video_production_assets
 ```
@@ -40,7 +40,7 @@ uv run --no-project --python .venv-video-production/bin/python python \
 Before writing a video storyboard, search the curated metadata using words from the topic, audience problem, and visual beats. Include unreviewed material only to form a review shortlist:
 
 ```bash
-uv run --no-project --python .venv-video-production/bin/python python \
+uv run --python .venv/bin/python python \
   .agents/skills/video-production/scripts/08_search_assets.py \
   --assets-dir .video_production_assets \
   --query "creative thinking and ideas" --include-unusable
@@ -56,3 +56,13 @@ The result is a candidate list, not a command to use the highest-ranked asset. I
 - Copy the selected original into the project, then record the asset ID, source path, scene purpose, trim/crop, and attribution in the project's asset manifest.
 
 Do not treat this library as a licensed stock subscription. The current sample images are marked `user-provided` with rights `unknown` until their origin is confirmed.
+
+## Runtime model cache
+
+`kokoro/` and `whisper/` are checksum-verified runtime caches. Before TTS or timestamps, run the skill cache manager with the workspace root and the model actually needed. It downloads missing/corrupt files atomically into this directory and never falls back to `~/.cache`:
+
+```bash
+uv run --python .venv/bin/python python \
+  .agents/skills/video-production/scripts/model_cache.py \
+  --workspace-root . --require kokoro --require whisper:base --ensure
+```

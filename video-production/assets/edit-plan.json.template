@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "transitions": [],
+  "holds": [],
+  "audio": [],
+  "mix": {
+    "targetLufs": -16,
+    "toleranceLufs": 1,
+    "maxTruePeakDbtp": -1
+  }
+}
