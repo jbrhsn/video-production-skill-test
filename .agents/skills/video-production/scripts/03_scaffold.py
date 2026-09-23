@@ -64,8 +64,7 @@ def parse_args() -> argparse.Namespace:
 # File content generators
 # ---------------------------------------------------------------------------
 
-def make_package_json(version: str, total_frames: int, guarded: bool = False) -> str:
-    last_frame = max(0, total_frames - 1)
+def make_package_json(version: str) -> str:
     data = {
         "name": "video-production",
         "version": "1.0.0",
@@ -73,8 +72,8 @@ def make_package_json(version: str, total_frames: int, guarded: bool = False) ->
         "scripts": {
             "studio": "npx remotion studio src/index.ts",
             "typecheck": "tsc --noEmit",
-            "render": "node scripts/production-export.cjs render" if guarded else "npx remotion render src/index.ts VideoFull out/video.mp4 --codec=h264 --pixel-format=yuv420p",
-            "hero": "node scripts/production-export.cjs hero" if guarded else f"npx remotion still src/index.ts VideoFull out/video-hero.png --frame={last_frame}",
+            "render": "node scripts/production-export.cjs render",
+            "hero": "node scripts/production-export.cjs hero",
         },
         "dependencies": {
             "remotion": version,
@@ -161,61 +160,9 @@ def make_design_tokens(design: dict) -> str:
     return "// Generated from approved design-system.json. Do not edit this copy.\nexport const DESIGN_TOKENS = " + json.dumps(design, indent=2) + " as const;\n"
 
 
-def make_root_tsx(scenes: list[dict]) -> str:
-    imports = "\n".join(
-        f'import {{ Scene{s["scene"]} }} from "./scenes/Scene{s["scene"]}";' for s in scenes
-    )
-    series_sequences = "\n".join(
-        f'      <Series.Sequence durationInFrames={{SCENES[{i}].durationFrames}}>\n'
-        f'        <Scene{s["scene"]} />\n'
-        f'      </Series.Sequence>'
-        for i, s in enumerate(scenes)
-    )
-    scene_compositions = "\n".join(
-        f'    <Composition\n'
-        f'      id="Scene{s["scene"]}"\n'
-        f'      component={{Scene{s["scene"]}}}\n'
-        f'      durationInFrames={{SCENES[{i}].durationFrames}}\n'
-        f'      fps={{VIDEO_CONFIG.fps}}\n'
-        f'      width={{VIDEO_CONFIG.width}}\n'
-        f'      height={{VIDEO_CONFIG.height}}\n'
-        f'    />'
-        for i, s in enumerate(scenes)
-    )
-    return dedent(f"""\
-        import React from "react";
-        import {{ Composition, Series }} from "remotion";
-        import {{ VIDEO_CONFIG, SCENES, TOTAL_FRAMES }} from "./config";
-        {imports}
-
-        const VideoFull: React.FC = () => (
-          <Series>
-        {series_sequences}
-          </Series>
-        );
-
-        export const Root: React.FC = () => (
-          <>
-            {{/* Master composition — full merged video */}}
-            <Composition
-              id="VideoFull"
-              component={{VideoFull}}
-              durationInFrames={{TOTAL_FRAMES}}
-              fps={{VIDEO_CONFIG.fps}}
-              width={{VIDEO_CONFIG.width}}
-              height={{VIDEO_CONFIG.height}}
-            />
-            {{/* Per-scene compositions for isolated preview rendering */}}
-        {scene_compositions}
-          </>
-        );
-    """)
-
-
-def make_scene_stub(scene: dict, visual_only: bool = False) -> str:
+def make_scene_stub(scene: dict) -> str:
     n = scene["scene"]
-    name = "VisualScene.tsx.template" if visual_only else "Scene.tsx.template"
-    template = (Path(__file__).parent.parent / "assets" / name).read_text()
+    template = (Path(__file__).parent.parent / "assets" / "VisualScene.tsx.template").read_text()
     values = {
         "__SCENE__": str(n),
         "__TITLE__": json.dumps(scene.get("title", f"Scene {n}")),
@@ -403,7 +350,7 @@ def main() -> None:
         raise ValueError("Use an exact stable Remotion 4.0.x version")
     metadata = json.loads(Path(args.audio_metadata).expanduser().read_text(encoding="utf-8")) if args.audio_metadata else None
     storyboard = resolve_scenes(storyboard, metadata, args.fps)
-    state = check_production(project_dir, "implement", [scene["scene"] for scene in storyboard], args.production_state)
+    check_production(project_dir, "implement", [scene["scene"] for scene in storyboard], args.production_state)
     from workflow_v2 import read, validate_asset_manifest, validate_design_system, validate_execution
     execution = validate_execution(project_dir, [scene["scene"] for scene in storyboard])
     design = validate_design_system(project_dir)
@@ -420,10 +367,9 @@ def main() -> None:
         raise ValueError("Pass the approved project --design-system")
     marker = project_dir / "src" / "timeline-contract.json"
     existing_scenes = list((project_dir / "src" / "scenes").glob("Scene*.tsx"))
-    visual_only = marker.exists() or not existing_scenes
     if marker.exists() and json.loads(marker.read_text()) != {"version": 2, "sceneContract": "visual-only"}:
         raise ValueError("Only the version-2 visual-only timeline contract is supported")
-    if not visual_only:
+    if existing_scenes and not marker.exists():
         raise ValueError("Only the visual-only v2 timeline contract is supported")
     plan = json.loads(Path(args.edit_plan).expanduser().read_text())
     # Preserve the previous edit decisions on structural refresh unless replaced explicitly.
@@ -433,18 +379,15 @@ def main() -> None:
         plan = {**plan, "safeArea": safe}
     timeline = compile_timeline(storyboard, args.fps, plan, execution=execution, assets=assets,
                                 word_frames=word_frame_map(project_dir, storyboard, args.fps))
-    if timeline:
-        validate_audio_sources(project_dir, timeline, args.fps)
-    generated = ["package.json", "tsconfig.json", "src/config.ts", "src/index.ts", "src/Root.tsx"]
-    if state:
-        generated += ["scripts/production-export.cjs", "scripts/production/export-config.json"]
-    if visual_only:
-        generated += ["src/timeline-data.json", "src/timeline-contract.json", "src/edit-plan.json", "src/design-tokens.ts"]
+    validate_audio_sources(project_dir, timeline, args.fps)
+    generated = ["package.json", "tsconfig.json", "src/config.ts", "src/index.ts", "src/Root.tsx",
+                 "scripts/production-export.cjs", "scripts/production/export-config.json",
+                 "src/timeline-data.json", "src/timeline-contract.json", "src/edit-plan.json", "src/design-tokens.ts"]
     conflicts = [name for name in generated if (project_dir / name).exists()]
     if conflicts and not args.refresh_generated:
         raise ValueError(f"Refusing to overwrite {conflicts}; inspect first, then use --refresh-generated if intended")
 
-    total_frames = timeline["totalFrames"] if timeline else sum(s["duration_frames"] for s in storyboard)
+    total_frames = timeline["totalFrames"]
     print(f"Scaffolding Remotion project at: {project_dir}")
     print(f"  {len(storyboard)} scene(s), {total_frames} total frames @ {args.fps} fps")
 
@@ -458,30 +401,28 @@ def main() -> None:
         path.write_text(content, encoding="utf-8")
         print(f"  Wrote: {path.relative_to(project_dir)}")
 
-    write(project_dir / "package.json", make_package_json(args.remotion_version, total_frames, guarded=state is not None))
-    if state:
-        guards = project_dir / "scripts/production"
-        guards.mkdir(parents=True, exist_ok=True)
-        for name in ("09_check_production.py", "production.py", "workflow_v2.py"):
-            write(guards / name, (Path(__file__).parent / name).read_text())
-        write(project_dir / "scripts/production-export.cjs", (Path(__file__).parent.parent / "assets/production-export.cjs").read_text())
-        state_path = str(Path(args.production_state).expanduser().resolve()) if args.production_state else "production-state.json"
-        write(guards / "export-config.json", json.dumps({"python": sys.executable, "state": state_path, "lastFrame": total_frames - 1}))
+    write(project_dir / "package.json", make_package_json(args.remotion_version))
+    guards = project_dir / "scripts/production"
+    guards.mkdir(parents=True, exist_ok=True)
+    for name in ("09_check_production.py", "production.py", "workflow_v2.py"):
+        write(guards / name, (Path(__file__).parent / name).read_text())
+    write(project_dir / "scripts/production-export.cjs", (Path(__file__).parent.parent / "assets/production-export.cjs").read_text())
+    state_path = str(Path(args.production_state).expanduser().resolve()) if args.production_state else "production-state.json"
+    write(guards / "export-config.json", json.dumps({"python": sys.executable, "state": state_path, "lastFrame": total_frames - 1}))
     write(project_dir / "tsconfig.json", make_tsconfig())
     config = make_config_ts(args.fps, args.width, args.height, storyboard)
-    if timeline:
-        config = 'import timeline from "./timeline-data.json";\n' + config.replace(
-            "SCENES.reduce((sum, s) => sum + s.durationFrames, 0)", "timeline.totalFrames")
-        write(project_dir / "src" / "timeline-data.json", json.dumps(timeline, indent=2))
-        write(marker, json.dumps({"version": 2, "sceneContract": "visual-only"}, indent=2))
-        write(saved_plan, json.dumps(plan, indent=2))
-        write(project_dir / "src" / "design-tokens.ts", make_design_tokens(design))
-        helper = project_dir / "src" / "Timeline.tsx"
-        if not helper.exists():
-            write(helper, (Path(__file__).parent.parent / "assets" / "Timeline.tsx").read_text())
+    config = 'import timeline from "./timeline-data.json";\n' + config.replace(
+        "SCENES.reduce((sum, s) => sum + s.durationFrames, 0)", "timeline.totalFrames")
+    write(project_dir / "src" / "timeline-data.json", json.dumps(timeline, indent=2))
+    write(marker, json.dumps({"version": 2, "sceneContract": "visual-only"}, indent=2))
+    write(saved_plan, json.dumps(plan, indent=2))
+    write(project_dir / "src" / "design-tokens.ts", make_design_tokens(design))
+    helper = project_dir / "src" / "Timeline.tsx"
+    if not helper.exists():
+        write(helper, (Path(__file__).parent.parent / "assets" / "Timeline.tsx").read_text())
     write(project_dir / "src" / "config.ts", config)
     write(project_dir / "src" / "index.ts", make_index_ts())
-    write(project_dir / "src" / "Root.tsx", make_visual_root(storyboard) if visual_only else make_root_tsx(storyboard))
+    write(project_dir / "src" / "Root.tsx", make_visual_root(storyboard))
 
     # Write scene stubs — only for files that do not yet exist
     for scene in storyboard:
@@ -490,7 +431,7 @@ def main() -> None:
         if scene_path.exists():
             print(f"  Skipped (already exists): src/scenes/Scene{n}.tsx")
         else:
-            write(scene_path, make_scene_stub(scene, visual_only=visual_only))
+            write(scene_path, make_scene_stub(scene))
 
     caption_path = project_dir / "src" / "WordCaptions.tsx"
     if not caption_path.exists():
@@ -521,13 +462,6 @@ def main() -> None:
 
     print(f"\nScaffold complete. Project ready at: {project_dir}")
     print("Next step: implement SceneN.tsx from the approved playbook (or delegated direction), then review in Studio.")
-
-
-def _which(cmd: str) -> bool:
-    """Return True if `cmd` is on PATH."""
-    import shutil
-    return shutil.which(cmd) is not None
-
 
 if __name__ == "__main__":
     main()

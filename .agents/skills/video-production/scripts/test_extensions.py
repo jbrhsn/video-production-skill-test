@@ -1,9 +1,6 @@
-"""Behavior checks for recorded narration, calculation data, and optional visual kits."""
+"""Behavior checks for recorded narration and calculation data."""
 import importlib.util
 import json
-import os
-import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -38,7 +35,7 @@ class ExtensionTests(unittest.TestCase):
         self.assertEqual(row["balance"], 220)
         self.assertEqual(row["growth"], 0)
         self.assertEqual(investment(0, 10, .12, 1 / 12)["rows"][-1]["balance"], 10)
-        for args in [(100, 10, -1, 1), (100, 10, float('nan'), 1), (100, 10, .1, 0), (100, 10, .1, .01)]:
+        for args in [(100, 10, -1, 1), (100, 10, float("nan"), 1), (100, 10, .1, 0), (100, 10, .1, .01)]:
             with self.assertRaises(ValueError):
                 investment(*args)
 
@@ -72,39 +69,6 @@ class ExtensionTests(unittest.TestCase):
             self.assertFalse((root / "output").exists())
             with self.assertRaises(ValueError):
                 recorded.validate_manifest({"scenes": [{"scene": 1, "source": "silent.wav", "text": "Test", "end_s": -1}]}, root)
-
-    @unittest.skip("Obsolete no-state scaffold coverage removed; v2 scaffolding requires approved production state")
-    def test_whiteboard_scaffold_and_refresh_preserve_art(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            brief = root / "storyboard.json"
-            brief.write_text(json.dumps([{"scene": 1, "direction": {"audience_sees": "A house"}}]))
-            metadata = root / "metadata.json"
-            metadata.write_text(json.dumps({"scenes": [{"scene": 1, "file": "scene-1.wav", "duration_s": 1}]}))
-            command = [sys.executable, str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root / "project"),
-                       "--storyboard", str(brief), "--audio-metadata", str(metadata), "--skip-install",
-                       "--profile", "youtube-horizontal", "--visual-style", "whiteboard"]
-            subprocess.run(command, check=True, capture_output=True)
-            helper = root / "project/src/visuals/DoodleAssets.tsx"
-            self.assertTrue(helper.is_file())
-            authored = helper.read_text() + "\n// authored revision\n"
-            helper.write_text(authored)
-            subprocess.run(command + ["--refresh-generated"], check=True, capture_output=True)
-            self.assertEqual(helper.read_text(), authored)
-
-    @unittest.skip("Obsolete no-state scaffold coverage removed; v2 scaffolding requires approved production state")
-    def test_single_scene_whiteboard_typechecks_with_empty_boundaries(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "storyboard.json").write_text(json.dumps([{"scene": 1, "direction": {}}]))
-            (root / "metadata.json").write_text(json.dumps({"scenes": [{"scene": 1, "file": "scene-1.wav", "duration_s": 1}]}))
-            subprocess.run([sys.executable, str(SCRIPTS / "03_scaffold.py"), "--legacy-workflow", "--project-dir", str(root),
-                "--storyboard", str(root / "storyboard.json"), "--audio-metadata", str(root / "metadata.json"),
-                "--visual-style", "whiteboard", "--skip-install"], check=True, capture_output=True)
-            (root / "public/audio/scene-1-timestamps.json").write_text('{"words": []}')
-            (root / "node_modules").symlink_to(Path(os.environ["VIDEO_PRODUCTION_NODE_MODULES"]).resolve(), target_is_directory=True)
-            result = subprocess.run([str(root / "node_modules/.bin/tsc"), "--noEmit"], cwd=root, capture_output=True, text=True)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == "__main__":
