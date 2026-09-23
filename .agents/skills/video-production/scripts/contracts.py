@@ -14,7 +14,7 @@ ROUTES = {"faceless-standard", "faceless-editorial", "recorded-edit", "hybrid-ed
 AUTONOMY_MODES = {"guided", "producer", "autonomous"}
 STREAM_KINDS = {"audio", "video"}
 TRACK_KINDS = {"audio", "video", "generated"}
-TRACK_ROLES = {"primary-dialogue", "music", "sfx", "primary-picture", "broll", "graphics", "overlay"}
+TRACK_ROLES = {"primary-dialogue", "music", "sfx", "primary-picture", "broll", "graphics", "overlay", "titles", "effects"}
 
 
 def text(value, label):
@@ -69,8 +69,8 @@ def validate_project(data):
 
 
 def validate_source_manifest(data):
-    if not isinstance(data, dict) or data.get("schema") != "source-manifest" or data.get("version") != 2:
-        raise ValueError("source manifest requires schema source-manifest version 2")
+    if not isinstance(data, dict) or data.get("schema") != "source-manifest" or data.get("version") != 3:
+        raise ValueError("source manifest requires schema source-manifest version 3")
     if set(data) != {"schema", "version", "sources"}:
         raise ValueError("source manifest contains unsupported fields")
     sources = data.get("sources")
@@ -78,7 +78,7 @@ def validate_source_manifest(data):
         raise ValueError("source manifest requires sources")
     checked = {}
     for source in sources:
-        if not isinstance(source, dict) or set(source) - {"id", "path", "sha256", "durationUs", "streams", "roles", "provenance"}:
+        if not isinstance(source, dict) or set(source) - {"id", "path", "sha256", "durationUs", "streams", "roles", "provenance", "derivative"}:
             raise ValueError("source contains unsupported fields")
         source_id = text(source.get("id"), "source.id")
         if source_id in checked:
@@ -96,7 +96,7 @@ def validate_source_manifest(data):
         stream_ids = set()
         checked_streams = {}
         for stream in streams:
-            if not isinstance(stream, dict) or set(stream) - {"id", "kind", "durationUs", "timeBase", "startUs", "width", "height"}:
+            if not isinstance(stream, dict) or set(stream) - {"id", "kind", "durationUs", "timeBase", "startUs", "width", "height", "frameRate", "sampleRate", "channels"}:
                 raise ValueError(f"source {source_id} stream contains unsupported fields")
             stream_id = text(stream.get("id"), f"source {source_id} stream.id")
             if stream_id in stream_ids:
@@ -110,6 +110,11 @@ def validate_source_manifest(data):
             if stream["kind"] == "video":
                 integer(stream.get("width"), f"source {source_id} stream {stream_id}.width", 1)
                 integer(stream.get("height"), f"source {source_id} stream {stream_id}.height", 1)
+                checked_streams[stream_id] = {**stream, "durationUs": stream_duration,
+                                              "frameRate": rational(stream.get("frameRate"), f"source {source_id} stream {stream_id}.frameRate")}
+                continue
+            integer(stream.get("sampleRate", 48_000), f"source {source_id} stream {stream_id}.sampleRate", 1)
+            integer(stream.get("channels", 1), f"source {source_id} stream {stream_id}.channels", 1)
             checked_streams[stream_id] = {**stream, "durationUs": stream_duration}
         checked[source_id] = {**source, "durationUs": duration, "streams": checked_streams}
     return checked

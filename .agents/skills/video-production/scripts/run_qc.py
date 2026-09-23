@@ -6,16 +6,18 @@ import argparse
 import json
 from pathlib import Path
 
-from qc_timeline import check_timeline
+from qc_production import check
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--timeline", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--observations")
     args = parser.parse_args()
     timeline = json.loads(Path(args.timeline).read_text(encoding="utf-8"))
-    report = check_timeline(timeline)
+    observations = json.loads(Path(args.observations).read_text(encoding="utf-8")) if args.observations else None
+    report = check(timeline, observations)
     output = Path(args.out)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

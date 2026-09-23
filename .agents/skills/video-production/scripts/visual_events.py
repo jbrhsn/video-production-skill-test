@@ -14,6 +14,7 @@ def validate_visual_events(data, render_timeline):
     if set(data) != {"schema", "version", "events"} or not isinstance(data.get("events"), list):
         raise ValueError("visual events require an events array")
     clip_ids = {clip["id"] for clip in render_timeline.get("clips", [])}
+    dialogue_ids = {clip["id"] for clip in render_timeline.get("clips", []) if clip.get("role") == "primary-dialogue"}
     total_frames = render_timeline.get("totalFrames")
     if type(total_frames) is not int or total_frames < 1:
         raise ValueError("render timeline is invalid")
@@ -26,8 +27,8 @@ def validate_visual_events(data, render_timeline):
         if event_id in seen:
             raise ValueError("visual event IDs must be unique")
         seen.add(event_id)
-        if event.get("dialogueClipId") not in clip_ids:
-            raise ValueError(f"visual event {event_id} references an unknown dialogue occurrence")
+        if event.get("dialogueClipId") not in dialogue_ids:
+            raise ValueError(f"visual event {event_id} references an unknown primary dialogue occurrence")
         frames = time_range(event.get("frames"), f"visual event {event_id}.frames")
         if frames[1] > total_frames:
             raise ValueError(f"visual event {event_id} exceeds the master timeline")

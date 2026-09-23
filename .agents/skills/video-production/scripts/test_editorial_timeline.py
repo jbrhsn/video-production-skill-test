@@ -8,15 +8,15 @@ from route_production import route
 
 def sources():
     digest = "a" * 64
-    return {"schema": "source-manifest", "version": 2, "sources": [
+    return {"schema": "source-manifest", "version": 3, "sources": [
         {"id": "camera", "path": "public/media/camera.mp4", "sha256": digest, "durationUs": 20_000_000,
-         "streams": [{"id": "video-0", "kind": "video", "durationUs": 20_000_000, "width": 1920, "height": 1080},
+         "streams": [{"id": "video-0", "kind": "video", "durationUs": 20_000_000, "width": 1920, "height": 1080, "frameRate": {"num": 30, "den": 1}},
                      {"id": "audio-0", "kind": "audio", "durationUs": 20_000_000}]}
     ]}
 
 
 def timeline():
-    return {"schema": "editorial-timeline", "version": 1,
+    return {"schema": "editorial-timeline", "version": 2,
             "sequence": {"id": "master", "fps": {"num": 30, "den": 1}, "width": 1920, "height": 1080},
             "tracks": [{"id": "dialogue", "kind": "audio", "role": "primary-dialogue"},
                        {"id": "picture", "kind": "video", "role": "primary-picture"}],

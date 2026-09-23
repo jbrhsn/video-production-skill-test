@@ -1,18 +1,36 @@
 # Video production skill: implementation plan
 
-Status: proposed implementation plan; no skill changes or feature verification performed as part of this planning task.
+Status: direct-overhaul implementation in progress. The canonical foundation is implemented and verified; the remaining packages below are follow-on work.
 
 Source: [video-production-skill-improvement-plan.md](video-production-skill-improvement-plan.md). Target: [.agents/skills/video-production](.agents/skills/video-production/SKILL.md). Prepared against the repository inspected on 2026-09-23.
 
 ## 1. Outcome and implementation strategy
 
-Extend the existing skill to support four explicit routes: faceless standard, faceless editorial, recorded editing, and hybrid editorial editing. Preserve source truth, deterministic timing, editable delivery, asset provenance, scoped review, and guarded export throughout the expansion.
+Replace the former track-specific skill architecture with one AI-native production system supporting faceless standard, faceless editorial, recorded editing, and hybrid editorial editing. Preserve source truth, deterministic timing, editable delivery, asset provenance, scoped review, and guarded export throughout the expansion.
 
-Implement the work as compatible increments. Introduce a new timeline and review contract alongside the current generated v2 and recorded v3 workflows. Prove separate picture/dialogue scheduling with a real render early, then add editorial analysis, layered explanation, reusable styles, stronger QA, and advanced editing. Existing projects continue to use their existing contracts until explicitly migrated.
+Implement the work as direct increments on the new contracts. Do not add migration adapters, compatibility shims, or new behavior to the former v2/v3 paths. Prove separate picture/dialogue scheduling with a real render early, then add editorial analysis, layered explanation, reusable styles, stronger QA, and advanced editing.
 
-This document is the implementation backlog and acceptance authority for the upgrade. The source improvement document remains the product vision. New module names, schemas, commands, defaults, and targets below are proposals unless identified as existing.
+This document is the implementation backlog and acceptance authority for the overhaul. The source improvement document remains the product vision. The implementation record below distinguishes code that exists from proposed follow-on work.
 
-The first release slice is deliberately small: a legacy recorded fixture imports into the new contract, separate audio and video tracks render a J-cut, captions follow dialogue, and current input evidence controls export. This establishes the most consequential integration before expanding the catalog of features.
+The initial foundation establishes the canonical route/project/source/timeline/style/event/QC/review artifacts. It schedules separate audio and video tracks, maps captions to dialogue occurrences, and blocks export when the current master lacks approval. Follow-on work must turn that foundation into a fully rendered, media-analyzed, self-repairing production system.
+
+## 1A. Implementation record and follow-on boundary
+
+The following code exists in the skill and is covered by the tests named here:
+
+| Delivered capability | Implementation | Evidence |
+|---|---|---|
+| Direct route selection | `scripts/route_production.py` | `test_editorial_timeline.py` covers all four routes |
+| Canonical project/source contracts | `scripts/contracts.py` | Contract validation exercised by new timeline/system fixtures |
+| Independent editorial lanes | `scripts/editorial_timeline.py`, `scripts/compile_timeline.py` | 600 ms J-cut, repeat occurrence, overlap rejection, source-bounds tests |
+| Deterministic caption mapping | `editorial_timeline.py` | Captions map to dialogue clips, including repeated source intervals |
+| Initial Remotion renderer/scaffold | `assets/EditorialTimeline.tsx`, `scripts/13_scaffold_production.py` | No-install scaffold integration test |
+| Style grammar resolution | `assets/style-profiles.json`, `scripts/style_profile.py` | Deterministic resolved digest and provenance test |
+| Editorial evidence baseline | `scripts/analyze_editorial.py` | Silence/sentence evidence and repeat-candidate test |
+| Visual-story event contract | `scripts/visual_events.py` | Dialogue occurrence and explicit re-entry test |
+| Timeline QC and guarded export | `scripts/qc_timeline.py`, `scripts/run_qc.py`, `scripts/production_workflow.py`, `assets/production-export-v1.cjs` | Bounds/caption findings and stale-master-approval test |
+
+The following capabilities are not implemented yet and must not be represented as available: actual-media renderer smoke verification; audio/video source-PTS probing; J/L-cut playback validation; speed/freeze/nested sequences; full style catalog and reusable visual primitives; asset processing; speaker, face, cursor, and UI analysis; generated visual-event rendering; frame/layout/motion/audio QC; forced alignment/mastering/caption sidecars; producer/autonomous repair execution; multicam/tracking/reframing; cache/resume; and NLE interchange.
 
 ## 2. Evidence from the current skill
 
@@ -21,7 +39,7 @@ Paths in this table are relative to `.agents/skills/video-production/`.
 | Existing component | Observed behavior | Consequence for implementation |
 |---|---|---|
 | `SKILL.md`, `references/collaborative-production.md` | Generated production follows narration, asset/planning, active-scene, master, and export gates. | Preserve this behavior for existing v2 projects and the default guided policy. |
-| `scripts/workflow_v2.py` | Validates state, snapshots, design system, accepted assets, and executable beats. | Reuse its documented invariants; avoid weakening legacy validation while adding new contracts. |
+| `scripts/workflow_v2.py` | Validates state, snapshots, design system, accepted assets, and executable beats. | Retire it from the canonical route while carrying forward the useful snapshot and approval invariants. |
 | `scripts/timeline.py` | Compiles generated edit-plan v2, holds, transitions, anchored sound, and measured narration. | Keep the narration clock intact. New common rendering must reproduce this behavior before replacing it. |
 | `scripts/recorded_contract.py` | Source roles are screen/presenter/voice/system-audio; clips link screen/presenter tracks with primary audio over one session range. | A general timeline needs new source capabilities and independent track clips. B-roll must not be relabeled as a presenter. |
 | `scripts/recorded_timeline.py` | Compiles clip boundaries cumulatively; derives source playback rate from sync sections; remaps each word to its first matching retained clip. | Repeated intervals need occurrence IDs and multiple caption mappings. Creative speed must remain distinct from sync correction. |
@@ -50,17 +68,15 @@ The working tree was clean at inspection. A workspace `.venv-video-production/bi
 4. Every caption, source annotation, visual event, and audio event has an explicit time domain and traceable anchors.
 5. Source/session gaps cannot be crossed through inferred synchronization. Unrelated B-roll does not require a fabricated session map.
 6. Output frames and audio samples derive deterministically from one compiled master schedule.
-7. Existing v2/v3 projects remain readable and renderable through their own supported paths.
-8. Migration preserves authored code and approval history. A transformed project does not inherit approval of changed inputs.
-9. Production autonomy reflects explicit user delegation. Choosing a style or receiving a passing QA report does not grant authority.
-10. Export validates the current inputs and relevant evidence; raw renderer commands are not treated as enforcement boundaries.
-11. The final image is exactly the last composition frame. The master retains full timeline context and mix.
-12. Automated checks identify their coverage and limits. Unobserved behavior is `not_checked`, not a pass.
+7. Production autonomy reflects explicit user delegation. Choosing a style or receiving a passing QA report does not grant authority.
+8. Export validates the current inputs and relevant evidence; raw renderer commands are not treated as enforcement boundaries.
+9. The final image is exactly the last composition frame. The master retains full timeline context and mix.
+10. Automated checks identify their coverage and limits. Unobserved behavior is `not_checked`, not a pass.
 
 ### Planning assumptions
 
 - Keep Python and Remotion as the core implementation. Reuse the dedicated uv environment and the generated project's npm setup.
-- Keep existing file locations initially. Add a project manifest with artifact references instead of moving all projects into the aspirational directory tree at once.
+- Use the canonical project layout declared by `project.json`. Do not build compatibility paths for pre-overhaul project layouts.
 - Use JSON for canonical machine artifacts. Human-authored YAML style profiles may be accepted later through a pinned parser that resolves to JSON.
 - Keep optional speech, vision, alignment, and tracking models behind adapters. Core validation/scaffolding must not download ML models.
 - Start the new renderer at the existing integer-fps boundary. Preserve rational source rates/time bases; add fractional output fps only after its renderer compatibility is demonstrated.
@@ -73,21 +89,20 @@ The working tree was clean at inspection. A workspace `.venv-video-production/bi
 
 ### 4.1 Version strategy
 
-Introduce a proposed `project.json` v1 for new projects. It names the production route, the independent contract versions, artifact paths, renderer, and minimum compatible skill build. Do not treat all existing integers named `version` as one global version.
+`project.json` v1 is the canonical project root. It names the production route, independent contract versions, artifact paths, renderer, and minimum compatible skill build. Do not treat all integers named `version` as one global version.
 
 | Contract | Existing | Proposed evolution |
 |---|---|---|
-| Production state | v2 generated; v3 recorded | v4 for new route/policy-aware projects; legacy readers retained |
-| Generated edit plan | v2; older compatibility paths also exist | Retain through an adapter; do not reinterpret old fields |
-| Recorded cut plan | v1 | Keep legacy reader; new editorial timeline has its own schema |
-| Source manifest | v1 recorded role model | v2 with stream capabilities, role tags, sync groups, derivative lineage |
-| Execution plan | v2 generated; v3 recorded | v4 with stable scene/beat/event IDs and typed anchors |
+| Production state | `production-state` v1 | Route/policy-aware state with exact snapshots and decision evidence |
+| Editorial timeline | `editorial-timeline` v1 | Canonical edit authority for all routes |
+| Source manifest | `source-manifest` v2 | Stream capabilities, role tags, sync groups, derivative lineage |
+| Execution plan | `execution-plan` v1 | Stable beat/event IDs and typed anchors |
 | Editorial timeline | No general lane contract | `editorial-timeline` v1 |
 | Compiled render timeline | Track-specific output | `render-timeline` v1 with a new explicit renderer discriminator |
 | Style and brand | Design-system v1 | `style-profile`, `brand-profile`, `resolved-style` v1, compiled into design tokens |
 | Editorial evidence | Observations and cut-proposal artifacts | `editorial-analysis` v1; adapt existing observations/proposals |
 | Visual events | Beat-local named events | `visual-story-events` v1 referencing beat-local events and timeline occurrences |
-| QC | Existing review/audio reports | `qc-result` v1 plus aggregate report; preserve old reports as evidence |
+| QC | `qc-result` v1 | Aggregate report with explicit detector coverage |
 
 Write schema files under proposed `schemas/`, with valid/invalid examples under `tests/fixtures/contracts/`. Keep structural schema validation and semantic validation distinct. Cross-file references, source bounds, cycles, clock mapping, and approval freshness require code checks beyond JSON Schema.
 
@@ -106,14 +121,14 @@ Canonical entity coverage: Project, Track, Source, Narration, Transcript, Beat, 
 | Permission and review | Production state with actual evidence/delegation | Readiness decisions, export authorization report |
 | Observed result | Render/QC manifests tied to input and output hashes | Review report and delivery package |
 
-New projects declare artifact paths in `project.json`. Old projects use known legacy locations. A missing manifest must not cause accidental migration. Avoid simultaneous editable copies such as both root and nested asset manifests; migration chooses one owner and records moved paths.
+Projects declare artifact paths in `project.json`. Avoid simultaneous editable copies such as both root and nested asset manifests; one canonical artifact owns each concern.
 
 ### 4.3 Time and identity contract
 
 - Use half-open ranges `[start, end)` throughout.
 - Keep source presentation timestamps, time-base fractions, stream start offsets, and rotation/geometry metadata from probing.
 - Author recorded times in integer microseconds for compatibility. Use exact rational arithmetic internally for rates, source mappings, and cumulative boundaries.
-- Quantize master boundaries once, using a documented tie rule. Preserve legacy rounding when using legacy adapters; include edge cases where tie behavior differs.
+- Quantize master boundaries once, using a documented tie rule and fixtures at rounding boundaries.
 - Audio has sample-accurate trims and envelopes. Video frames must not become the only representation of audio edit points.
 - A clip instance ID identifies an occurrence, independently of source ID and source range. Repeating a source interval creates a new instance.
 - A caption instance references both its source word ID and selected dialogue clip instance. Repeated speech gets repeated captions; unused picture audio never creates captions.
@@ -213,24 +228,23 @@ All new paths in this section are proposed and relative to the skill root unless
 1. Run the five existing suites through the dedicated uv environment. Record Python, Node, ffmpeg, Remotion, OS, tested revision, results, and skips.
 2. Inspect fixture coverage for approvals, copied guard modules, narration quantization, source/session gaps, sync-rate correction, masks, and draft renders. Add only missing behavior checks needed for compatibility.
 3. Build a synthetic fixture generator using local media tools: frame-numbered/color-coded clips, time labels, identifiable audio tones, silence, words with known anchors, and deliberate sync gaps. Include multiple stream rates and a VFR input.
-4. Maintain small fixtures for generated v2, recorded v3, legacy compatibility paths, and projects with authored helpers. Use temporary project folders; preserve the horror project.
+4. Maintain small canonical fixtures for faceless, recorded, and hybrid routes plus projects with authored helpers. Use temporary project folders; preserve the horror project.
 5. Add `references/capability-matrix.md` with implemented, experimental, unsupported, and dependency-required states.
 
 **Acceptance:** baseline report identifies passing/failing/skipped checks without implying unavailable tests passed; both current production tracks have a reproducible small render fixture or an explicit environment blocker. Re-running fixture generation produces the same semantic source manifest even if container metadata is nondeterministic.
 
 ### WP-01 — Formalize contracts, routing, and migration
 
-**Outcome:** explicit route selection and schema ownership without changing legacy rendering.
+**Outcome:** explicit route selection and schema ownership for the canonical system.
 
 1. Add `schemas/`, `scripts/contracts.py`, `scripts/project_manifest.py`, and `scripts/route_production.py`. Validate versions, IDs, ranges, references, capabilities, and paths.
 2. Implement the four route choices using source presence, information carried by footage, requested explanation, platform/aspect, and delegated review scope. Emit route rationale and unresolved prerequisites. Fail unsupported combinations explicitly.
 3. Add source-manifest v2 with stream capability separate from editorial role, optional sync group, selected audio stream, source PTS evidence, derivative mapping, and provenance. Validate containment of local asset paths, including symlink escape cases.
-4. Add adapters for existing generated and recorded artifacts. Preserve legacy dispatch and original serializers where required by snapshots.
-5. Add `scripts/migrate_project.py` with dry-run default, migration report, explicit destination, collision refusal, and recoverable copies. Write transformed projects to a sibling destination before considering any in-place support.
-6. Define project layout references. Introduce only needed directories; do not move `public/`, `src/`, audio, or state mechanically.
+4. Define canonical artifact paths in `project.json`; reject ambiguous or incomplete project definitions at the boundary.
+5. Define project layout references. Introduce only needed directories and ensure every artifact path is project-relative.
 7. Add `references/production-routing.md` and `references/contract-versioning.md`; update intake templates only when this package is operational.
 
-**Acceptance:** all four routes can be represented and validated; source audio alone and silent footage are handled deliberately; unknown versions fail; a legacy fixture round-trips without source/code mutation; migration reports changed approval scopes and preserves history as historical evidence. Re-running migration cannot duplicate IDs or overwrite authored files.
+**Acceptance:** all four routes can be represented and validated; source audio alone and silent footage are handled deliberately; unknown versions fail; invalid project paths and duplicate IDs fail before compilation.
 
 ### WP-02 — Review policies and trustworthy export packaging
 
@@ -486,18 +500,16 @@ Proposed new CLIs such as `compile_timeline.py`, `run_qc.py`, `production_runner
 
 Each investigation ends with a short decision record, measured evidence, limitations, and affected contracts. Check current official APIs/licenses when selecting external dependencies during implementation; this repository-based plan does not assume a specific unverified new library.
 
-## 9. Migration, rollout, and rollback
+## 9. Direct rollout and rollback
 
-1. **Foundation:** ship new schemas/router/policy behind explicit new-project selection. Legacy projects retain their current readers, compilers, renderers, and approval semantics.
-2. **Timeline preview:** enable the new path for engineering fixtures and explicitly selected projects. Mark unsupported operations clearly.
+1. **Foundation:** the canonical schemas, router, style/event/QC contracts, scaffold, and export guard are the active architecture.
+2. **Renderer qualification:** prove the new renderer against numbered video/audio fixtures before enabling J/L cuts, speed changes, or source-bound graphics in production.
 3. **Route qualification:** enable each production route after its timeline, planning, review, and final export tests pass. A feature exists only when schema, compiler, renderer, QA/review, docs, and fixtures agree.
-4. **Migration rehearsal:** dry-run an old generated and recorded fixture; migrate copies; compare semantic timelines and decoded outputs, plus preserved authored files. Existing user projects are not implicit migration targets.
-5. **Approval transition:** carry historical decisions with original snapshots. Require fresh evidence for changed artifacts; never synthesize user approval during migration.
-6. **Guard refresh:** update project-local checkers using an explicit versioned bundle update with a preview of changed files. Preserve authored scene/helpers and refuse unrecognized local guard modifications until resolved.
-7. **Rollback:** keep previous project copy, original assets, old renderer/contract adapters, and prior skill release. New-format-only edits cannot be downgraded silently; restore the prior project or export a documented compatible derivative.
-8. **Default change:** select the new contract by default only after compatibility and all four route fixtures pass. Existing projects still do not auto-migrate.
+4. **Guard refresh:** version the project-local checker bundle and display changed files before refreshing generated project files. Preserve authored scenes/helpers and refuse unrecognized local guard modifications until resolved.
+5. **Rollback:** retain original sources, generated derivative recipes, and the prior skill release. New-format-only project edits do not need an automatic downgrade path; restore the prior project copy when rolling back.
+6. **Default state:** the canonical contract remains the only path. Mark an individual route experimental until its own end-to-end fixture passes.
 
-A release fails readiness if it loses source mapping, changes legacy speech timing unexpectedly, omits a bundled checker dependency, allows stale approvals, or reports unperformed QA as passed. Restore the previous supported path and retain the failed evidence for diagnosis.
+A release fails readiness if it loses source mapping, omits a bundled checker dependency, allows stale approvals, or reports unperformed QA as passed. Retain the failed evidence for diagnosis.
 
 ## 10. Metrics and release evidence
 
@@ -542,15 +554,92 @@ Suggested release conditions for controlled fixtures: no unresolved blocking tec
 
 The north-star founder-recording workflow is the final integration scenario: ingest/sync → corrected speech/evidence → edit thesis and style → shortened timeline → explanation events → inspected assets → hybrid scenes → captions/mix → QA and scoped repair → policy review → final MP4, exact PNG, editable project, provenance/QC report. Use a consented recording when available; a synthetic substitute validates mechanics but cannot establish editorial usefulness on real conversation.
 
-## 12. First executable implementation batch
+## 12. Follow-on execution sequence
 
-Start with WP-00 and the narrow part of WP-01 required by WP-03:
+The canonical foundation replaces the former first batch. Execute follow-on work in this order.
 
-1. Capture the existing test/runtime baseline and generate a short recorded media fixture.
-2. Freeze legacy schemas and add the new project/source/editorial-timeline identifiers with validation fixtures.
-3. Define time conversion, clip occurrence, and dialogue-caption mappings in tested pure functions.
-4. Add a read-only v3-to-new timeline adapter with semantic equivalence checks.
-5. Implement the v4 guided guard and portable checker bundle needed for the fixture.
-6. Render the same fixture through the new picture/dialogue tracks, then apply the 600 ms J-cut and verify frames, audio, captions, and export readiness.
+### FO-01 — Real-media renderer qualification
 
-This batch produces a reviewable architectural proof. Its measured limitations determine subsequent timeline work; the rest of the work packages remain an explicit backlog rather than implied completed capability.
+**Outcome:** prove that `EditorialTimeline.tsx` renders source time correctly, including independent picture/audio starts.
+
+1. Add a fixture generator for numbered video frames and distinct audio tones, with known source PTS and short source ranges.
+2. Scaffold a canonical project with `13_scaffold_production.py`, install the pinned Remotion dependencies in a disposable fixture directory, typecheck, render `VideoFull`, and render the final-frame PNG.
+3. Add decoded-frame and audio-onset assertions for normal cuts, a 600 ms J-cut, a 600 ms L-cut, repeated dialogue, and a final-frame check.
+4. Verify the bundled `production-export-v1.cjs` checks master approval and timeline QC from a copied project after the skill directory is unavailable.
+5. Correct the timeline renderer if source time, trim math, caption clock, or `totalFrames - 1` differs from the compiled schedule.
+
+**Acceptance:** the fixture proves source frame, audio onset, caption start, output duration, and exact final PNG against declared schedule values. No route may advertise J/L-cut support before this passes.
+
+### FO-02 — Extend the timeline contract and renderer
+
+**Outcome:** add the remaining high-value recorded-edit operations on the canonical lane model.
+
+1. Add audio-only/video-only cuts, B-roll/overlay/music/SFX lanes, track z-order, and source replacement.
+2. Add constant positive creative speed, explicit freeze frames, transition handles, reordered/repeated occurrences, and nested sequences with cycle detection.
+3. Keep source/session synchronization correction separate from creative playback rate; declare pitch policy for audible speed changes.
+4. Add per-operation validation fixtures and decoded render tests. Reject unsupported rate ramps, reverse playback, or unavailable transition handles until explicitly implemented.
+
+**Acceptance:** each operation has one successful real-media fixture and one meaningful invalid-input fixture. Repeated speech yields repeated captions; freezes do not halt independent dialogue.
+
+### FO-03 — Complete styles, assets, and reusable visual language
+
+**Outcome:** turn the starter style resolver into the full composable catalog and reusable visual library.
+
+1. Add all ten faceless styles and ten recorded-edit styles from the product plan, each with editing, visual, motion, caption, audio, and QC policies.
+2. Add brand profile validation, constraint/exception records, and generated design tokens.
+3. Build original React primitives for typography, charts, maps, documents, comparisons, timelines, systems, quote evidence, paths, counters, masks, and camera rules.
+4. Add a deterministic asset-processing pipeline with derivative recipe, input/output hash, alpha/dimension inspection, provenance, rights, and staged path.
+
+**Acceptance:** each profile resolves deterministically; three representative styles render visibly distinct fixtures; a processed asset has a complete immutable lineage record.
+
+### FO-04 — Render hybrid visual events
+
+**Outcome:** visual-story events become actual presenter/overlay/takeover/re-entry sequences.
+
+1. Compile validated events into the render timeline with layer ownership and master-frame anchors.
+2. Render presenter-only, overlay, split, picture-in-picture, map, chart, document, montage, and full-screen modes.
+3. Keep primary dialogue/captions mounted once across an event; attach re-entry to the exact picture occurrence and source time.
+4. Add map, chart, document, and system-diagram fixtures with frame checkpoints and source-return playback windows.
+
+**Acceptance:** all fixture takeovers preserve dialogue/caption continuity and return to the declared source frame without adding duration.
+
+### FO-05 — Expand editorial intelligence
+
+**Outcome:** analysis supports more useful first cuts without making unreviewed editorial changes.
+
+1. Add phrase/sentence segmentation, pause classification, semantic retake/topic/context candidates, speaker changes, source scene changes, screen/UI events, and confidence/coverage metadata.
+2. Store detector inputs, versions, time domains, gaps, and manual corrections. Keep model-dependent detectors optional behind adapters.
+3. Compile accepted candidates into timeline changes only through a documented decision record.
+
+**Acceptance:** fixtures distinguish a retake from an intentional refrain, preserve a dramatic pause, flag context-dependent clip extraction, and produce explicit unavailable-detector results.
+
+### FO-06 — Expand quality control and bounded repair
+
+**Outcome:** identify layout, media, motion, event, source, and audio risks with evidence and repair only bounded mechanical defects.
+
+1. Instrument rendered elements to capture post-font bounds, transforms, asset load state, named event state, and output-frame ranges.
+2. Add checks for clipping, safe areas, caption/graphic collisions, missing/low-resolution assets, source bounds, black/flash frames, freezes, crop jumps, caption drift, and expected event state changes.
+3. Add report aggregation, detector coverage, false-positive controls for intentional dark/still shots, and bounded repair records.
+4. Enable producer/autonomous execution only after required checks and repair limits are enforced.
+
+**Acceptance:** injected defects produce localized findings; clean controls do not block; no detector error or uninstrumented region is reported as a pass.
+
+### FO-07 — Speech, audio, tracking, and long-form operations
+
+**Outcome:** make large recorded and hybrid projects accurate, resumable, and suitable for podcasts/tutorials.
+
+1. Evaluate and add forced alignment, phrase confidence, narration direction, sidecar caption export, mixing recipes, loudness/true-peak measurement, and playback review evidence.
+2. Add speaker/face/cursor/UI tracking in source coordinates, multicam decision candidates, vertical reframing, and source-bound annotations/masks.
+3. Add chapter manifests, content-hash caches, atomic artifact writes, dependency invalidation, resume reports, and full-master correctness fallback.
+
+**Acceptance:** alignment uncertainty is explicit; tracked geometry follows source transforms; interrupted jobs resume safely; changed duration invalidates downstream anchors and captions.
+
+### FO-08 — Professional interchange and release qualification
+
+**Outcome:** deliver a reviewable, portable production package.
+
+1. Export timeline JSON, markers, source manifest, corrected captions, and provenance/QC reports.
+2. Evaluate OTIO and FCPXML against named consuming-editor versions; record native, baked, approximate, and unsupported operations.
+3. Package source, master MP4, exact PNG, captions, render/QC evidence, and editable project. Run all route end-to-end fixtures before changing an experimental route to supported.
+
+**Acceptance:** an imported fixture preserves declared trims/tracks/markers within documented fidelity, while unsupported operations are explicitly baked or rejected.

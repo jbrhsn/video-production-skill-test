@@ -26,10 +26,10 @@ class ProductionSystemTests(unittest.TestCase):
         self.render_timeline = compile_timeline(timeline(), sources())
 
     def test_style_resolution_is_deterministic_and_records_origins(self):
-        first = resolve_style(self.catalog, {"profile": "hybrid-documentary"},
+        first = resolve_style(self.catalog, {"profile": "premium-documentary"},
                               {"tokens": {"captions": {"fontFamily": "Inter"}}},
                               {"captions": {"maxLines": 3}})
-        second = resolve_style(self.catalog, {"profile": "hybrid-documentary"},
+        second = resolve_style(self.catalog, {"profile": "premium-documentary"},
                                {"tokens": {"captions": {"fontFamily": "Inter"}}},
                                {"captions": {"maxLines": 3}})
         self.assertEqual(first["digest"], second["digest"])
@@ -71,7 +71,7 @@ class ProductionSystemTests(unittest.TestCase):
             self.assertTrue((root / "scripts/production/run_qc.py").is_file())
 
     def test_editorial_analysis_preserves_repeats_as_candidates(self):
-        transcript = {"schema": "corrected-transcript", "version": 1, "words": [
+        transcript = {"schema": "corrected-transcript", "version": 2, "words": [
             {"id": "w1", "word": "This", "start": 0, "end": .2},
             {"id": "w2", "word": "is", "start": .2, "end": .3},
             {"id": "w3", "word": "important.", "start": .3, "end": .6},
@@ -81,8 +81,8 @@ class ProductionSystemTests(unittest.TestCase):
         ]}
         report = analyze(transcript)
         self.assertEqual(report["events"][0]["type"], "silence")
-        self.assertEqual(report["candidates"][0]["type"], "candidate-repeated-phrase")
-        self.assertTrue(report["candidates"][0]["requiresEditorialDecision"])
+        repeated = next(row for row in report["candidates"] if row["type"] == "candidate-repeated-phrase")
+        self.assertTrue(repeated["requiresEditorialDecision"])
 
     def test_export_requires_current_master_approval(self):
         with tempfile.TemporaryDirectory() as directory:

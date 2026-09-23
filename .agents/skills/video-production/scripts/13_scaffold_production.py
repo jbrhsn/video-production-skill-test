@@ -63,7 +63,7 @@ def main():
     if report["status"] != "pass":
         raise ValueError("Timeline QC must pass before scaffolding")
     generated = ["package.json", "tsconfig.json", "src/index.ts", "src/Root.tsx", "src/EditorialTimeline.tsx",
-                 "src/WordCaptions.tsx", "src/design-tokens.ts", "src/timeline-data.json", "scripts/production-export.cjs"]
+                 "src/WordCaptions.tsx", "src/EditorialVisuals.tsx", "src/design-tokens.ts", "src/timeline-data.json", "scripts/production-export.cjs"]
     conflicts = [name for name in generated if (project / name).exists()]
     if conflicts and not args.refresh_generated:
         raise ValueError(f"Refusing to overwrite {conflicts}; inspect first, then use --refresh-generated")
@@ -83,6 +83,7 @@ def main():
     write("src/index.ts", 'import {registerRoot} from "remotion";\nimport {Root} from "./Root";\nregisterRoot(Root);\n')
     write("src/Root.tsx", root_tsx())
     write("src/EditorialTimeline.tsx", (assets / "EditorialTimeline.tsx").read_text())
+    write("src/EditorialVisuals.tsx", (assets / "EditorialVisuals.tsx").read_text())
     write("src/WordCaptions.tsx", (assets / "WordCaptions.tsx").read_text())
     write("src/design-tokens.ts", "export const DESIGN_TOKENS = " + json.dumps(style, indent=2) + " as const;\n")
     write("src/timeline-data.json", json.dumps(compiled, indent=2) + "\n")
