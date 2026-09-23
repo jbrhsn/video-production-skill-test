@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "profiles": {
+    "faceless-editorial": {
+      "format": "explainer",
+      "energy": "balanced-fast",
+      "visualLanguage": "editorial-collage",
+      "editing": {"cutDensity": "medium-high", "preserveEmotionalPauses": "context-dependent"},
+      "visuals": {"layersRequired": true, "textDensity": "medium", "documents": "allowed", "maps": "allowed", "charts": "allowed"},
+      "motion": {"semanticMotionRequired": true, "genericFades": "discouraged", "pace": "medium-fast"},
+      "captions": {"enabled": true, "mode": "phrase", "emphasis": "keywords", "maxLines": 2},
+      "audio": {"dialoguePriority": "highest", "music": "moderate", "impactSfx": "selective"},
+      "qc": {"safeAreaRequired": true, "staticVisualWarningSeconds": 6, "cutInsideWord": "forbidden"}
+    },
+    "recorded-professional": {
+      "format": "talking-head",
+      "energy": "calm",
+      "visualLanguage": "clean-professional",
+      "editing": {"cutDensity": "low-medium", "preserveEmotionalPauses": "yes"},
+      "visuals": {"layersRequired": false, "textDensity": "low", "documents": "selective", "maps": "selective", "charts": "selective"},
+      "motion": {"semanticMotionRequired": true, "genericFades": "discouraged", "pace": "restrained"},
+      "captions": {"enabled": true, "mode": "phrase", "emphasis": "none", "maxLines": 2},
+      "audio": {"dialoguePriority": "highest", "music": "subtle", "impactSfx": "none"},
+      "qc": {"safeAreaRequired": true, "staticVisualWarningSeconds": 10, "cutInsideWord": "forbidden"}
+    },
+    "hybrid-documentary": {
+      "format": "documentary",
+      "energy": "intentional",
+      "visualLanguage": "editorial-collage",
+      "editing": {"cutDensity": "medium", "preserveEmotionalPauses": "context-dependent"},
+      "visuals": {"layersRequired": true, "textDensity": "low-medium", "documents": "high", "maps": "allowed", "charts": "allowed"},
+      "motion": {"semanticMotionRequired": true, "genericFades": "discouraged", "pace": "measured"},
+      "captions": {"enabled": true, "mode": "phrase", "emphasis": "keywords", "maxLines": 2},
+      "audio": {"dialoguePriority": "highest", "music": "moderate", "impactSfx": "selective"},
+      "qc": {"safeAreaRequired": true, "staticVisualWarningSeconds": 8, "cutInsideWord": "forbidden"}
+    }
+  }
+}
